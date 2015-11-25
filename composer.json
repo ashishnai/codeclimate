@@ -1,0 +1,7 @@
+{
+    "name": "arvato/magento-module-arvato-combodeals",
+    "type": "magento-module",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
