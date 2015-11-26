@@ -1,6 +1,5 @@
 # Arvato HealthCheck
 
-app/code/local/Arvato/HealthCheck                               app/code/local/Arvato/HealthCheck
-app/etc/modules/Arvato_HealthCheck.xml                          app/etc/modules/Arvato_HealthCheck.xml
-app/design/frontend/base/default/layout/arvato_healthcheck.xml  app/design/frontend/base/default/layout/arvato_healthcheck.xml
-app/design/frontend/base/default/template/arvato/healthcheck    app/design/frontend/base/default/template/arvato/healthcheck
+app/code/local/Arvato/ComboDeals                               app/code/local/Arvato/ComboDeals
+app/etc/modules/Arvato_ComboDeals.xml                          app/etc/modules/Arvato_ComboDeals.xml
+app/design/adminhtml/default/default/layout/combodeal.xml      app/design/adminhtml/default/default/layout/combodeal.xml
