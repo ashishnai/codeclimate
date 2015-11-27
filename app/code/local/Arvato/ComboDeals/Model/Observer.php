@@ -2,9 +2,9 @@
 /**
  * Catalog Observer
  *
- * @category   Arvato
- * @package    Arvato_ComboDeals
- * @author     Cybage Team <core@cybage.com>
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato 2015
  */
 class Arvato_ComboDeals_Model_Observer
 {
@@ -28,7 +28,7 @@ class Arvato_ComboDeals_Model_Observer
     }
 	
 	/**
-	 * Overwrite the cache field in the product to remove disabled attributes
+	 * Disable the attributes which are not required
 	 *
 	 * event: core_block_abstract_prepare_layout_before
 	 *

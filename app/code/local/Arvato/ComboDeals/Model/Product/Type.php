@@ -1,6 +1,6 @@
 <?php
 /**
- * Adminhtml product edit tabs
+ * Adminhtml product type
  *
  * @category    Arvato
  * @package     Arvato_ComboDeals

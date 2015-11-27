@@ -4,7 +4,7 @@
  *
  * @category    Arvato
  * @package     Arvato_ComboDeals
- * @author      Shireen N <shireenn@cybage.com>
+ * @copyright   Copyright (c) arvato 2015
  */
 class Arvato_ComboDeals_Block_Adminhtml_Combo extends Mage_Adminhtml_Block_Widget
     implements Mage_Adminhtml_Block_Widget_Tab_Interface

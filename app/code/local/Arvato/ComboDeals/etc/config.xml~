@@ -29,7 +29,7 @@
                 <type>
                     <combodeal translate="label" module="catalog">
                         <label>Combo Deal Product</label>
-                        <model>combodeals/product_type</model>
+                        <model>combodeals/product_type_combo_product</model>
                         <is_qty>1</is_qty>
                         <price_model>combodeals/product_price</price_model>
                         <composite>1</composite>
