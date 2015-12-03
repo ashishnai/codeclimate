@@ -1,0 +1,104 @@
+<?php
+
+?>
+<script type="text/javascript">
+optionTemplate = '<div id="<?php echo $this->getFieldId() ?>_{{index}}"  class="option-box"> ' +
+    '<table class="option-header" cellpadding="0" cellspacing="0">' +
+        '<tbody>' +
+            '<tr>' +
+                '<input type="hidden" id="<?php echo $this->getFieldId() ?>_id_{{index}}" name="<?php echo $this->getFieldName() ?>[{{index}}][option_id]" value="{{option_id}}">' +                
+                '<input type="hidden" name="<?php echo $this->getFieldName() ?>[{{index}}][delete]" value="" class="delete">' +                
+                '<td>&nbsp;<?php echo $this->jsQuoteEscape($this->getOptionDeleteButtonHtml()) ?></td>' +
+                '<td>&nbsp;<?php echo $this->jsQuoteEscape($this->getAddSelectionButtonHtml()) ?></td>' +
+            '</tr>' +
+        '</tbody>' +
+    '</table>' +
+    '<div id="<?php echo $this->getFieldId() ?>_search_{{index}}">' +
+    '</div>' +
+    '<input type="hidden" id="<?php echo $this->getFieldId() ?>_validation_{{index}}" class="<?php echo Arvato_ComboDeal_Helper_Data::VALIDATION_CLASS_HAS_PRODUCTS; ?>">' +
+'</div>';
+</script>
+
+<?php echo $this->getSelectionHtml() ?>
+
+<script type="text/javascript">
+
+function changeInputType(oldObject, oType) {
+    var newObject = document.createElement('input');
+    newObject.type = oType;
+    if(oldObject.size) newObject.size = oldObject.size;
+    if(oldObject.value) newObject.value = oldObject.value;
+    if(oldObject.name) newObject.name = oldObject.name;
+    if(oldObject.id) newObject.id = oldObject.id;
+    if(oldObject.onclick) newObject.onclick = oldObject.onclick;
+    if(oldObject.className) newObject.className = oldObject.className;
+    oldObject.parentNode.replaceChild(newObject,oldObject);
+    return newObject;
+}
+
+Combodeal.Option = Class.create();
+Combodeal.Option.prototype = {
+    idLabel : '<?php echo $this->getFieldId() ?>',
+    top : '',
+    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
+    templateText : '',
+    itemsCount : 0,
+    initialize : function(template) {
+        this.templateText = template;
+        this.top = $('product_combodeals_container_top');
+    },
+
+    add : function(data) {
+
+        if(!data){
+            data = {};
+            this.top = $('product_combodeals_container_top');
+        } else {
+            data.title = data.title.replace('"', "&quot;");
+        }
+
+        data.index = this.itemsCount++;
+
+        this.template = new Template(this.templateText, this.templateSyntax);
+
+        Element.insert(this.top, {'after':this.template.evaluate(data)});
+
+        this.top = $(this.idLabel + '_' + data.index);
+
+        //set selected discount type
+        if (data.discount_type) {
+            $A($(this.idLabel + '_'+data.index+'_discount_type').options).each(function(option){
+                if (option.value==data.discount_type) option.selected = true;
+            });
+        }
+
+        // rebind change notifications
+        varienWindowOnload(true);
+
+        return data.index;
+    },
+
+    remove : function(event){
+        var element = $(Event.findElement(event, 'div')).parentNode;
+        if(element){
+            Element.select(element, '.delete').each(function(elem){elem.value='1'});
+            Element.select(element, ['input', 'select']).each(function(elem){elem.hide(); elem.className = '';});
+            Element.hide(element);
+        }
+    }
+}
+
+var optionIndex = 0;
+cdOption = new Combodeal.Option(optionTemplate);
+//adding data to templates
+<?php /*  foreach ($this->getOptions() as $_option): ?>
+optionIndex = cdOption.add(<?php echo $_option->toJson() ?>);
+<?php if ($_option->getSelections()):?>
+    <?php foreach ($_option->getSelections() as $_selection): ?>
+    <?php $_selection->setName($this->escapeHtml($_selection->getName())); ?>
+cdSelection.addRow(optionIndex, <?php echo $_selection->toJson() ?>);
+    <?php endforeach; ?>
+<?php endif; ?>
+<?php endforeach; */ ?>
+
+</script>
