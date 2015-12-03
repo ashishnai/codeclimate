@@ -1,4 +1,11 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato
+ */
+-->
 <config>
     <modules>
         <Arvato_ComboDeals>
@@ -62,6 +69,7 @@
             <combodeals_setup>
                 <setup>
                     <module>Arvato_ComboDeals</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -117,13 +125,6 @@
                 </observers>
             </core_block_abstract_prepare_layout_after>
         </events>
-        <acl>
-            <resources>
-                <all>
-                    <title>Allow Everything</title>
-                </all>
-            </resources>
-        </acl>
         <layout>
             <updates>
                 <combodeals>
@@ -132,4 +133,14 @@
             </updates>
         </layout>
     </adminhtml>
+    <default>
+        <combodeals_admin>
+            <setting>
+                <enable_frontend>1</enable_frontend>
+            </setting>
+            <combodeals_setting>
+                <enable_dedicated>1</enable_dedicated>
+            </combodeals_setting>
+        </combodeals_admin>
+    </default>
 </config>

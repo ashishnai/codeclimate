@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) 2015
+ */
+-->
+<config>
+    <menu>
+        <catalog translate="title" module="awesome">
+            <children>
+                <combodeals translate="title" module="combodeals">
+                    <title>Combo Deal Products</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/example/index</action>
+                </combodeals>
+            </children>
+        </catalog>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <combodeals_admin translate="title" module="combodeals">
+                                        <title>arvato Combo Deals Settings</title>
+                                    </combodeals_admin>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

@@ -20,10 +20,9 @@ class Arvato_ComboDeals_Model_Observer
         $product = $observer->getEvent()->getProduct();
 		if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
 			$product->setSku(rand(5, 15));
-			$product->setVisibility('1');
+			$product->setVisibility('1');		
 			$product->save();
 		}
-       // Mage::log($product->getData(), true, null);
         return $this;
     }
 	
@@ -69,7 +68,9 @@ class Arvato_ComboDeals_Model_Observer
 			$block->removeTab('reviews'); 
 			$block->removeTab('tags'); 
 			$block->removeTab('customers_tags'); 
-			$block->removeTab('customer_options'); 
+			$block->removeTab('customer_options');
+			$block->removeTab('customers_tags');
+			$block->removeTab('customer_options');
 			// fix tab selection, as we might have removed the active tab
 			$tabs = $block->getTabsIds();
 			if (count($tabs) == 0) {
@@ -78,7 +79,7 @@ class Arvato_ComboDeals_Model_Observer
 				$block->setActiveTab($tabs[0]);
 			}
 		} else{
-			
+			return;
 		}
 	}	
 	

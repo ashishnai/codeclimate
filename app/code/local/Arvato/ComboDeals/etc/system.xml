@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) 2015 arvato
+ */
+-->
+<config>
+    <tabs>
+        <arvato translate="label" module="combodeals">
+            <label>arvato</label>
+            <sort_order>0</sort_order>
+        </arvato>
+    </tabs>
+    <sections>
+        <combodeals_admin translate="label" module="combodeals">
+            <label>arvato Combo Deals</label>
+            <tab>arvato</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>5060</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <setting translate="label" module="combodeals">
+                    <label>General Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>001</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable_frontend translate="label">
+                            <label>Enable on Frontend</label>
+                            <comment>
+                                <![CDATA[enables/disables the combo deals feature on frontend]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>001</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_frontend>
+                   </fields>
+                </setting>
+
+                <combodeals_setting translate="label" module="combodeals">
+                    <label>Combo Deals Settings</label>
+                    <tab>arvato</tab>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>003</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable_dedicated translate="label">
+                            <label>Enable on dedicated page</label>
+                            <comment>
+                                <![CDATA[enables/disables the combo deal dedicated list page.]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>001</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enable_dedicated>
+                        <header>
+                            <label>Header title</label>
+                            <comment>
+                                <![CDATA[Title of combo deal promotion block on PDP.]]>
+                            </comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>002</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </header>
+                        <number_of_combodeals>
+                            <label>Number of Combo deals on Product Details Page</label>
+                            <comment>
+                                <![CDATA[The number of combo deals to be displayed on the Product Details Page.]]>
+                            </comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-number</validate>
+                            <sort_order>003</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </number_of_combodeals>
+
+                        <sorting_option>
+                            <label>Default Sorting option for Combo deal</label>
+                            <comment>
+                                <![CDATA[The default sorting for the combo deal products on the Product details and dedicated page.]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>combodeals/system_config_source_sorting</source_model>
+                            <sort_order>004</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sorting_option>
+                        <label_cart>
+                            <label>Combo deal promotion discount label on cart</label>
+                            <comment>
+                                <![CDATA[The discount label of combo deal in the totals section of shopping cart.]]>
+                            </comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>005</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </label_cart>
+                    </fields>
+                </combodeals_setting>
+            </groups>
+        </combodeals_admin>
+    </sections>
+</config>
