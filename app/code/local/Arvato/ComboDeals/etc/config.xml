@@ -9,7 +9,7 @@
 <config>
     <modules>
         <Arvato_ComboDeals>
-            <version>0.1.0</version>
+            <version>1.0.0</version>
         </Arvato_ComboDeals>
     </modules>
     <frontend>
@@ -57,7 +57,7 @@
         <models>
             <combodeals>
                 <class>Arvato_ComboDeals_Model</class>
-                <resourceModel>combodeals_mysql4</resourceModel>
+                <resourceModel>combodeals_resource</resourceModel>
             </combodeals>
             <rewrite>
                 <bundle>

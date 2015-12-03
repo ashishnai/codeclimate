@@ -4,7 +4,7 @@
 		<reference name="product_tabs">
 			<action method="addTab">
 				<name>combo_deal</name> 
-				<block>combodeals/adminhtml_combo</block> 
+				<block>combodeals/adminhtml_tab</block>
 			</action>
 		</reference>
 	</adminhtml_catalog_product_edit>
@@ -12,7 +12,7 @@
 		<reference name="product_tabs">
 			<action method="addTab">
 				<name>combo_deal</name> 
-				<block>combodeals/adminhtml_combo</block> 
+				<block>combodeals/adminhtml_tab</block>
 			</action>
 		</reference>
 	</adminhtml_catalog_product_new>

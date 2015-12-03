@@ -6,7 +6,7 @@
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
  */
-class Arvato_ComboDeals_Block_Adminhtml_Combo extends Mage_Adminhtml_Block_Widget
+class Arvato_ComboDeals_Block_Adminhtml_Tab extends Mage_Adminhtml_Block_Widget
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
     protected $_product = null;
