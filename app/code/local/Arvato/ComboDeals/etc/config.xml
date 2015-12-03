@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Arvato_ComboDeals>
-            <version>0.1.0</version>
+            <version>1.0.0</version>
         </Arvato_ComboDeals>
     </modules>
     <frontend>
@@ -50,8 +50,19 @@
         <models>
             <combodeals>
                 <class>Arvato_ComboDeals_Model</class>
-                <resourceModel>combodeals_mysql4</resourceModel>
+                <resourceModel>combodeals_resource</resourceModel>
             </combodeals>
+            <combodeals_resource>
+                <class>Arvato_ComboDeals_Model_Resource</class>
+                <entities>
+                    <option>
+                        <table>arvato_catalog_product_combodeal_option</table>
+                    </option>
+                    <selection>
+                        <table>arvato_catalog_product_combodeal_selection</table>
+                    </selection>
+                </entities>
+            </combodeals_resource>
             <rewrite>
                 <bundle>
                     <product_type>Arvato_ComboDeals_Model_Product_Type</product_type>
@@ -63,20 +74,10 @@
                 <setup>
                     <module>Arvato_ComboDeals</module>
                 </setup>
-                <connection>
-                    <use>core_setup</use>
-                </connection>
             </combodeals_setup>
-            <combodeals_write>
-                <connection>
-                    <use>core_write</use>
-                </connection>
-            </combodeals_write>
-            <combodeals_read>
-                <connection>
-                    <use>core_read</use>
-                </connection>
-            </combodeals_read>
+            <connection>
+                <use>core_setup</use>
+            </connection>
         </resources>
     </global>
     <admin>
