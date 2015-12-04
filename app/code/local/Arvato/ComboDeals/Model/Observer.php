@@ -18,8 +18,7 @@ class Arvato_ComboDeals_Model_Observer
     {
         $request = $observer->getEvent()->getRequest();
         $product = $observer->getEvent()->getProduct();
-		if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
-			$product->setSku(rand(5, 15));
+		if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL) {
 			$product->setVisibility('1');		
 			$product->save();
 		}

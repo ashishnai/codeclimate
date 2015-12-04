@@ -59,6 +59,17 @@
                 <class>Arvato_ComboDeals_Model</class>
                 <resourceModel>combodeals_resource</resourceModel>
             </combodeals>
+            <combodeals_resource>
+                <class>Arvato_ComboDeals_Model_Resource</class>
+                <entities>
+                    <option>
+                        <table>arvato_catalog_product_combodeal_option</table>
+                    </option>
+                    <selection>
+                        <table>arvato_catalog_product_combodeal_selection</table>
+                    </selection>
+                </entities>
+            </combodeals_resource>
             <rewrite>
                 <bundle>
                     <product_type>Arvato_ComboDeals_Model_Product_Type</product_type>
