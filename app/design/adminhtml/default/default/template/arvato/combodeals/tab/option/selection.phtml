@@ -42,8 +42,8 @@ var bundleTemplateRow ='<td>' +
                 '<td><input class="input-text required-entry validate-greater-than-zero" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][position]" value="{{position}}"></td>' +
                 '<td class="last"><span title="Delete Row"><?php echo $this->getSelectionDeleteButtonHtml() ?></span></td>';
 
-Combodeal.Selection = Class.create();
-Combodeal.Selection.prototype = {
+Combodeals.Selection = Class.create();
+Combodeals.Selection.prototype = {
     idLabel : '<?php echo $this->getFieldId() ?>',
     templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
     templateBox : '',
@@ -109,12 +109,11 @@ Combodeal.Selection.prototype = {
         var tbody = $$('#' + this.idLabel + '_box_' + parentIndex + ' tbody');
 
         Element.insert(tbody[0], {'bottom':this.template.evaluate(data)});
-
-
-        //set selected role
-        if (data.role) {
-            $A($(this.idLabel + '_' + parentIndex +'_'+ data.index +'_role').options).each(function(selection){
-                if (selection.value==data.role)
+        
+        //set selected discount type
+        if (data.discount_type) {
+            $A($(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_type').options).each(function(selection){
+                if (selection.value==data.discount_type)
                 {
                     selection.selected = true;
                 }
@@ -247,6 +246,6 @@ Combodeal.Selection.prototype = {
     }
 }
 
-cdSelection = new Combodeal.Selection();
+cdSelection = new Combodeals.Selection();
 //]]>
 </script>

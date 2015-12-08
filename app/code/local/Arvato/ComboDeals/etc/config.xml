@@ -82,13 +82,13 @@
     </global>
     <admin>
         <routers>
-            <combodeals>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Arvato_ComboDeals</module>
-                    <frontName>admin_combodeals</frontName>
+                    <modules>
+                        <combodeals before="Mage_Adminhtml">Arvato_ComboDeals_Adminhtml</combodeals>
+                    </modules>
                 </args>
-            </combodeals>
+            </adminhtml>
         </routers>
     </admin>
     <adminhtml>
@@ -101,6 +101,14 @@
                     </combodeal_product_save>
                 </observers>
             </catalog_product_prepare_save>
+            <catalog_product_save_after>
+                <observers>
+                    <arvato_combodeal_model_observer>
+                        <class>combodeals/observer</class>
+                        <method>afterProductSave</method>
+                    </arvato_combodeal_model_observer>
+                </observers>
+            </catalog_product_save_after>
             <core_block_abstract_prepare_layout_before>
                 <observers>
                     <combodeal_remove_attributes>

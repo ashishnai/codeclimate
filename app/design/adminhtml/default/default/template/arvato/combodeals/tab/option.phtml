@@ -4,10 +4,24 @@
 <script type="text/javascript">
 optionTemplate = '<div id="<?php echo $this->getFieldId() ?>_{{index}}"  class="option-box"> ' +
     '<table class="option-header" cellpadding="0" cellspacing="0">' +
+        '<thead>' +
+            '<tr>' +
+                '<th class="opt-order"><?php echo Mage::helper('combodeals')->__('From Date') ?></th>' +
+                '<th>&nbsp;</th>' +
+                '<th class="opt-order"><?php echo Mage::helper('combodeals')->__('To Date') ?></th>' +
+                '<th>&nbsp;</th>' +
+                '<th>&nbsp;</th>' +
+                '<th>&nbsp;</th>' +
+            '</tr>' +
+        '</thead>' +
         '<tbody>' +
             '<tr>' +
-                '<input type="hidden" id="<?php echo $this->getFieldId() ?>_id_{{index}}" name="<?php echo $this->getFieldName() ?>[{{index}}][option_id]" value="{{option_id}}">' +                
-                '<input type="hidden" name="<?php echo $this->getFieldName() ?>[{{index}}][delete]" value="" class="delete">' +                
+                '<input type="hidden" id="<?php echo $this->getFieldId() ?>_id_{{index}}" name="<?php echo $this->getFieldName() ?>[{{index}}][option_id]" value="{{option_id}}">' +
+                '<input type="hidden" name="<?php echo $this->getFieldName() ?>[{{index}}][delete]" value="" class="delete">' +
+                '<td><input type="text" id="_from_date" name="<?php echo $this->getFieldName() ?>[{{index}}][from_date]" class="input-text required-entry" value="{{from_date}}" /></td>' +
+                '<td><img title="Select From Date" id="_from_date_trig" src="<?php echo $this->getSkinUrl('images/grid-cal.gif');?>" class = "v-middle"></td>' +
+                '<td><input type="text" id="_to_date" name="<?php echo $this->getFieldName() ?>[{{index}}][to_date]" class="input-text required-entry" value="{{to_date}}" /></td>' +
+                '<td><img title="Select To Date" id="_to_date_trig" src="<?php echo $this->getSkinUrl('images/grid-cal.gif');?>" class = "v-middle"></td>' +
                 '<td>&nbsp;<?php echo $this->jsQuoteEscape($this->getOptionDeleteButtonHtml()) ?></td>' +
                 '<td>&nbsp;<?php echo $this->jsQuoteEscape($this->getAddSelectionButtonHtml()) ?></td>' +
             '</tr>' +
@@ -15,7 +29,7 @@ optionTemplate = '<div id="<?php echo $this->getFieldId() ?>_{{index}}"  class="
     '</table>' +
     '<div id="<?php echo $this->getFieldId() ?>_search_{{index}}">' +
     '</div>' +
-    '<input type="hidden" id="<?php echo $this->getFieldId() ?>_validation_{{index}}" class="<?php echo Arvato_ComboDeal_Helper_Data::VALIDATION_CLASS_HAS_PRODUCTS; ?>">' +
+    '<input type="hidden" id="<?php echo $this->getFieldId() ?>_validation_{{index}}" class="<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_PRODUCTS; ?>">' +
 '</div>';
 </script>
 
@@ -36,8 +50,8 @@ function changeInputType(oldObject, oType) {
     return newObject;
 }
 
-Combodeal.Option = Class.create();
-Combodeal.Option.prototype = {
+Combodeals.Option = Class.create();
+Combodeals.Option.prototype = {
     idLabel : '<?php echo $this->getFieldId() ?>',
     top : '',
     templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
@@ -53,8 +67,6 @@ Combodeal.Option.prototype = {
         if(!data){
             data = {};
             this.top = $('product_combodeals_container_top');
-        } else {
-            data.title = data.title.replace('"', "&quot;");
         }
 
         data.index = this.itemsCount++;
@@ -89,16 +101,40 @@ Combodeal.Option.prototype = {
 }
 
 var optionIndex = 0;
-cdOption = new Combodeal.Option(optionTemplate);
+cdOption = new Combodeals.Option(optionTemplate);
 //adding data to templates
-<?php /*  foreach ($this->getOptions() as $_option): ?>
-optionIndex = cdOption.add(<?php echo $_option->toJson() ?>);
-<?php if ($_option->getSelections()):?>
-    <?php foreach ($_option->getSelections() as $_selection): ?>
-    <?php $_selection->setName($this->escapeHtml($_selection->getName())); ?>
-cdSelection.addRow(optionIndex, <?php echo $_selection->toJson() ?>);
+<?php if ($this->getOptions()):?>
+    <?php foreach ($this->getOptions() as $_option): ?>
+    optionIndex = cdOption.add(<?php echo $_option->toJson() ?>);
+    <?php if ($_option->getSelections()):?>
+        <?php foreach ($_option->getSelections() as $_selection): ?>
+        <?php $_selection->setName($this->escapeHtml($_selection->getName())); ?>
+    cdSelection.addRow(optionIndex, <?php echo $_selection->toJson() ?>);
+        <?php endforeach; ?>
+    <?php endif; ?>
     <?php endforeach; ?>
+<?php else: ?>
+    cdOption.add();
 <?php endif; ?>
-<?php endforeach; */ ?>
+</script>
 
+<script type="text/javascript">
+//<![CDATA[
+    Calendar.setup({
+        inputField: "_from_date",
+        ifFormat: "%m/%e/%Y",
+        showsTime: false,
+        button: "_from_date_trig",
+        align: "Bl",
+        singleClick : true
+    });
+    Calendar.setup({
+        inputField: "_to_date",
+        ifFormat: "%m/%e/%Y",
+        showsTime: false,
+        button: "_to_date_trig",
+        align: "Bl",
+        singleClick : true
+    });
+//]]>
 </script>

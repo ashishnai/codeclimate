@@ -2,9 +2,9 @@
 
 ?>
 <script type="text/javascript">
-if(typeof Combodeal=='undefined') {
+if(typeof Combodeals=='undefined') {
 
-    Combodeal = {};
+    Combodeals = {};
 }
 </script>
 
@@ -21,46 +21,6 @@ if(typeof Combodeal=='undefined') {
                     <option value="0"<?php if ($this->getProduct()->getShipmentType() == 0): ?> selected="selected"<?php endif; ?>><?php echo $this->__('Together') ?></option>
                 </select>
                 </td>            
-            </tr>
-            <tr>
-                <td class="label"><label for=�from_date�><?php echo $this->__('From Date') ?></label></td>
-                <td class="value">
-                    <input type="text" id="_from_date" name="from_date" class="input-text required-entry" />
-                    <img title="Select From Date" id="_from_date_trig" src="<?php echo $this->getSkinUrl('images/grid-cal.gif');?>" class = "v-middle">
-
-                    <script type="text/javascript">
-                    //<![CDATA[
-                        Calendar.setup({
-                            inputField: "_from_date",
-                            ifFormat: "%m/%e/%Y",
-                            showsTime: false,
-                            button: "_from_date_trig",
-                            align: "Bl",
-                            singleClick : true
-                        });
-                    //]]>
-                    </script>            
-                </td>
-            </tr>
-            <tr>
-                <td class="label"><label for=�to_date�><?php echo $this->__('To Date') ?></label></td>
-                <td class="value">
-                    <input type="text" id="_to_date" name="to_date" class="input-text required-entry" />
-                    <img title="Select To Date" id="_to_date_trig" src="<?php echo $this->getSkinUrl('images/grid-cal.gif');?>" class = "v-middle">
-
-                    <script type="text/javascript">
-                    //<![CDATA[
-                        Calendar.setup({
-                            inputField: "_to_date",
-                            ifFormat: "%m/%e/%Y",
-                            showsTime: false,
-                            button: "_to_date_trig",
-                            align: "Bl",
-                            singleClick : true
-                        });
-                    //]]>
-                    </script>            
-                </td>
             </tr>
         </table>
     </fieldset>
@@ -97,24 +57,22 @@ Validation.add('validate-greater-zero-based-on-option', '<?php echo $this->__('P
     }
     return true;
 });
-Validation.add('<?php echo Arvato_ComboDeal_Helper_Data::VALIDATION_CLASS_HAS_PRODUCTS; ?>', '<?php echo $this->__('Please add at least one product to the deal.') ?>', 
-        function(v, el) {
-            var elementId = el.id;
-            var lastUnderscore = elementId.lastIndexOf('_');
-            var parentIndex = elementId.substring(lastUnderscore + 1);
-            var containerId = 'combodeals_selection_box_' + parentIndex;
-            if ($$('#' + containerId + ' tr.selection')) {
-                if (!$$('#' + containerId + ' tr.selection').length) {
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
+Validation.add('<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_PRODUCTS; ?>', '<?php echo $this->__('Please add at least two products to the deal.') ?>',
+    function(v, el) {
+        var elementId = el.id;
+        var lastUnderscore = elementId.lastIndexOf('_');
+        var parentIndex = elementId.substring(lastUnderscore + 1);
+        var containerId = 'combodeals_selection_box_' + parentIndex;
+        if ($$('#' + containerId + ' tr.selection')) {
+            if (!$$('#' + containerId + ' tr.selection').length) {
                 return false;
+            } else {
+                return true;
             }
-        });
-        
-cdOption.add();
+        } else {
+            return false;
+        }
+    });
 </script>
 
 <div><input type="hidden" name="affect_combodeals_product_selections" value="1" /></div>
