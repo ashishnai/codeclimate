@@ -100,15 +100,15 @@
     </global>
     <admin>
         <routers>
-            <combodeals>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Arvato_ComboDeals</module>
-                    <frontName>admin_combodeals</frontName>
+                    <modules>
+                        <combodeals before="Mage_Adminhtml">Arvato_ComboDeals_Adminhtml</combodeals>
+                    </modules> 
                 </args>
-            </combodeals>
+            </adminhtml>
         </routers>
-    </admin>
+    </admin>    
     <adminhtml>
         <events>
             <catalog_product_prepare_save>

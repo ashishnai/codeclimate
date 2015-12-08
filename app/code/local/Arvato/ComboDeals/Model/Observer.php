@@ -9,16 +9,16 @@
 class Arvato_ComboDeals_Model_Observer
 {
 	 /**
-     * Setting Comdo deal product Data to product for father processing
+     * Setting Comdo deal product Data to product for further processing
      *
      * @param Varien_Object $observer
      * @return Arvato_ComboDeals_Model_Observer
      */
     public function prepareProductSave($observer)
     {
-        $request = $observer->getEvent()->getRequest();
         $product = $observer->getEvent()->getProduct();
 		if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL) {
+                        $product->setSku(rand(2, 4));	
 			$product->setVisibility('1');		
 			$product->save();
 		}
@@ -41,7 +41,7 @@ class Arvato_ComboDeals_Model_Observer
 		if($block->getProduct()->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
 			$block->getProduct()->setVisibility('1');
 			$block->getProduct()->lockAttribute('visibility');
-			$adminSession = Mage::getSingleton('admin/session');
+                        $block->getProduct()->lockAttribute('sku');
 		}else{
 			return;
 		}
@@ -67,8 +67,6 @@ class Arvato_ComboDeals_Model_Observer
 			$block->removeTab('reviews'); 
 			$block->removeTab('tags'); 
 			$block->removeTab('customers_tags'); 
-			$block->removeTab('customer_options');
-			$block->removeTab('customers_tags');
 			$block->removeTab('customer_options');
 			// fix tab selection, as we might have removed the active tab
 			$tabs = $block->getTabsIds();
