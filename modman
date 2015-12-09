@@ -2,4 +2,4 @@
 
 app/code/local/Arvato/ComboDeals                               app/code/local/Arvato/ComboDeals
 app/etc/modules/Arvato_ComboDeals.xml                          app/etc/modules/Arvato_ComboDeals.xml
-app/design/adminhtml/default/default/layout/combodeal.xml      app/design/adminhtml/default/default/layout/combodeal.xml
+
