@@ -21,6 +21,11 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      * Separator to join child SKU's to make parent SKU of combo deal product
      */
     const COMBODEAL_PRODUCT_SKU_SEPARATOR = '--';
+    
+    /**
+     * New attribute set name
+     */
+    const COMBODEAL_ATTRIBUTE_SET_NAME = 'Combo Deals';
 
     /**
      * Retrieve mixed string SKU using selected child products

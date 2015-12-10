@@ -105,4 +105,18 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('combodeals
     $installer->getConnection()->createTable($selectionTable);
 }
 
+/* Create a new Attribute Set from Default */
+// Mage_Eav_Model_Entity_Setup
+$catalogProductEntityTypeId = (int) $installer->getEntityTypeId('catalog_product');
+
+$attributeSet = Mage::getModel('eav/entity_attribute_set')
+        ->setEntityTypeId($catalogProductEntityTypeId)
+        ->setAttributeSetName(Arvato_ComboDeals_Helper_Data::COMBODEAL_ATTRIBUTE_SET_NAME);
+
+if ($attributeSet->validate()) {
+    $attributeSet->save()
+            ->initFromSkeleton($catalogProductEntityTypeId)
+            ->save();
+}
+
 $installer->endSetup();
