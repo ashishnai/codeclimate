@@ -1,0 +1,32 @@
+<?php
+$installer = $this;
+$installer->startSetup();
+
+
+// Mage_Eav_Model_Entity_Setup
+$newSetName = 'Combo Deals';
+$catalogProductEntityTypeId = (int) $installer->getEntityTypeId('catalog_product');
+
+$attributeSet = Mage::getModel('eav/entity_attribute_set')
+		    ->setEntityTypeId($catalogProductEntityTypeId)
+		    ->setAttributeSetName($newSetName);
+
+if ($attributeSet->validate()) {
+	$attributeSet
+			->save();
+
+}
+else {
+	die('Attribute set with name ' . $newSetName . ' already exists.');
+}
+
+//create an attribute group instance
+//$attributeGroup = Mage::getModel('eav/entity_attribute_group');
+//$attributeGroup->setAttributeGroupName('General')
+//link to the current set
+//->setAttributeSetId($attributeSet->getId())
+		->setSortOrder(100);
+//$attributeGroup->save();
+
+$installer->endSetup();
+	 
