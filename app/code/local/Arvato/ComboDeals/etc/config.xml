@@ -52,7 +52,12 @@
         <blocks>
             <combodeals>
                 <class>Arvato_ComboDeals_Block</class>
-            </combodeals>
+            </combodeals>           
+            <adminhtml>
+                <rewrite>
+                    <catalog_product_edit>Arvato_ComboDeals_Block_Adminhtml_Catalog_Product_Edit</catalog_product_edit>
+                </rewrite>
+            </adminhtml>
         </blocks>
         <models>
             <combodeals>
@@ -70,11 +75,11 @@
                     </selection>
                 </entities>
             </combodeals_resource>
-            <rewrite>
-                <bundle>
-                    <product_type>Arvato_ComboDeals_Model_Product_Type</product_type>
-                </bundle>
-            </rewrite>
+            <bundle>
+                <rewrite>
+                    <product_type>Arvato_ComboDeals_Model_Product_Type</product_type>              
+                </rewrite>
+            </bundle>
         </models>
         <resources>
             <combodeals_setup>
