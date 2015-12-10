@@ -11,7 +11,6 @@
         <Arvato_ComboDeals>
             <active>true</active>
             <codePool>local</codePool>
-            <version>1.0.0</version>
             <depends>
                 <Mage_Bundle/>
             </depends>

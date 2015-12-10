@@ -52,7 +52,12 @@
         <blocks>
             <combodeals>
                 <class>Arvato_ComboDeals_Block</class>
-            </combodeals>
+            </combodeals>           
+            <adminhtml>
+                <rewrite>
+                    <catalog_product_edit>Arvato_ComboDeals_Block_Adminhtml_Catalog_Product_Edit</catalog_product_edit>
+                </rewrite>
+            </adminhtml>
         </blocks>
         <models>
             <combodeals>
@@ -70,16 +75,17 @@
                     </selection>
                 </entities>
             </combodeals_resource>
-            <rewrite>
-                <bundle>
-                    <product_type>Arvato_ComboDeals_Model_Product_Type</product_type>
-                </bundle>
-            </rewrite>
+            <bundle>
+                <rewrite>
+                    <product_type>Arvato_ComboDeals_Model_Product_Type</product_type>              
+                </rewrite>
+            </bundle>
         </models>
         <resources>
             <combodeals_setup>
                 <setup>
                     <module>Arvato_ComboDeals</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
                 </setup>
             </combodeals_setup>
             <connection>
@@ -97,7 +103,7 @@
                 </args>
             </adminhtml>
         </routers>
-    </admin>
+    </admin>    
     <adminhtml>
         <events>
             <catalog_product_prepare_save>
@@ -133,13 +139,6 @@
                 </observers>
             </core_block_abstract_prepare_layout_after>
         </events>
-        <acl>
-            <resources>
-                <all>
-                    <title>Allow Everything</title>
-                </all>
-            </resources>
-        </acl>
         <layout>
             <updates>
                 <combodeals>
@@ -148,4 +147,14 @@
             </updates>
         </layout>
     </adminhtml>
+    <default>
+        <combodeals_admin>
+            <setting>
+                <enable_frontend>1</enable_frontend>
+            </setting>
+            <combodeals_setting>
+                <enable_dedicated>1</enable_dedicated>
+            </combodeals_setting>
+        </combodeals_admin>
+    </default>
 </config>

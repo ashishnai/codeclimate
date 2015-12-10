@@ -11,17 +11,17 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      * Validation class name
      */
     const VALIDATION_CLASS_HAS_PRODUCTS = 'validate-has-products';
-    
+
     /**
      * SKU prefix for combo deal product
      */
     const COMBODEAL_PRODUCT_SKU_PREFIX = 'combo';
-    
+
     /**
      * Separator to join child SKU's to make parent SKU of combo deal product
      */
     const COMBODEAL_PRODUCT_SKU_SEPARATOR = '--';
-    
+
     /**
      * Retrieve mixed string SKU using selected child products
      *     
