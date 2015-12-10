@@ -1,11 +1,15 @@
 <?php
-/**
+/** 
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    /**
+     * Validation class name
+     */
     const VALIDATION_CLASS_HAS_PRODUCTS = 'validate-has-products';
     
     /**

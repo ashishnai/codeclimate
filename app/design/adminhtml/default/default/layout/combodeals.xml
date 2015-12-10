@@ -1,4 +1,11 @@
-<?xml version="1.0" ?> 
+<?xml version="1.0" ?>
+<!--
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
+ */
+-->
 <layout>
     <adminhtml_catalog_product_edit>
         <reference name="product_tabs">

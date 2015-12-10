@@ -1,15 +1,16 @@
 <?php
 /**
- * Catalog Observer
- *
+ * Prepare product data to save
+ * 
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Model_Observer
 {
     /**
-     * Setting Comdo deal product Data to product for father processing
+     * Setting options, selections and product Data to combo deal product for father processing
      *
      * @param Varien_Object $observer
      * @return Arvato_ComboDeals_Model_Observer
@@ -18,11 +19,6 @@ class Arvato_ComboDeals_Model_Observer
     {
         $request = $observer->getEvent()->getRequest();
         $product = $observer->getEvent()->getProduct();
-        
-//        echo "<pre>";
-//        print_r($request->getPost('combodeals_options'));
-//        print_r($request->getPost('combodeals_selections'));
-//        exit;        
 
         if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){            
             // set visibility to "Not Visible Individually"
@@ -50,7 +46,7 @@ class Arvato_ComboDeals_Model_Observer
      */
     public function afterProductSave($observer)
     {
-        $typeInstance = Mage::helper("combodeals/productComboDeals");
+        $typeInstance = Mage::helper("combodeals/saveComboDeals");
         $product = $observer->getEvent()->getProduct();
         $typeInstance->save($product);
     }
@@ -109,5 +105,4 @@ class Arvato_ComboDeals_Model_Observer
 
         }
     }
-
 }

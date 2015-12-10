@@ -1,12 +1,17 @@
 <?php
 /**
+ * ComboDeals selection product grid
+ * 
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
-
+    /**
+     * Initialize product selection grid
+     */
     public function __construct()
     {
         parent::__construct();
@@ -18,16 +23,31 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
         $this->setUseAjax(true);
     }
 
+    /**
+     * Return grid URL
+     *
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('*/comboDeals_selection/grid', array('index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts())));
     }
 
+    /**
+     * Retrieve store
+     *
+     * @return string|integer|Mage_Core_Model_Store
+     */
     public function getStore()
     {
         return Mage::app()->getStore();
     }
 
+    /**
+     * This method is called before rendering HTML
+     *
+     * @return Mage_Adminhtml_Block_Widget_Grid
+     */
     protected function _beforeToHtml()
     {
         $this->setId($this->getId().'_'.$this->getIndex());
@@ -36,9 +56,13 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
 
         return parent::_beforeToHtml();
     }
+
+    /**
+     * Prepare grid collection
+     */
     protected function _prepareCollection()
     {
-        // Load the actual products by the given IDs
+        // Load the actual products by the given IDs with qty
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('sku')
@@ -46,8 +70,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
             ->addAttributeToSelect('attribute_set_id')
             ->addStoreFilter()
             ->joinField(
-                'qty', 
-                'cataloginventory/stock_item', 
+                'qty',
+                'cataloginventory/stock_item',
                 'qty',
                 'product_id=entity_id',
                 '{{table}}.stock_id=1 ) AND ( {{table}}.qty>0',
@@ -69,6 +93,11 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
         return parent::_prepareCollection();
     }
 
+    /**
+     * Prepare and add columns to grid
+     *
+     * @return Mage_Adminhtml_Block_Widget_Grid
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('id', array(
@@ -133,13 +162,23 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
 
         return parent::_prepareColumns();
     }
-
+    
+    /**
+     * Return selected products
+     *
+     * @return array
+     */
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost('selected_products', array());
         return $products;
     }
 
+    /**
+     * Return products
+     *
+     * @return array
+     */
     protected function _getProducts()
     {
         if ($products = $this->getRequest()->getPost('products', null)) {
@@ -151,6 +190,11 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
         }
     }
 
+    /**
+     * Retirve currently edited product model
+     *
+     * @return Mage_Catalog_Model_Product
+     */
     private function _getProduct()
     {
         return Mage::registry('current_product');

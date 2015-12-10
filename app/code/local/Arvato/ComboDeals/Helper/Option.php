@@ -1,8 +1,11 @@
 <?php
 /**
+ * ComboDeals option and selections colletion
+ * 
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
 {
@@ -12,6 +15,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      * @var string
      */
     protected $_keyOptionsCollection = '_cache_instance_comboDeals_options_collection';
+
     /**
      * Cache key for Selections Collection
      *
@@ -19,6 +23,12 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      */
     protected $_keySelectionsCollection = '_cache_instance_comboDeals_selections_collection';
 
+    /**
+     * Get Options with attached Selections collection
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
     public function getOptions($product)
     {
         $storeId = $product->getStoreId();
@@ -52,6 +62,11 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
 
     /*
      * Gets the option with the given id incl. the selections
+     * 
+     * @param Mage_Catalog_Model_Product $product
+     * @param int $optionId
+     * 
+     * @return array
      */
     public function getOption($product, $optionId)
     {

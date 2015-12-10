@@ -1,4 +1,11 @@
 <?xml version="1.0"?>
+<!--
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
+ */
+-->
 <config>
     <modules>
         <Arvato_ComboDeals>

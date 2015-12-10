@@ -3,6 +3,7 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
 {
@@ -12,13 +13,14 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * @var array
      */
     protected $_itemIds;
+
     /**
      * True when selections a
      *
      * @var bool
      */
     protected $_selectionsAppended = false;
-    
+
     /**
      * Init model and resource model
      *

@@ -3,13 +3,14 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
-
 class Arvato_ComboDeals_Model_Option extends Mage_Core_Model_Abstract
 {
     const DISCOUNT_TYPE_PERCENT = 'percent';
     const DISCOUNT_TYPE_FIXED = 'fixed';
     const DISCOUNT_TYPE_FREE = 'free';
+    const DISCOUNT_TYPE_NONE = 'none';
     
     /**
      * Default selection object
@@ -88,7 +89,7 @@ class Arvato_ComboDeals_Model_Option extends Mage_Core_Model_Abstract
     }
 
     /*
-     * gets the type of discount (percent or fixed)
+     * gets the type of discount (percent or fixed or free or none)
      */
     public function getDiscountType()
     {

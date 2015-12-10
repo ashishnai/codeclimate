@@ -1,13 +1,13 @@
 <?php
 /**
- * Contains the logic for Saving all combo deal options of a product
+ * Save all options and selection of a combodeal product
  * 
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
-
-class Arvato_ComboDeals_Helper_ProductComboDeals extends Mage_Core_Helper_Abstract
+class Arvato_ComboDeals_Helper_SaveComboDeals extends Mage_Core_Helper_Abstract
 {
 
     /**

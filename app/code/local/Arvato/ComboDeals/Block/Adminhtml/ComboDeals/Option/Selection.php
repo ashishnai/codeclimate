@@ -1,8 +1,11 @@
 <?php
 /**
+ * ComboDeals product selection
+ * 
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage_Adminhtml_Block_Widget
 {
@@ -56,14 +59,16 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage
 
     /*
      * Gets the HTML for the discount type drop down list
+     * 
+     * @return string
      */
     public function getDiscountTypeSelectHtml()
     {
         $selectionDiscountTypes = array(
-            array('label' => 'None', 'value' => 'none'),
-            array('label' => 'Fixed', 'value' => 'fixed'),
-            array('label' => 'Percent', 'value' => 'percent'),
-            array('label' => 'Free', 'value' => 'free'),
+            array('label' => 'None', 'value' => Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_NONE),
+            array('label' => 'Fixed', 'value' => Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_FIXED),
+            array('label' => 'Percent', 'value' => Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_PERCENT),
+            array('label' => 'Free', 'value' => Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_FREE),
         );
 
         $select = $this->getLayout()->createBlock('adminhtml/html_select')
@@ -78,9 +83,9 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage
     }
 
     /**
-     * Prepare block layout
+     * Prepare selection block layout
      *
-     * @return Arvato_ComboDeal_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selection
+     * @return Mage_Adminhtml_Block_Widget
      */
     protected function _prepareLayout()
     {

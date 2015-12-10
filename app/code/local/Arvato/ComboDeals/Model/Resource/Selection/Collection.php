@@ -3,6 +3,7 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog_Model_Resource_Product_Collection
 {
@@ -41,7 +42,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
     }
 
     /**
-     * Initialize collection select
+     * Initialize collection select with qty
      *
      */
     protected function _initSelect()

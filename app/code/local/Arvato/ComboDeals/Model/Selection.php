@@ -3,8 +3,8 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
-
 class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
 {
     /**
@@ -16,9 +16,13 @@ class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
         parent::_construct();
     }
 
-    /*
-    * determins the discounted price
-    */
+    /**
+     * determins the discounted price
+     * 
+     * @param $parentOption Arvato_ComboDeal_Model_Option
+     * @param $minimalProductPrice int
+     * @return int 
+     */
     public function getDiscountedPrice($parentOption, $minimalProductPrice)
     {
         // init
@@ -40,11 +44,7 @@ class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
             {
                 $discountedPrice = $discountedPrice- $amount;
             }
-
-
         }
-
         return $discountedPrice;
     }
-
 }

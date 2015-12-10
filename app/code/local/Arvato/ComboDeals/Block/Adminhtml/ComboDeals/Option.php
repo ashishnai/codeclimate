@@ -1,21 +1,24 @@
 <?php
 /**
+ * ComboDeals product option
+ * 
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml_Block_Widget
 {
 
     /**
-     * List of combodeal options
+     * List of combodeals options
      *
      * @var array|null
      */
     protected $_options = null;
 
     /**
-     * combodeal option renderer class constructor
+     * combodeals option renderer class constructor
      *
      * Sets block template and necessary data
      */
@@ -24,11 +27,21 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
         $this->setTemplate('arvato/combodeals/tab/option.phtml');
     }
 
+    /**
+     * Return field id
+     *
+     * @return string
+     */
     public function getFieldId()
     {
         return 'combodeals_option';
     }
 
+    /**
+     * Return field name
+     *
+     * @return string
+     */
     public function getFieldName()
     {
         return 'combodeals_options';
@@ -53,39 +66,69 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
         return $this->toHtml();
     }
 
+    /**
+     * Set option element
+     *
+     * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option
+     */
     public function setElement(Varien_Data_Form_Element_Abstract $element)
     {
         $this->_element = $element;
         return $this;
     }
 
+    /**
+     * Get option element
+     *
+     * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option
+     */
     public function getElement()
     {
         return $this->_element;
     }
 
+    /**
+     * Is multi websites?
+     *
+     * @return bool
+     */
     public function isMultiWebsites()
     {
         return !Mage::app()->isSingleStoreMode();
     }
 
+    /**
+     * Return add button html
+     *
+     * @return string
+     */
     public function getAddButtonHtml()
     {
         return $this->getChildHtml('add_button');
     }
 
+    /**
+     * Return close search button html
+     *
+     * @return string
+     */
     public function getCloseSearchButtonHtml()
     {
         return $this->getChildHtml('close_search_button');
     }
 
+    /**
+     * Return add selection button html
+     *
+     * @return string
+     */
     public function getAddSelectionButtonHtml()
     {
         return $this->getChildHtml('add_selection_button');
     }
 
     /**
-     * Retrieve list of combodeal options
+     * Retrieve list of combodeals options
      *
      * @return array
      */
@@ -98,6 +141,11 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
         return $this->_options;
     }
 
+    /**
+     * Return product add button id
+     *
+     * @return string
+     */
     public function getAddButtonId()
     {
         $buttonId = $this->getLayout()
@@ -106,22 +154,42 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
         return $buttonId;
     }
 
+    /**
+     * Return option delete button html
+     *
+     * @return string
+     */
     public function getOptionDeleteButtonHtml()
     {
         return $this->getChildHtml('option_delete_button');
     }
 
+    /**
+     * Return selection button html
+     *
+     * @return string
+     */
     public function getSelectionHtml()
     {
 
         return $this->getChildHtml('selection_template');
     }
 
+    /**
+     * Is default store?
+     *
+     * @return bool
+     */
     public function isDefaultStore()
     {
         return ($this->getProduct()->getStoreId() == '0');
     }
 
+    /**
+     * Prepare option block layout
+     *
+     * @return Mage_Adminhtml_Block_Widget
+     */
     protected function _prepareLayout()
     {
         $this->setChild('add_selection_button',
