@@ -42,6 +42,8 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                     continue;
                 }
             }
+            // set date format to "%m/%e/%Y"
+            $option = $this->getFormatDate($option);
             $return_options[] = $option;
         }
 
@@ -141,13 +143,32 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 ->setFlag('require_stock_items', true)
                 ->setFlag('product_children', true)
                 ->setPositionOrder()
-                ->addStoreFilter($product->getStoreFilter(null))
                 ->setStoreId($storeId)
-                ->addFilterByRequiredOptions()
                 ->setOptionIdsFilter($optionIds);
 
             $product->setData($key, $selectionsCollection);
         }
         return $product->getData($key);
+    }
+
+    /**
+     * Retrieve combodeal option with formatted from and to date
+     *
+     * @param Arvato_ComboDeals_Model_Option $option
+     * @return Arvato_ComboDeals_Model_Option $option
+     */
+    public function getFormatDate($option)
+    {
+        //set formatted from date i.e. 12/9/2015
+        $fromDate = $option->getFromDate();
+        $fromDate = Mage::helper('core')->formatDate($fromDate, Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+        $option->setFromDate($fromDate);
+        
+        //set formatted to date i.e. 12/9/2015
+        $toDate = $option->getToDate();
+        $toDate = Mage::helper('core')->formatDate($toDate, Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+        $option->setToDate($toDate);
+        
+        return $option;
     }
 }

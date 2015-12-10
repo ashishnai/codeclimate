@@ -60,6 +60,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage
     public function getDiscountTypeSelectHtml()
     {
         $selectionDiscountTypes = array(
+            array('label' => 'None', 'value' => 'none'),
             array('label' => 'Fixed', 'value' => 'fixed'),
             array('label' => 'Percent', 'value' => 'percent'),
             array('label' => 'Free', 'value' => 'free'),

@@ -55,7 +55,8 @@ class Arvato_ComboDeals_Helper_ProductComboDeals extends Mage_Core_Helper_Abstra
                         $selectionModel = Mage::getModel('combodeals/selection')
                             ->setData($selection)
                             ->setOptionId($options[$index]['option_id'])
-                            ->setParentProductId($product->getId());
+                            ->setParentProductId($product->getId())
+                            ->setStoreId($product->getStoreId());
 
                         $selectionModel->isDeleted((bool)$selection['delete']);
                         $selectionModel->save();

@@ -22,22 +22,24 @@ class Arvato_ComboDeals_Model_Observer
 //        echo "<pre>";
 //        print_r($request->getPost('combodeals_options'));
 //        print_r($request->getPost('combodeals_selections'));
-//        exit;
+//        exit;        
 
-        if (($items = $request->getPost('combodeals_options')) && !$product->getCompositeReadonly()) {
-            $product->setComboDealOptionsData($items);
+        if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){            
+            // set visibility to "Not Visible Individually"
+            $product->setVisibility('1');
+            
+            if (($items = $request->getPost('combodeals_options')) && !$product->getCompositeReadonly()) {
+                $product->setComboDealOptionsData($items);
+            }
+
+            if (($selections = $request->getPost('combodeals_selections')) && !$product->getCompositeReadonly()) {
+                $product->setComboDealSelectionsData($selections);
+                
+                // set SKU using mixed SKU string of selected child products
+                $product->setSku(Mage::helper("combodeals")->getJoinedSku($selections));
+            }
         }
-
-        if (($selections = $request->getPost('combodeals_selections')) && !$product->getCompositeReadonly()) {
-            $product->setComboDealSelectionsData($selections);
-        }
-
-//        if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
-//                $product->setSku(rand(5, 15));
-//                $product->setVisibility('1');
-//                $product->save();
-//        }
-        return $this;
+        return $observer;
     }
 
     /**

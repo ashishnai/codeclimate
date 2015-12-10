@@ -117,25 +117,6 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
         return $this->getChildHtml('selection_template');
     }
 
-    public function getTypeSelectHtml()
-    {
-        $discountTypes =  array(
-            array('label' => 'Fixed Amount','value' => 'by_fixed'),
-            array('label' =>'Percent','value' =>'by_percent'),
-        );
-
-        $select = $this->getLayout()->createBlock('adminhtml/html_select')
-            ->setData(array(
-                'id' => $this->getFieldId().'_{{index}}_discount_type',
-                'class' => 'select select-product-option-type required-option-select',
-            ))
-            ->setName($this->getFieldName().'[{{index}}][discount_type]')
-            ->setOptions($discountTypes);
-
-        return $select->getHtml();
-    }
-
-
     public function isDefaultStore()
     {
         return ($this->getProduct()->getStoreId() == '0');

@@ -50,12 +50,11 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
                 'cataloginventory/stock_item', 
                 'qty',
                 'product_id=entity_id',
-                '{{table}}.stock_id=1',
-                'left')
+                '{{table}}.stock_id=1 ) AND ( {{table}}.qty>0',
+                'inner')
             ->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
             ->addAttributeToFilter('visibility', array('in'=>Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds()))
             ->addAttributeToFilter('status', array('in' => Mage::getSingleton('catalog/product_status')->getVisibleStatusIds()));
-
         if ($products = $this->_getProducts()) {
             $collection->addIdFilter($this->_getProducts(), true);
         }

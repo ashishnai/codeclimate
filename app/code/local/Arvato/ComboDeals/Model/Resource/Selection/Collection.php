@@ -51,6 +51,13 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
             'selection.product_id = e.entity_id',
             array('*')
         );
+        $this->joinField(
+                'qty', 
+                'cataloginventory/stock_item',
+                'qty',
+                'product_id=entity_id',
+                '{{table}}.stock_id=1',
+                'left');
     }
 
     /**
