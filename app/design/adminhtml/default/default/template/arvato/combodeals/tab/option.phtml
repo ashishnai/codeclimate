@@ -27,9 +27,9 @@ optionTemplate = '<div id="<?php echo $this->getFieldId() ?>_{{index}}"  class="
             '<tr>' +
                 '<input type="hidden" id="<?php echo $this->getFieldId() ?>_id_{{index}}" name="<?php echo $this->getFieldName() ?>[{{index}}][option_id]" value="{{option_id}}">' +
                 '<input type="hidden" name="<?php echo $this->getFieldName() ?>[{{index}}][delete]" value="" class="delete">' +
-                '<td><input type="text" id="_from_date" name="<?php echo $this->getFieldName() ?>[{{index}}][from_date]" class="input-text required-entry" value="{{from_date}}" style="width:110px !important;" /></td>' +
+                '<td><input type="text" id="combo_from" name="<?php echo $this->getFieldName() ?>[{{index}}][from_date]" class="input-text required-entry validate-date validate-date-range date-range-combo-from" value="{{from_date}}" style="width:110px !important;" /></td>' +
                 '<td><img title="Select From Date" id="_from_date_trig" src="<?php echo $this->getSkinUrl('images/grid-cal.gif');?>" class = "v-middle"></td>' +
-                '<td><input type="text" id="_to_date" name="<?php echo $this->getFieldName() ?>[{{index}}][to_date]" class="input-text required-entry" value="{{to_date}}" style="width:110px !important;" /></td>' +
+                '<td><input type="text" id="combo_to" name="<?php echo $this->getFieldName() ?>[{{index}}][to_date]" class="input-text required-entry validate-date validate-date-range date-range-combo-to" value="{{to_date}}" style="width:110px !important;" /></td>' +
                 '<td><img title="Select To Date" id="_to_date_trig" src="<?php echo $this->getSkinUrl('images/grid-cal.gif');?>" class = "v-middle"></td>' +
                 '<td>&nbsp;<?php echo $this->jsQuoteEscape($this->getOptionDeleteButtonHtml()) ?></td>' +
                 '<td>&nbsp;<?php echo $this->jsQuoteEscape($this->getAddSelectionButtonHtml()) ?></td>' +
@@ -124,7 +124,7 @@ cdOption = new Combodeals.Option(optionTemplate);
 function setCalendar() {
     //<![CDATA[
         Calendar.setup({
-            inputField: "_from_date",
+            inputField: "combo_from",
             ifFormat: "%m/%e/%Y",
             showsTime: false,
             button: "_from_date_trig",
@@ -132,7 +132,7 @@ function setCalendar() {
             singleClick : true
         });
         Calendar.setup({
-            inputField: "_to_date",
+            inputField: "combo_to",
             ifFormat: "%m/%e/%Y",
             showsTime: false,
             button: "_to_date_trig",
