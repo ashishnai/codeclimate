@@ -16,7 +16,9 @@ class Arvato_ComboDeals_Model_Observer {
      * @param Varien_Object $observer
      * @return Arvato_ComboDeals_Model_Observer
      */
-    public function prepareProductSave($observer) {
+    public function prepareProductSave($observer) 
+    {
+        $request = $observer->getEvent()->getRequest();
         $product = $observer->getEvent()->getProduct();
 
         if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
@@ -57,7 +59,8 @@ class Arvato_ComboDeals_Model_Observer {
      *
      * @param Varien_Event_Observer $event
      */
-    public function removeAttributes(Varien_Event_Observer $event) {
+    public function removeAttributes(Varien_Event_Observer $event) 
+    {
         $block = $event->getBlock();
         if (!$block instanceof Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs) {
             return;
@@ -77,7 +80,8 @@ class Arvato_ComboDeals_Model_Observer {
      *
      * @param Varien_Event_Observer $event
      */
-    public function removeTabs(Varien_Event_Observer $event) {
+    public function removeTabs(Varien_Event_Observer $event) 
+    {
         $block = $event->getBlock();
         if (!$block instanceof Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs) {
             return;
