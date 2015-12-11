@@ -35,12 +35,12 @@ class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
             $amount = $option->getAmount();
             $discountType = $option->getDiscountType();
 
-            if($discountType == Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_PERCENT)
+            if($discountType == Arvato_ComboDeals_Model_Product_Discount::TYPE_PERCENT)
             {
                 $discountedPrice = $discountedPrice- $discountedPrice * $amount / 100;
             }
 
-            if($discountType == Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_FIXED)
+            if($discountType == Arvato_ComboDeals_Model_Product_Discount::TYPE_FIXED)
             {
                 $discountedPrice = $discountedPrice- $amount;
             }

@@ -65,7 +65,7 @@ Validation.add('validate-greater-zero-based-on-option', '<?php echo $this->__('P
     }
     return true;
 });
-Validation.add('<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_PRODUCTS; ?>', '<?php echo $this->__('Please add at least two products to the deal.') ?>',
+Validation.add('<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_PRODUCTS; ?>', '<?php echo $this->__('Please add products to the deal.') ?>',
     function(v, el) {
         var elementId = el.id;
         var lastUnderscore = elementId.lastIndexOf('_');
@@ -81,6 +81,20 @@ Validation.add('<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_P
             return false;
         }
     });
+Validation.add('<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_TWO_PRODUCTS; ?>', '<?php echo $this->__('Please add at least two products to the deal.') ?>',
+    function(v, el) {
+        var elementId = el.id;
+        var lastUnderscore = elementId.lastIndexOf('_');
+        var parentIndex = elementId.substring(lastUnderscore + 1);
+        var containerId = 'combodeals_selection_box_' + parentIndex;
+        if ($$('#' + containerId + ' tr.selection')) {
+            if ($$('#' + containerId + ' tr.selection').length < 2) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    });
 </script>
-
-<div><input type="hidden" name="affect_combodeals_product_selections" value="1" /></div>

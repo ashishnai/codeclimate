@@ -65,10 +65,10 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage
     public function getDiscountTypeSelectHtml()
     {
         $selectionDiscountTypes = array(
-            array('label' => 'None', 'value' => Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_NONE),
-            array('label' => 'Fixed', 'value' => Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_FIXED),
-            array('label' => 'Percent', 'value' => Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_PERCENT),
-            array('label' => 'Free', 'value' => Arvato_ComboDeals_Model_Option::DISCOUNT_TYPE_FREE),
+            array('label' => 'None', 'value' => Arvato_ComboDeals_Model_Product_Discount::TYPE_NONE),
+            array('label' => 'Fixed', 'value' => Arvato_ComboDeals_Model_Product_Discount::TYPE_FIXED),
+            array('label' => 'Percent', 'value' => Arvato_ComboDeals_Model_Product_Discount::TYPE_PERCENT),
+            array('label' => 'Free', 'value' => Arvato_ComboDeals_Model_Product_Discount::TYPE_FREE),
         );
 
         $select = $this->getLayout()->createBlock('adminhtml/html_select')

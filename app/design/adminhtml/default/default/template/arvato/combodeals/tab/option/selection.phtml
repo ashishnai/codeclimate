@@ -60,7 +60,9 @@ Combodeals.Selection.prototype = {
     gridSelection : new Hash(),
 
     initialize : function() {
-        this.templateBox = '<div class="grid tier form-list" id="' + this.idLabel + '_box_{{parentIndex}}">' + bundleTemplateBox + '</div>';
+        this.templateBox = '<div class="grid tier form-list" id="' + this.idLabel + '_box_{{parentIndex}}">' + bundleTemplateBox +
+                                '<input type="hidden" id="<?php echo $this->getFieldId() ?>_validation_{{parentIndex}}" class="<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_TWO_PRODUCTS; ?>">' +
+                            '</div>';
 
         this.templateRow = '<tr class="selection" id="' + this.idLabel + '_row_{{index}}">' + bundleTemplateRow + '</tr>';
     },
