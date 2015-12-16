@@ -52,4 +52,16 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
         $sku = self::COMBODEAL_PRODUCT_SKU_PREFIX . $sku;
         return $sku;
     }
+    
+    /**
+     * Get Gird url or combo deals products
+     *     
+     *
+     *
+     * @return string
+     */
+    public function getComboDealGridUrl()
+    {
+       return Mage::getUrl('adminhtml/comboDeals_product/'); 
+    }
 }

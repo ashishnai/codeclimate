@@ -5,13 +5,11 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Shireen Nimachwala <shireenn@cybage.com>
- * 
  */
 class Arvato_ComboDeals_Block_Adminhtml_Catalog_Product_Edit extends Mage_Adminhtml_Block_Catalog_Product_Edit
 {
     /*
-     * override the method for changing the back url based on combodeal refferer
+     * Changing the back button url based on combodeal refferer
      * 
      */
      protected function _prepareLayout()

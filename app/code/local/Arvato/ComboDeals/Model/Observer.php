@@ -16,27 +16,26 @@ class Arvato_ComboDeals_Model_Observer {
      * @param Varien_Object $observer
      * @return Arvato_ComboDeals_Model_Observer
      */
-    public function prepareProductSave($observer) 
-    {
+    public function prepareProductSave($observer) {
         $request = $observer->getEvent()->getRequest();
         $product = $observer->getEvent()->getProduct();
 
-        if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
+        if ($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL) {
             // set visibility to "Not Visible Individually"
             $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
-            
+
             if (($items = $request->getPost('combodeals_options')) && !$product->getCompositeReadonly()) {
                 $product->setComboDealOptionsData($items);
             }
 
             if (($selections = $request->getPost('combodeals_selections')) && !$product->getCompositeReadonly()) {
                 $product->setComboDealSelectionsData($selections);
-                
+
                 // set SKU using mixed SKU string of selected child products
                 $product->setSku(Mage::helper("combodeals")->getJoinedSku($selections));
             }
         }
-        return $observer;
+        return;
     }
 
     /**
@@ -45,23 +44,38 @@ class Arvato_ComboDeals_Model_Observer {
      * @param Varien_Event_Observer $observer
      * @return Arvato_ComboDeals_Model_Observer
      */
-    public function afterProductSave($observer)
-    {
+    public function afterProductSave($observer) {
         $typeInstance = Mage::helper("combodeals/saveComboDeals");
         $product = $observer->getEvent()->getProduct();
         $typeInstance->save($product);
     }
-        
+
+    /**
+     * Redirect Back to Combo deal grid if the new param exist
+     *
+     * event : controller_action_postdispatch_adminhtml_catalog_product_save
+     * @param Varien_Event_Observer $observer
+     * @return Arvato_ComboDeals_Model_Observer
+     */
+    public function saveAndRedirect($observer) {
+        if (Mage::app()->getRequest()->getParam('redirectBack')) {
+            $controllerAction = $observer->getEvent()->getControllerAction();
+            $observer->getEvent()->getControllerAction()->getResponse();
+            $controllerAction->getResponse()->setRedirect($controllerAction->getUrl('adminhtml/comboDeals_product/'));
+            return;
+        }
+    }
+
     /**
      * Disable the attributes which are not required
      *
      * event: core_block_abstract_prepare_layout_before
      *
      * @param Varien_Event_Observer $event
+     * @return Arvato_ComboDeals_Model_Observer
      */
-    public function removeAttributes(Varien_Event_Observer $event) 
-    {
-        $block = $event->getBlock();
+    public function removeAttributes($observer) {
+        $block = $observer->getBlock();
         if (!$block instanceof Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs) {
             return;
         }
@@ -69,9 +83,7 @@ class Arvato_ComboDeals_Model_Observer {
             $block->getProduct()->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
             $block->getProduct()->lockAttribute('visibility');
             $block->getProduct()->lockAttribute('sku');
-        } else {
-            return;
-        }
+        } 
     }
 
     /**
@@ -79,16 +91,16 @@ class Arvato_ComboDeals_Model_Observer {
      * event: core_block_abstract_prepare_layout_after
      *
      * @param Varien_Event_Observer $event
+     * @return Arvato_ComboDeals_Model_Observer
      */
-    public function removeTabs(Varien_Event_Observer $event) 
-    {
-        $block = $event->getBlock();
+    public function removeTabs($observer) {
+        $block = $observer->getBlock();
         if (!$block instanceof Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs) {
             return;
         }
         if ($block->getProduct()->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL) {
             $removeTabs = array('related', 'upsell', 'crosssell', 'reviews', 'tags', 'customers_tags', 'customer_options');
-            foreach($removeTabs as $removeTab){
+            foreach ($removeTabs as $removeTab) {
                 $block->removeTab($removeTab);
             }
             // fix tab selection, as we might have removed the active tab
@@ -98,8 +110,7 @@ class Arvato_ComboDeals_Model_Observer {
             } else {
                 $block->setActiveTab($tabs[0]);
             }
-        } else {
-            return;
         }
     }
+
 }

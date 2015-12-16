@@ -3,7 +3,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 -->
 <layout>
@@ -23,4 +22,15 @@
             </action>
         </reference>
     </adminhtml_catalog_product_new>
+    <adminhtml_combodeals_product_index>
+        <reference name="content">
+            <block type="combodeals/adminhtml_comboDeals" name="products_list">
+                <block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm">
+                        <params>0</params>
+                    </action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_combodeals_product_index>
 </layout>
