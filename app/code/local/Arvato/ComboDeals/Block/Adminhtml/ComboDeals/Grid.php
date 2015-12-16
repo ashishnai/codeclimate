@@ -14,7 +14,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
         $this->setId('combodealGrid');
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('DESC');
-        $this->setSaveParametersInSession(false);
+        $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
     }
 
