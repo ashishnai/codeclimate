@@ -8,7 +8,7 @@
 -->
 <config>
     <menu>
-        <catalog translate="title" module="awesome">
+        <catalog translate="title" module="combodeals">
             <children>
                 <combodeals translate="title" module="combodeals">
                     <title>Combo Deal Products</title>
@@ -26,9 +26,9 @@
                         <children>
                             <config>
                                 <children>
-                                    <combodeals translate="title" module="combodeals">
+                                    <combodeals_admin translate="title" module="combodeals">
                                         <title>arvato Combo Deals Settings</title>
-                                    </combodeals>
+                                    </combodeals_admin>
                                 </children>
                             </config>
                         </children>

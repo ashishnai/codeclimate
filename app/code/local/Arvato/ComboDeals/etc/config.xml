@@ -107,7 +107,7 @@
             <catalog_product_prepare_save>
                 <observers>
                     <combodeal_product_save>
-                        <class>combodeals/observer</class>
+                        <class>combodeals/productSaveObserver</class>
                         <method>prepareProductSave</method>
                     </combodeal_product_save>
                 </observers>
@@ -115,7 +115,7 @@
             <catalog_product_save_after>
                 <observers>
                     <arvato_combodeal_model_observer>
-                        <class>combodeals/observer</class>
+                        <class>combodeals/productSaveObserver</class>
                         <method>afterProductSave</method>
                     </arvato_combodeal_model_observer>
                 </observers>
@@ -123,7 +123,7 @@
             <core_block_abstract_prepare_layout_before>
                 <observers>
                     <combodeal_remove_attributes>
-                        <class>combodeals/observer</class>
+                        <class>combodeals/manageProductObserver</class>
                         <method>removeAttributes</method>
                     </combodeal_remove_attributes>
                 </observers>
@@ -131,7 +131,7 @@
             <core_block_abstract_prepare_layout_after>
                 <observers>
                     <combodeal_remove_tab>
-                        <class>combodeals/observer</class>
+                        <class>combodeals/manageProductObserver</class>
                         <method>removeTabs</method>
                     </combodeal_remove_tab>
                 </observers>
@@ -139,7 +139,7 @@
             <controller_action_postdispatch_adminhtml_catalog_product_save>
                 <observers>
                     <combodeal_grid_redirect>
-                        <class>combodeals/observer</class>
+                        <class>combodeals/saveRedirectObserver</class>
                         <method>saveAndRedirect</method>
                     </combodeal_grid_redirect>
                 </observers>
