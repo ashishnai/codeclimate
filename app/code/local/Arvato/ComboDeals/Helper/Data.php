@@ -42,6 +42,7 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
     {
         foreach($selections as $products) {
             $sku = $this->prepareSku($products);
+            break;
         }
 
         // concate SKU prefix + random number + prepared SKU string

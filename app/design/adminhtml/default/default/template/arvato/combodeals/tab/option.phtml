@@ -96,7 +96,9 @@ Combodeals.Option.prototype = {
         if(element){
             Element.select(element, '.delete').each(function(elem){elem.value='1'});
             Element.select(element, ['input', 'select']).each(function(elem){elem.hide(); elem.className = '';});
-            Element.hide(element);
+            Element.hide($(Event.findElement(event, 'div')));
+            cdOption.add();
+            setCalendar();
         }
     }
 }

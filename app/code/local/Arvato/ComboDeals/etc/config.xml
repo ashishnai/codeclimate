@@ -107,7 +107,7 @@
             <catalog_product_prepare_save>
                 <observers>
                     <combodeal_product_save>
-                        <class>combodeals/observer</class>
+                        <class>combodeals/productSaveObserver</class>
                         <method>prepareProductSave</method>
                     </combodeal_product_save>
                 </observers>
@@ -115,7 +115,7 @@
             <catalog_product_save_after>
                 <observers>
                     <arvato_combodeal_model_observer>
-                        <class>combodeals/observer</class>
+                        <class>combodeals/productSaveObserver</class>
                         <method>afterProductSave</method>
                     </arvato_combodeal_model_observer>
                 </observers>
