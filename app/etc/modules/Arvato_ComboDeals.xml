@@ -1,13 +1,19 @@
 <?xml version="1.0"?>
+<!--
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
+ */
+-->
 <config>
-  <modules>
-    <Arvato_ComboDeals>
-      <active>true</active>
-      <codePool>local</codePool>
-      <version>0.1.0</version>
-	  <depends>
-		<Mage_Bundle/> 
-	  </depends>
-    </Arvato_ComboDeals>
-  </modules>
+    <modules>
+        <Arvato_ComboDeals>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Bundle/>
+            </depends>
+        </Arvato_ComboDeals>
+    </modules>
 </config>

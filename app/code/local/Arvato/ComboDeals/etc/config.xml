@@ -1,8 +1,15 @@
 <?xml version="1.0"?>
+<!--
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
+ */
+-->
 <config>
     <modules>
         <Arvato_ComboDeals>
-            <version>0.1.0</version>
+            <version>1.0.0</version>
         </Arvato_ComboDeals>
     </modules>
     <frontend>
@@ -45,51 +52,58 @@
         <blocks>
             <combodeals>
                 <class>Arvato_ComboDeals_Block</class>
-            </combodeals>
+            </combodeals>           
+            <adminhtml>
+                <rewrite>
+                    <catalog_product_edit>Arvato_ComboDeals_Block_Adminhtml_Catalog_Product_Edit</catalog_product_edit>
+                </rewrite>
+            </adminhtml>
         </blocks>
         <models>
             <combodeals>
                 <class>Arvato_ComboDeals_Model</class>
-                <resourceModel>combodeals_mysql4</resourceModel>
+                <resourceModel>combodeals_resource</resourceModel>
             </combodeals>
-            <rewrite>
-                <bundle>
-                    <product_type>Arvato_ComboDeals_Model_Product_Type</product_type>
-                </bundle>
-            </rewrite>
+            <combodeals_resource>
+                <class>Arvato_ComboDeals_Model_Resource</class>
+                <entities>
+                    <option>
+                        <table>arvato_catalog_product_combodeal_option</table>
+                    </option>
+                    <selection>
+                        <table>arvato_catalog_product_combodeal_selection</table>
+                    </selection>
+                </entities>
+            </combodeals_resource>
+            <bundle>
+                <rewrite>
+                    <product_type>Arvato_ComboDeals_Model_Product_Type</product_type>              
+                </rewrite>
+            </bundle>
         </models>
         <resources>
             <combodeals_setup>
                 <setup>
                     <module>Arvato_ComboDeals</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
                 </setup>
-                <connection>
-                    <use>core_setup</use>
-                </connection>
             </combodeals_setup>
-            <combodeals_write>
-                <connection>
-                    <use>core_write</use>
-                </connection>
-            </combodeals_write>
-            <combodeals_read>
-                <connection>
-                    <use>core_read</use>
-                </connection>
-            </combodeals_read>
+            <connection>
+                <use>core_setup</use>
+            </connection>
         </resources>
     </global>
     <admin>
         <routers>
-            <combodeals>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Arvato_ComboDeals</module>
-                    <frontName>admin_combodeals</frontName>
+                    <modules>
+                        <combodeals before="Mage_Adminhtml">Arvato_ComboDeals_Adminhtml</combodeals>
+                    </modules>
                 </args>
-            </combodeals>
+            </adminhtml>
         </routers>
-    </admin>
+    </admin>    
     <adminhtml>
         <events>
             <catalog_product_prepare_save>
@@ -100,6 +114,14 @@
                     </combodeal_product_save>
                 </observers>
             </catalog_product_prepare_save>
+            <catalog_product_save_after>
+                <observers>
+                    <arvato_combodeal_model_observer>
+                        <class>combodeals/observer</class>
+                        <method>afterProductSave</method>
+                    </arvato_combodeal_model_observer>
+                </observers>
+            </catalog_product_save_after>
             <core_block_abstract_prepare_layout_before>
                 <observers>
                     <combodeal_remove_attributes>
@@ -117,13 +139,6 @@
                 </observers>
             </core_block_abstract_prepare_layout_after>
         </events>
-        <acl>
-            <resources>
-                <all>
-                    <title>Allow Everything</title>
-                </all>
-            </resources>
-        </acl>
         <layout>
             <updates>
                 <combodeals>
@@ -132,4 +147,14 @@
             </updates>
         </layout>
     </adminhtml>
+    <default>
+        <combodeals_admin>
+            <setting>
+                <enable_frontend>1</enable_frontend>
+            </setting>
+            <combodeals_setting>
+                <enable_dedicated>1</enable_dedicated>
+            </combodeals_setting>
+        </combodeals_admin>
+    </default>
 </config>

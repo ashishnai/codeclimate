@@ -1,4 +1,6 @@
 # Arvato Combodeals
 
-app/code/local/Arvato/ComboDeals                               app/code/local/Arvato/ComboDeals
-app/etc/modules/Arvato_ComboDeals.xml                          app/etc/modules/Arvato_ComboDeals.xml
+app/code/local/Arvato/ComboDeals                                      app/code/local/Arvato/ComboDeals
+app/etc/modules/Arvato_ComboDeals.xml                                 app/etc/modules/Arvato_ComboDeals.xml
+app/design/adminhtml/default/default/layout/combodeals.xml            app/design/adminhtml/default/default/layout/combodeals.xml
+app/design/adminhtml/default/default/template/arvato/combodeals       app/design/adminhtml/default/default/template/arvato/combodeals

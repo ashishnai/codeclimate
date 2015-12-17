@@ -1,0 +1,172 @@
+<?php
+/**
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
+ */
+class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
+{
+    /**
+     * All item ids cache
+     *
+     * @var array
+     */
+    protected $_itemIds;
+
+    /**
+     * True when selections a
+     *
+     * @var bool
+     */
+    protected $_selectionsAppended = false;
+
+    /**
+     * Init model and resource model
+     *
+     */
+    protected function _construct()
+    {
+        $this->_init('combodeals/option');
+    }
+
+    /**
+     * Sets store id filter
+     *
+     * @param int $storeId The id of the store scope
+     *
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setStoreIdFilter($storeId)
+    {
+        $this->addFieldToFilter('main_table.store_id', $storeId);
+        return $this;
+    }
+
+    /**
+     * Sets product id filter
+     *
+     * @param int $productId
+     *
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setProductIdFilter($productId)
+    {
+        $this->addFieldToFilter('main_table.parent_id', $productId);
+        return $this;
+    }
+
+    /**
+     * Sets option id filter
+     *
+     * @param int $optionId
+     *
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setOptionIdFilter($optionId)
+    {
+        $this->addFieldToFilter('main_table.option_id', $optionId);
+        return $this;
+    }
+
+    /**
+     * Append selection to options
+     * stripBefore - indicates to reload
+     * appendAll - indicates do we need to filter by saleable and required custom options
+     *
+     * @param Arvato_ComboDeals_Model_Resource_Selection_Collection $selectionsCollection
+     * @param bool $stripBefore
+     * @param bool $appendAll
+     *
+     * @return array
+     */
+    public function appendSelections($selectionsCollection, $stripBefore = false, $appendAll = true)
+    {
+        if ($stripBefore)
+        {
+            $this->_stripSelections();
+        }
+
+        if (!$this->_selectionsAppended)
+        {
+            foreach ($selectionsCollection->getItems() as $key => $_selection)
+            {
+                if ($_option = $this->getItemById($_selection->getOptionId()))
+                {
+                    if ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions()))
+                    {
+                        $_selection->setOption($_option);
+                        $_option->addSelection($_selection);
+                    }
+                    else
+                    {
+                        $selectionsCollection->removeItemByKey($key);
+                    }
+                }
+            }
+            $this->_selectionsAppended = true;
+        }
+
+        return $this->getItems();
+    }
+
+    /**
+     * Removes appended selections before
+     *
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    protected function _stripSelections()
+    {
+        foreach ($this->getItems() as $option)
+        {
+            $option->setSelections(array());
+        }
+        $this->_selectionsAppended = false;
+        return $this;
+    }
+
+    /**
+     * Sets filter by option id
+     *
+     * @param array|int $ids
+     *
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setIdFilter($ids)
+    {
+        if (is_array($ids))
+        {
+            $this->addFieldToFilter('main_table.option_id', array('in' => $ids));
+        }
+        else if ($ids != '')
+        {
+            $this->addFieldToFilter('main_table.option_id', $ids);
+        }
+        return $this;
+    }
+
+    /**
+     * Reset all item ids cache
+     *
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function resetAllIds()
+    {
+        $this->_itemIds = null;
+        return $this;
+    }
+
+    /**
+     * Retrive all ids for collection
+     *
+     * @return array
+     */
+    public function getAllIds()
+    {
+        if (is_null($this->_itemIds))
+        {
+            $this->_itemIds = parent::getAllIds();
+        }
+        return $this->_itemIds;
+    }
+}

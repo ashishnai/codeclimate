@@ -1,0 +1,100 @@
+<?php
+/**
+ * ComboDeals product edit tab template
+ * 
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato 2015
+ * @author      Mayur Patel <mayurpate@cybage.com>
+ */
+/** @var Arvato_ComboDeals_Block_Adminhtml_Tab $this */
+?>
+
+<script type="text/javascript">
+if(typeof Combodeals=='undefined') {
+    Combodeals = {};
+}
+</script>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Global Settings') ?></h4>
+    </div>
+    <fieldset>
+        <table cellspacing="0" class="form-list">
+            <tr>
+                <td class="label"><label for="shipment_type"><?php echo $this->__('Ship Combo Deal Items') ?></label></td>
+                <td class="value"><select <?php if ($this->isReadonly()): ?>disabled="disabled" <?php endif;?>id="shipment_type" name="<?php echo $this->getFieldSuffix() ?>[shipment_type]" class="select">
+                    <option value="1"><?php echo $this->__('Separately') ?></option>
+                    <option value="0"<?php if ($this->getProduct()->getShipmentType() == 0): ?> selected="selected"<?php endif; ?>><?php echo $this->__('Together') ?></option>
+                </select>
+                </td>            
+            </tr>
+        </table>
+    </fieldset>
+</div>
+
+<div class="entry-edit custom-options bundle" id="product_combodeals_container">
+    <div class="entry-edit-head">
+        <h4><?php echo $this->__('Combo Deal Items') ?></h4>
+    </div>
+
+    <div id="product_options_container" class="box">
+        <div id="product_combodeals_container_top"></div>
+        <?php echo $this->getOptionsBoxHtml() ?>
+    </div>
+</div>
+
+<script type="text/javascript">
+// re-bind form elements onchange
+varienWindowOnload(true);
+<?php if ($this->isReadonly()):?>
+$('product_combodeals_container').select('input', 'select', 'textarea', 'button').each(function(input){
+    input.disabled = true;
+    if (input.tagName.toLowerCase() == 'button') {
+        input.addClassName('disabled');
+    }
+});
+<?php endif; ?>
+Validation.add('validate-greater-zero-based-on-option', '<?php echo $this->__('Please enter a number greater 0 in this field.') ?>', function(v, el) {
+    var optionType = $(el).up('div.grid').previous('table.option-header').select('select.select-product-option-type')[0],
+        v = Number(v) || 0;
+
+    if (optionType && (optionType.value == 'checkbox' || optionType.value == 'multi') && v <= 0) {
+        return false;
+    }
+    return true;
+});
+Validation.add('<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_PRODUCTS; ?>', '<?php echo $this->__('Please add products to the deal.') ?>',
+    function(v, el) {
+        var elementId = el.id;
+        var lastUnderscore = elementId.lastIndexOf('_');
+        var parentIndex = elementId.substring(lastUnderscore + 1);
+        var containerId = 'combodeals_selection_box_' + parentIndex;
+        if ($$('#' + containerId + ' tr.selection')) {
+            if (!$$('#' + containerId + ' tr.selection').length) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    });
+Validation.add('<?php echo Arvato_ComboDeals_Helper_Data::VALIDATION_CLASS_HAS_TWO_PRODUCTS; ?>', '<?php echo $this->__('Please add at least two products to the deal.') ?>',
+    function(v, el) {
+        var elementId = el.id;
+        var lastUnderscore = elementId.lastIndexOf('_');
+        var parentIndex = elementId.substring(lastUnderscore + 1);
+        var containerId = 'combodeals_selection_box_' + parentIndex;
+        if ($$('#' + containerId + ' tr.selection')) {
+            if ($$('#' + containerId + ' tr.selection').length < 2) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    });
+</script>
