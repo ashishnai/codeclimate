@@ -30,7 +30,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
     public function getGridUrl()
     {
         $storeId = $this->getRequest()->getParam('store');
-        return $this->getUrl('*/comboDeals_selection/grid', array('store' => $storeId, 'index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts())));
+        return $this->getUrl('*/comboDeals_selection/grid', array('store' => $storeId, 'index' => $this->getIndex()));
     }
 
     /**
