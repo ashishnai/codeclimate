@@ -1,38 +1,21 @@
 <?php
 
 /**
- * Setting options, selections and product Data to combo deal product for futher processing
+ * Remove not required tabs and disable few attribute
  * 
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
  */
-class Arvato_ComboDeals_Model_Observer
+class Arvato_ComboDeals_Model_ManageProductObserver
 {
-    /**
-     * Redirect Back to Combo deal grid if the new param exist
-     *
-     * event : controller_action_postdispatch_adminhtml_catalog_product_save
-     * @param Varien_Event_Observer $observer
-     * @return Arvato_ComboDeals_Model_Observer
-     */
-    public function saveAndRedirect($observer)
-    {
-        if (Mage::app()->getRequest()->getParam('redirectBack')) {
-            $controllerAction = $observer->getEvent()->getControllerAction();
-            $observer->getEvent()->getControllerAction()->getResponse();
-            $controllerAction->getResponse()->setRedirect($controllerAction->getUrl('adminhtml/comboDeals_product/'));
-            return;
-        }
-    }
-
-    /**
-     * Disable the attributes which are not required
+     /**
+     * Disable the attributes which should not be editable from product edit
      *
      * event: core_block_abstract_prepare_layout_before
      *
      * @param Varien_Event_Observer $observer
-     * @return Arvato_ComboDeals_Model_Observer
+     * @return Arvato_ComboDeals_Model_ManageProductObserver
      */
     public function removeAttributes($observer)
     {
@@ -48,11 +31,11 @@ class Arvato_ComboDeals_Model_Observer
     }
 
     /**
-     * Remove hidden tabs from product edit
+     * Remove tabs which are irrelevant from product edit
      * event: core_block_abstract_prepare_layout_after
      *
      * @param Varien_Event_Observer $observer
-     * @return Arvato_ComboDeals_Model_Observer
+     * @return Arvato_ComboDeals_Model_ManageProductObserver
      */
     public function removeTabs($observer)
     {
