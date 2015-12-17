@@ -244,7 +244,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
     public function getRowUrl($row) {
         return $this->getUrl('adminhtml/catalog_product/edit', array(
                     'store' => $this->getRequest()->getParam('store'),
-                    'id' => $row->getId())
+                    'id' => $row->getId(),
+                    'redirectBack' => 'combodealGrid')
         );
     }
 
