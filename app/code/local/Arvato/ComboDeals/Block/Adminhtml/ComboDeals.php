@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Catalog combo deals block
+ * Catalog combo deals block for the grid
  *
  * @category    Arvato
  * @package     Arvato_ComboDeals
@@ -42,10 +42,10 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals extends Mage_Adminhtml_Block_
      * @return bool
      */
     public function isSingleStoreMode() {
-        if (!Mage::app()->isSingleStoreMode()) {
-            return false;
+        if (Mage::app()->isSingleStoreMode()) {
+            return true;
         }
-        return true;
+        return false;
     }
 
 }

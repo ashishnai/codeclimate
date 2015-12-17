@@ -183,6 +183,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             'filter' => false,
             'sortable' => false,
             'index' => 'stores',
+            'is_system' =>true,
         ));
         $this->addExportType('*/*/exportCsv', Mage::helper('combodeals')->__('CSV'));
         $this->addExportType('*/*/exportXml', Mage::helper('combodeals')->__('XML'));
@@ -250,7 +251,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
     /*
      * Filter for included skus
      * 
-     * @param $collection object, $column filter
+     * @param $collection object, $column filter 
      * @return $collection object
      */
 

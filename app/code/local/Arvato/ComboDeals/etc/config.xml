@@ -138,6 +138,14 @@
                     </combodeal_remove_tab>
                 </observers>
             </core_block_abstract_prepare_layout_after>
+            <controller_action_postdispatch_adminhtml_catalog_product_save>
+                <observers>
+                    <combodeal_grid_redirect>
+                        <class>combodeals/observer</class>
+                        <method>saveAndRedirect</method>
+                    </combodeal_grid_redirect>
+                </observers>
+            </controller_action_postdispatch_adminhtml_catalog_product_save>
         </events>
         <layout>
             <updates>

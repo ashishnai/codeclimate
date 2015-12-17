@@ -38,7 +38,7 @@ class Arvato_ComboDeals_Adminhtml_ComboDeals_ProductController extends Mage_Admi
     }
 
     /**
-     * Delete combo deal products
+     * Delete combo deal product(s)
      */
     public function massDeleteAction() {
         $productIds = $this->getRequest()->getParam('product');
@@ -111,20 +111,20 @@ class Arvato_ComboDeals_Adminhtml_ComboDeals_ProductController extends Mage_Admi
     }
 
     /**
-     * Export combo deal product grid to CSV format
+     * Export combo deal product to CSV format
      */
     public function exportCsvAction() {
         $fileName = 'arvato_combodeals.csv';
-        $grid = $this->getLayout()->createBlock('combodeals/adminhtml_comboDeals');
+        $grid = $this->getLayout()->createBlock('combodeals/adminhtml_comboDeals_grid');
         $this->_prepareDownloadResponse($fileName, $grid->getCsvFile());
     }
 
     /**
-     *  Export order grid to Excel XML format
+     *  Export combo deal product to XML format
      */
     public function exportXmlAction() {
         $fileName = 'arvato_combodeals.xml';
-        $grid = $this->getLayout()->createBlock('combodeals/adminhtml_comboDeals');
+        $grid = $this->getLayout()->createBlock('combodeals/adminhtml_comboDeals_grid');
         $this->_prepareDownloadResponse($fileName, $grid->getExcelFile($fileName));
     }
 
