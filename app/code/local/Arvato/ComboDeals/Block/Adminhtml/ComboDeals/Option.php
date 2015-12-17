@@ -5,10 +5,15 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml_Block_Widget
 {
+    /**
+     * Form element
+     *
+     * @var Varien_Data_Form_Element_Abstract|null
+     */
+    protected $_element = null;
 
     /**
      * List of combodeals options
@@ -22,7 +27,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
      *
      * Sets block template and necessary data
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->setTemplate('arvato/combodeals/tab/option.phtml');
     }
@@ -60,6 +65,12 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
         return $this->getData('product');
     }
 
+    /**
+     * Render element html
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
         $this->setElement($element);
@@ -69,6 +80,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
     /**
      * Set option element
      *
+     * @param Varien_Data_Form_Element_Abstract $element
      * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option
      */
     public function setElement(Varien_Data_Form_Element_Abstract $element)
@@ -124,6 +136,9 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
      */
     public function getAddSelectionButtonHtml()
     {
+        if($this->getProduct()->getStoreId() == Arvato_ComboDeals_Helper_Option::STORE_ID_ZERO) {
+            return $this->getChildHtml('add_selection_button');
+        }
         return $this->getChildHtml('add_selection_button');
     }
 
@@ -171,7 +186,6 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
      */
     public function getSelectionHtml()
     {
-
         return $this->getChildHtml('selection_template');
     }
 
@@ -182,7 +196,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
      */
     public function isDefaultStore()
     {
-        return ($this->getProduct()->getStoreId() == '0');
+        return ($this->getProduct()->getStoreId() == Arvato_ComboDeals_Helper_Option::STORE_ID_ZERO);
     }
 
     /**
@@ -197,7 +211,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
                 ->setData(array(
                     'id'    => $this->getFieldId().'_{{index}}_add_button',
                     'label'     => Mage::helper('combodeals')->__('Add Selection'),
-                    'on_click'   => 'cdSelection.showSearch(event)',
+                    'on_click'   => 'comboDealSelection.showSearch(event)',
                     'class' => 'add'
                 )));
 
@@ -206,7 +220,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
                 ->setData(array(
                     'id'    => $this->getFieldId().'_{{index}}_close_button',
                     'label'     => Mage::helper('combodeals')->__('Close'),
-                    'on_click'   => 'cdSelection.closeSearch(event)',
+                    'on_click'   => 'comboDealSelection.closeSearch(event)',
                     'class' => 'back no-display'
                 )));
 

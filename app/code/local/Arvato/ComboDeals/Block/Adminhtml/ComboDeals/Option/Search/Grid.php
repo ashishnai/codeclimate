@@ -5,7 +5,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
@@ -16,9 +15,9 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
     {
         parent::__construct();
         $this->setId('combodeals_selection_search_grid');
-        $this->setRowClickCallback('cdSelection.productGridRowClick.bind(cdSelection)');
-        $this->setCheckboxCheckCallback('cdSelection.productGridCheckboxCheck.bind(cdSelection)');
-        $this->setRowInitCallback('cdSelection.productGridRowInit.bind(cdSelection)');
+        $this->setRowClickCallback('comboDealSelection.productGridRowClick.bind(comboDealSelection)');
+        $this->setCheckboxCheckCallback('comboDealSelection.productGridCheckboxCheck.bind(comboDealSelection)');
+        $this->setRowInitCallback('comboDealSelection.productGridRowInit.bind(comboDealSelection)');
         $this->setDefaultSort('id');
         $this->setUseAjax(true);
     }
@@ -30,7 +29,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/comboDeals_selection/grid', array('index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts())));
+        $storeId = $this->getRequest()->getParam('store');
+        return $this->getUrl('*/comboDeals_selection/grid', array('store' => $storeId, 'index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts())));
     }
 
     /**
@@ -40,7 +40,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
      */
     public function getStore()
     {
-        return Mage::app()->getStore();
+        $storeId = $this->getRequest()->getParam('store');
+        return Mage::app()->getStore($storeId);
     }
 
     /**
@@ -62,6 +63,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
      */
     protected function _prepareCollection()
     {
+        $store = $this->getStore();
+
         // Load the actual products by the given IDs with qty
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('name')
@@ -86,6 +89,11 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
         if ($this->getFirstShow()) {
             $collection->addIdFilter('-1');
             $this->setEmptyText($this->__('Please enter search conditions to view products.'));
+        }
+
+        if ($store->getId()) {
+            $collection->setStore($store->getId());
+            $collection->addStoreFilter($store);
         }
 
         $this->setCollection($collection);
@@ -183,20 +191,12 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
     {
         if ($products = $this->getRequest()->getPost('products', null)) {
             return $products;
-        } else if ($productss = $this->getRequest()->getParam('productss', null)) {
-            return explode(',', $productss);
-        } else {
-            return array();
         }
-    }
+        
+        if ($productss = $this->getRequest()->getParam('productss', null)) {
+            return explode(',', $productss);
+        }
 
-    /**
-     * Retirve currently edited product model
-     *
-     * @return Mage_Catalog_Model_Product
-     */
-    private function _getProduct()
-    {
-        return Mage::registry('current_product');
+        return array();
     }
 }

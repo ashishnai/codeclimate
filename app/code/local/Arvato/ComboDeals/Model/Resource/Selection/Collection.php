@@ -3,7 +3,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog_Model_Resource_Product_Collection
 {
@@ -28,14 +27,17 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
     /**
      * Set store id for each collection item when collection was loaded
      *
-     * @return void
+     * @return Arvato_ComboDeals_Model_Resource_Selection_Collection
      */
     public function _afterLoad()
     {
         parent::_afterLoad();
-        if ($this->getStoreId() && $this->_items) {
+        if ($this->_items) {
             foreach ($this->_items as $item) {
-                $item->setStoreId($this->getStoreId());
+                $item->setPrice($this->getFormatPrice($item->getPrice()));
+                if($this->getStoreId()) {
+                    $item->setStoreId($this->getStoreId());
+                }
             }
         }
         return $this;
@@ -55,7 +57,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         $this->joinField(
                 'qty', 
                 'cataloginventory/stock_item',
-                'qty',
+                'ROUND(qty)',
                 'product_id=entity_id',
                 '{{table}}.stock_id=1',
                 'left');
@@ -99,5 +101,27 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         $this->getSelect()->order('selection.position asc')
             ->order('selection.selection_id asc');
         return $this;
+    }
+
+    /**
+     * Get store object of curently edited product
+     *
+     * @param int $storeId
+     * @return Mage_Core_Model_Store
+     */
+    protected function getStore($storeId)
+    {
+        return Mage::app()->getStore($storeId);
+    }
+
+    /**
+     * Get store wise price format
+     * 
+     * @param decimal $price
+     * @return string
+     */
+    public function getFormatPrice($price)
+    {
+        return Mage::helper('core')->currencyByStore($price, $this->getStore($this->getStoreId()), true, false);
     }
 }

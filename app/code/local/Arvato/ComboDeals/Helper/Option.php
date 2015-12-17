@@ -5,10 +5,14 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
 {
+    /**
+     * Store ID zero
+     */
+    const STORE_ID_ZERO = 0;
+
     /**
      * Cache key for Options Collection
      *
@@ -45,15 +49,11 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
 
         $options = $optionCollection->appendSelections($selectionCollection);
         $return_options = array();
-        // Check if each associated Product is in Stock
+
         foreach ($options as $option) {
-            foreach ($option->getSelections() as $selection) {
-                if (!$selection->getStockItem()->getIsInStock() && !Mage::app()->getStore()->isAdmin()) {
-                    continue;
-                }
-            }
             // set date format to "%m/%e/%Y"
             $option = $this->getFormatDate($option);
+
             $return_options[] = $option;
         }
 
@@ -110,8 +110,13 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
             // filter by store id if one is supplied
             if ($storeId !== null) {
                 $optionsCollection->setStoreIdFilter($storeId);
+                if(!$optionsCollection->getData()) {
+                    $optionsCollection->getSelect()->reset(Zend_Db_Select::WHERE);
+                    $optionsCollection->setProductIdFilter($productId)
+                        ->setStoreIdFilter(self::STORE_ID_ZERO);
+                }
             }
-
+            
             // filter by option id if one is supplied
             if ($optionId !== null)
             {
@@ -176,14 +181,27 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
     {
         //set formatted from date i.e. 12/9/2015
         $fromDate = $option->getFromDate();
-        $fromDate = Mage::helper('core')->formatDate($fromDate, Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+        $fromDate = $this->prepareFormatDate($fromDate);
         $option->setFromDate($fromDate);
-        
-        //set formatted to date i.e. 12/9/2015
+
         $toDate = $option->getToDate();
-        $toDate = Mage::helper('core')->formatDate($toDate, Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+        $toDate = $this->prepareFormatDate($toDate);
         $option->setToDate($toDate);
         
         return $option;
+    }
+
+    /**
+     * prepare formatted from and to date
+     *
+     * @param string $date
+     * @return string $date
+     */
+    public function prepareFormatDate($date)
+    {
+        //prepare formatted date i.e. 12/9/2015
+        $date = Mage::helper('core')->formatDate($date, Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+
+        return $date;
     }
 }

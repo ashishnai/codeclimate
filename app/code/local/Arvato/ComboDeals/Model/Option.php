@@ -3,7 +3,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Model_Option extends Mage_Core_Model_Abstract
 {
@@ -61,6 +60,8 @@ class Arvato_ComboDeals_Model_Option extends Mage_Core_Model_Abstract
 
     /*
      * Returns all selections fo this option
+     * 
+     * @return Arvato_ComboDeals_Model_Selection
      */
     public function getAllSelections()
     {
@@ -69,6 +70,8 @@ class Arvato_ComboDeals_Model_Option extends Mage_Core_Model_Abstract
 
     /*
      * Returns the minimum quantity for the condition products
+     * 
+     * @return int
      */
     public function getMinimumQuantity()
     {
@@ -77,6 +80,8 @@ class Arvato_ComboDeals_Model_Option extends Mage_Core_Model_Abstract
 
     /*
      * gets the discount amount for the action products
+     * 
+     * @return decimal
      */
     public function getAmount()
     {
@@ -85,6 +90,8 @@ class Arvato_ComboDeals_Model_Option extends Mage_Core_Model_Abstract
 
     /*
      * gets the type of discount (percent or fixed or free or none)
+     * 
+     * @return string
      */
     public function getDiscountType()
     {

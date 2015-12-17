@@ -6,7 +6,6 @@ require_once 'Mage/Adminhtml/controllers/Catalog/ProductController.php';
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Adminhtml_ComboDeals_Product_EditController extends Mage_Adminhtml_Catalog_ProductController
 {
@@ -16,7 +15,7 @@ class Arvato_ComboDeals_Adminhtml_ComboDeals_Product_EditController extends Mage
      */
     protected function _construct()
     {
-        $this->setUsedModuleName('arvato_combodeals');
+        $this->setUsedModuleName('Arvato_ComboDeals');
     }
 
     /**

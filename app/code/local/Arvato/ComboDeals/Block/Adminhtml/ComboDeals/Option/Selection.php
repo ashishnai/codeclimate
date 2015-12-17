@@ -5,14 +5,13 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage_Adminhtml_Block_Widget
 {
     /**
      * Initialize combodeal option selection block
      */
-    public function __construct()
+    public function _construct()
     {
         $this->setTemplate('arvato/combodeals/tab/option/selection.phtml');
     }
@@ -54,7 +53,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage
      */
     public function getSelectionSearchUrl()
     {
-        return $this->getUrl('*/comboDeals_selection/search');
+        $storeId = $this->getRequest()->getParam('store');
+        return $this->getUrl('*/comboDeals_selection/search', array('store' => $storeId));
     }
 
     /*
@@ -75,6 +75,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage
             ->setData(array(
                 'id' => $this->getFieldId() . '_{{parentIndex}}_{{index}}_discount_type',
                 'class' => 'select select-selection-role required-option-select',
+                'extra_params' => 'onchange="comboDealSelection.addPriceRangeClass(event)"',
             ))
             ->setName($this->getFieldName() . '[{{parentIndex}}][{{index}}][discount_type]')
             ->setOptions($selectionDiscountTypes);
@@ -94,7 +95,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage
                 ->setData(array(
                     'label' => Mage::helper('catalog')->__('Delete'),
                     'class' => 'delete icon-btn',
-                    'on_click' => 'cdSelection.remove(event)'
+                    'on_click' => 'comboDealSelection.remove(event)'
                 ))
         );
         return parent::_prepareLayout();

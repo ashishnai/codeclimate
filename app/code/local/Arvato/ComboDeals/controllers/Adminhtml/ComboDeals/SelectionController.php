@@ -3,7 +3,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Adminhtml_ComboDeals_SelectionController extends Mage_Adminhtml_Controller_Action
 {
@@ -13,7 +12,7 @@ class Arvato_ComboDeals_Adminhtml_ComboDeals_SelectionController extends Mage_Ad
      */
     protected function _construct()
     {
-        $this->setUsedModuleName('arvato_combodeals');
+        $this->setUsedModuleName('Arvato_ComboDeals');
     }
 
     /**

@@ -3,7 +3,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 
 /** @var Mage_Core_Model_Resource_Setup $installer */
@@ -28,11 +27,11 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('combodeals
         ->addColumn('from_date', Varien_Db_Ddl_Table::TYPE_DATE, null, array(
             ), 'From Date')
         ->addColumn('to_date', Varien_Db_Ddl_Table::TYPE_DATE, null, array(
-            ), 'To Date')    
+            ), 'To Date')
         ->addColumn('store_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
             'nullable' => false,
             'unsigned' => true
-            ), 'Store Id')    
+            ), 'Store Id')
         ->addForeignKey(
             $this->getFkName('combodeals/option', 'parent_id', 'catalog/product', 'entity_id'),
             'parent_id',

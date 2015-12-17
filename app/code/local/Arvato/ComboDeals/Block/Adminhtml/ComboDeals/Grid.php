@@ -7,93 +7,122 @@
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
  */
-class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->setId('combodealGrid');
-        $this->setDefaultSort('parent_id');
+        $this->setDefaultSort('entity_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
     }
 
-    protected function _getStore() {
+    /*
+     * Get store id from store view switcher selection
+     * 
+     * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid
+     */
+
+    protected function _getStore()
+    {
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         return Mage::app()->getStore($storeId);
     }
 
-    protected function _prepareCollection() {
+    /*
+     * Prepare catalog product collection for combo deal products
+     * 
+     * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid
+     */
+
+    protected function _prepareCollection()
+    {
         $store = $this->_getStore();
-        $collection = Mage::getModel('combodeals/option')->getCollection();
+        $collection = Mage::getModel('catalog/product')->getCollection()
+                ->addAttributeToSelect('sku')
+                ->addAttributeToSelect('name')
+                ->addAttributeToFilter('type_id', 'combodeal');
 
-        $productAttributes = array('product_name' => 'name', 'product_status' => 'status');
-        foreach ($productAttributes as $alias => $attributeCode) {
-            $tableAlias = $attributeCode . '_table';
-            $attribute = Mage::getSingleton('eav/config')
-                    ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode);
-
-            $collection->getSelect()->joinLeft(
-                    array($tableAlias => $attribute->getBackendTable()), "main_table.parent_id = $tableAlias.entity_id AND "
-                    . "$tableAlias.attribute_id={$attribute->getId()}", array($alias => 'value')
-            );
-        }
-        $collection->getSelect()->joinLeft(
-                        array('sku_table' => 'catalog_product_entity'), "main_table.parent_id = sku_table.entity_id ", array('combodeal_sku' => 'sku')
-                )
-                ->joinLeft(array('cselection' => 'arvato_catalog_product_combodeal_selection'), 'main_table.option_id = cselection.option_id', array('product_id' => 'product_id', 'discount_type' => 'discount_type'))
-                ->joinLeft(array(
-                    'cpe' => 'catalog_product_entity'), 'cpe.entity_id = cselection.product_id', array('sku')
-                )
-                ->columns(array('included_sku' => new Zend_Db_Expr
-                            ("IFNULL(GROUP_CONCAT(DISTINCT CONCAT(`cpe`.`sku`)"
-                            . " SEPARATOR ' , '), '')")))
-                ->group('main_table.parent_id');
-        //  ->columns('GROUP_CONCAT(DISTINCT (SELECT value FROM catalog_product_entity_decimal '
-        //          . 'WHERE entity_id = cselection.product_id) SEPARATOR \', \') AS pprice')
         if ($store->getId()) {
-            $collection->setStoreId($store->getId());
+            $adminStore = Mage_Core_Model_App::ADMIN_STORE_ID;
             $collection->addStoreFilter($store);
+            $collection->joinAttribute(
+                    'name', 'catalog_product/name', 'entity_id', null, 'inner', $adminStore
+            );
+            $collection->joinAttribute(
+                    'custom_name', 'catalog_product/name', 'entity_id', null, 'inner', $store->getId()
+            );
+            $collection->joinAttribute(
+                    'status', 'catalog_product/status', 'entity_id', null, 'inner', $store->getId()
+            );
+        } else {
+            $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         }
+        $collection->getSelect()
+                ->joinLeft(array('coption' => Mage::getSingleton('core/resource')
+                    ->getTableName('arvato_catalog_product_combodeal_option')), 'e.entity_id = coption.parent_id' . ' AND ' . 'coption.store_id=' . $store->getId(), array('from_date', 'to_date'))
+                ->joinLeft(array('cselection' => Mage::getSingleton('core/resource')
+                    ->getTableName('arvato_catalog_product_combodeal_selection')), 'coption.option_id = cselection.option_id' . ' AND ' . 'cselection.store_id=' . $store->getId(), array('product_id'))
+                ->columns(array('included_sku' => new Zend_Db_Expr
+                            ("IFNULL(GROUP_CONCAT(DISTINCT CONCAT(`cselection`.`product_id`)"
+                            . " SEPARATOR ' , '), '')")))
+                ->group('e.entity_id');
         $this->setCollection($collection);
         parent::_prepareCollection();
+        $this->getCollection()->addWebsiteNamesToResult();
         return $this;
     }
 
-    protected function _addColumnFilterToCollection($column) {
+    /*
+     * Prepare column for filter
+     * 
+     * @param $column object
+     * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid
+     */
+
+    protected function _addColumnFilterToCollection($column)
+    {
         if ($this->getCollection()) {
             if ($column->getId() == 'websites') {
-                $this->getCollection()->joinField('websites', 'catalog/product_website', 'website_id', 'parent_id=entity_id', null, 'left');
+                $this->getCollection()->joinField('websites', 'catalog/product_website', 'website_id', 'product_id=entity_id', null, 'left');
             }
         }
         return parent::_addColumnFilterToCollection($column);
     }
 
-    protected function _prepareColumns() {
-        $this->addColumn('id', array(
+    /*
+     * Prepare mass action for delete
+     * 
+     * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid
+     */
+
+    protected function _prepareColumns()
+    {
+        $this->addColumn('entity_id', array(
             'header' => Mage::helper('combodeals')->__('ID'),
             'width' => '50px',
             'type' => 'number',
-            'index' => 'option_id',
+            'index' => 'entity_id',
         ));
         $this->addColumn('name', array(
-            'header' => Mage::helper('combodeals')->__('Name'),
-            'width' => '60px',
-            'index' => 'product_name',
-            'filter_index' => 'name_table.value',
+            'header' => Mage::helper('catalog')->__('Name'),
+            'index' => 'name',
         ));
+
+        $store = $this->_getStore();
+        if ($store->getId()) {
+            $this->addColumn('custom_name', array(
+                'header' => Mage::helper('catalog')->__('Name in %s', $store->getName()),
+                'index' => 'custom_name',
+            ));
+        }
         $this->addColumn('sku', array(
             'header' => Mage::helper('combodeals')->__('SKU'),
-            'width' => '60px',
-            'index' => 'combodeal_sku',
-            'filter_index' => 'sku_table.sku',
-        ));
-        $this->addColumn('discount_type', array(
-            'header' => Mage::helper('combodeals')->__('Discount Type'),
-            'width' => '70px',
-            'index' => 'discount_type',
-            'type' => 'options',
-            'options' => Mage::getSingleton('combodeals/product_discount')->getOptionArray(),
+            'width' => '80px',
+            'index' => 'sku',
         ));
 
         $this->addColumn('from_date', array(
@@ -101,6 +130,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             'width' => '60px',
             'type' => 'datetime',
             'index' => 'from_date',
+            'filter_condition_callback' => array($this, 'filterCallbackFromDate'),
         ));
 
         $this->addColumn('to_date', array(
@@ -108,6 +138,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             'width' => '60px',
             'type' => 'datetime',
             'index' => 'to_date',
+            'filter_condition_callback' => array($this, 'filterCallbackToDate'),
         ));
 
 
@@ -115,7 +146,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             'header' => Mage::helper('combodeals')->__('Included SKUs'),
             'width' => '100px',
             'index' => 'included_sku',
-            'filter_condition_callback' => array($this, 'filterCallbackIncludedSku')
+            'filter_condition_callback' => array($this, 'filterCallbackIncludedSku'),
+            'renderer' => 'Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Renderer_Sku',
         ));
 
         $store = $this->_getStore();
@@ -123,14 +155,13 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             'header' => Mage::helper('combodeals')->__('Status'),
             'width' => '70px',
             'type' => 'options',
-            'index' => 'product_status',
-            'filter_index' => 'status_table.value',
+            'index' => 'status',
             'options' => Mage::getSingleton('catalog/product_status')->getOptionArray(),
         ));
 
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn('websites', array(
-                'header' => Mage::helper('combodeals')->__('Websites'),
+                'header' => Mage::helper('catalog')->__('Websites'),
                 'width' => '100px',
                 'sortable' => false,
                 'index' => 'websites',
@@ -139,11 +170,12 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             ));
         }
 
+
         $this->addColumn('action', array(
             'header' => Mage::helper('combodeals')->__('Action'),
             'width' => '50px',
             'type' => 'action',
-            'getter' => 'getParentId',
+            'getter' => 'getId',
             'actions' => array(
                 array(
                     'caption' => Mage::helper('combodeals')->__('View/Edit'),
@@ -157,26 +189,34 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             'filter' => false,
             'sortable' => false,
             'index' => 'stores',
+            'is_system' => true,
         ));
         $this->addExportType('*/*/exportCsv', Mage::helper('combodeals')->__('CSV'));
         $this->addExportType('*/*/exportXml', Mage::helper('combodeals')->__('XML'));
         return parent::_prepareColumns();
     }
 
-    protected function _prepareMassaction() {
-        $this->setMassactionIdField('option_id');
-        $this->getMassactionBlock()->setFormFieldName('products');
+    /*
+     * Prepare mass action for delete
+     * 
+     * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid
+     */
+
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('entity_id');
+        $this->getMassactionBlock()->setFormFieldName('product');
         $this->getMassactionBlock()->addItem('delete', array(
             'label' => Mage::helper('catalog')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('catalog')->__('Are you sure?')
         ));
-
         $statuses = Mage::getSingleton('catalog/product_status')->getOptionArray();
+
         array_unshift($statuses, array('label' => '', 'value' => ''));
         $this->getMassactionBlock()->addItem('status', array(
             'label' => Mage::helper('catalog')->__('Change status'),
-            'url' => $this->getUrl('adminhtml/catalog_product/massStatus', array('_current' => true)),
+            'url' => $this->getUrl('*/*/massStatus', array('_current' => true)),
             'additional' => array(
                 'visibility' => array(
                     'name' => 'status',
@@ -191,26 +231,81 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
         return $this;
     }
 
-    public function getGridUrl() {
+    /*
+     * Get Grid Url
+     * 
+     * @return string
+     */
+
+    public function getGridUrl()
+    {
         return $this->getUrl('*/*/grid', array('_current' => true));
     }
 
-    public function getRowUrl($row) {
+    /*
+     * Get Row Url
+     * 
+     * @param $row obect
+     * @return string
+     */
+
+    public function getRowUrl($row)
+    {
         return $this->getUrl('adminhtml/catalog_product/edit', array(
                     'store' => $this->getRequest()->getParam('store'),
-                    'id' => $row->getParentId())
+                    'id' => $row->getId(),
+                    'redirectBack' => 'combodealGrid')
         );
     }
 
     /*
      * Filter for included skus
+     * 
+     * @param $collection object, $column filter 
+     * @return $collection object
+     */
+
+    public function filterCallbackIncludedSku($collection, $column)
+    {
+        $value = $column->getFilter()->getValue();
+        $collection->addAttributeToFilter('sku', array('like' => '%' . $value . '%'));
+        return $collection;
+    }
+
+    /*
+     * Filter for Start Date
+     * 
      * @param $collection object, $column filter
      * @return $collection object
      */
 
-    public function filterCallbackIncludedSku($collection, $column) {
-        $value = $column->getFilter()->getValue();
-        $collection->getSelect()->where("cpe.sku LIKE '%" . $value . "%'");
+    public function filterCallbackToDate($collection, $column)
+    {
+        if (!$column->getFilter()->getCondition()) {
+            return;
+        }
+
+        $condition = $collection->getConnection()
+                ->prepareSqlCondition('coption.from_date', $column->getFilter()->getCondition());
+        $collection->getSelect()->where($condition);
+        return $collection;
+    }
+
+    /*
+     * Filter for End Date
+     * 
+     * @param $collection object, $column filter
+     * @return $collection object
+     */
+
+    public function filterCallbackFromDate($collection, $column)
+    {
+        if (!$column->getFilter()->getCondition()) {
+            return;
+        }
+        $condition = $collection->getConnection()
+                ->prepareSqlCondition('coption.to_date', $column->getFilter()->getCondition());
+        $collection->getSelect()->where($condition);
         return $collection;
     }
 

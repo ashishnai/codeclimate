@@ -5,7 +5,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Block_Adminhtml_Tab extends Mage_Adminhtml_Block_Widget
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
@@ -167,9 +166,11 @@ class Arvato_ComboDeals_Block_Adminhtml_Tab extends Mage_Adminhtml_Block_Widget
     public function isHidden()
     {
         $product = $this->getProduct();
-        if($product->getTypeId() != Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL) {
-            return true;
+        if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL) {
+            return false;
         }
+
+        return true;
     }
 
     /**
