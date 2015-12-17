@@ -3,7 +3,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Model_Resource_Selection extends Mage_Core_Model_Resource_Db_Abstract
 {

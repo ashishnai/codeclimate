@@ -3,7 +3,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
 {
@@ -19,7 +18,7 @@ class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
     /**
      * determins the discounted price
      * 
-     * @param $parentOption Arvato_ComboDeal_Model_Option
+     * @param $parentOption Arvato_ComboDeals_Model_Option
      * @param $minimalProductPrice int
      * @return int 
      */
@@ -28,8 +27,8 @@ class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
         // init
         $discountedPrice = $minimalProductPrice;
 
-        /* @var $option Arvato_ComboDeal_Model_Option */
-        if($parentOption  && $this->isActionProduct())
+        /* @var $option Arvato_ComboDeals_Model_Option */
+        if($parentOption && $this->isActionProduct())
         {
             $option = $parentOption;
             $amount = $option->getAmount();
@@ -37,12 +36,12 @@ class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
 
             if($discountType == Arvato_ComboDeals_Model_Product_Discount::TYPE_PERCENT)
             {
-                $discountedPrice = $discountedPrice- $discountedPrice * $amount / 100;
+                $discountedPrice = $discountedPrice - $discountedPrice * $amount / 100;
             }
 
             if($discountType == Arvato_ComboDeals_Model_Product_Discount::TYPE_FIXED)
             {
-                $discountedPrice = $discountedPrice- $amount;
+                $discountedPrice = $discountedPrice - $amount;
             }
         }
         return $discountedPrice;

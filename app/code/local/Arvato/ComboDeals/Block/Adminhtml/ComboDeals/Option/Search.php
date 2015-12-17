@@ -5,7 +5,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search extends Mage_Adminhtml_Block_Widget
 {
@@ -38,7 +37,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search extends Mage_Ad
         $addButtonData = array(
             'id'    => 'add_button_' . $this->getIndex(),
             'label' => Mage::helper('combodeals')->__('Add Selected Product(s) to Combo Deal'),
-            'onclick' => 'cdSelection.productGridAddSelected(event)',
+            'onclick' => 'comboDealSelection.productGridAddSelected(event)',
             'class' => 'add',
         );
         return $this->getLayout()->createBlock('adminhtml/widget_button')->setData($addButtonData)->toHtml();

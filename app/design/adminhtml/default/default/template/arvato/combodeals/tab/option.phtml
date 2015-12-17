@@ -5,7 +5,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 /** @var Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option $this */
 ?>
@@ -111,7 +110,7 @@ cdOption = new Combodeals.Option(optionTemplate);
     <?php if ($_option->getSelections()):?>
         <?php foreach ($_option->getSelections() as $_selection): ?>
             <?php $_selection->setName($this->escapeHtml($_selection->getName())); ?>
-            cdSelection.addRow(optionIndex, <?php echo $_selection->toJson() ?>);
+            comboDealSelection.addRow(optionIndex, <?php echo $_selection->toJson() ?>);
         <?php endforeach; ?>
     <?php endif; ?>
     <?php endforeach; ?>

@@ -3,7 +3,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -41,15 +40,36 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getJoinedSku($selections)
     {
-        $sku = '';
         foreach($selections as $products) {
-            foreach($products as $product) {
-                if(!$product['delete']) {
-                    $sku .= self::COMBODEAL_PRODUCT_SKU_SEPARATOR . $product['sku'];
-                }
-            }
+            $sku = $this->prepareSku($products);
         }
-        $sku = self::COMBODEAL_PRODUCT_SKU_PREFIX . $sku;
+
+        // concate SKU prefix + random number + prepared SKU string
+        $sku = self::COMBODEAL_PRODUCT_SKU_PREFIX . rand(10001,99999) . $sku;
+
+        return $sku;
+    }
+    
+    /**
+     * Check for deleted selection and prepare SKU string
+     *     
+     * @param array $products
+     *
+     * @return string
+     */
+    public function prepareSku($products)
+    {
+        $sku = '';
+
+        foreach($products as $product) {
+            // check if selected child product is deleted
+            if($product['delete']) {
+                continue;
+            }
+
+            $sku .= self::COMBODEAL_PRODUCT_SKU_SEPARATOR . $product['sku'];
+        }
+
         return $sku;
     }
 }

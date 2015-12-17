@@ -5,7 +5,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 /** @var Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection $this */
 ?>
@@ -45,7 +44,7 @@ var bundleTemplateRow ='<td>' +
                 '<td><strong>{{qty}}</strong></td>' +
                 '<td><?php echo $this->getDiscountTypeSelectHtml() ?></td>' +
                 '<td><input class="input-text required-entry validate-zero-or-greater" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][discount_amount]" value="{{discount_amount}}"></td>' +
-                '<td><input class="input-text required-entry validate-greater-than-zero" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][minimum_qty]" value="{{minimum_qty}}"></td>' +
+                '<td><input class="input-text required-entry validate-greater-than-zero validate-digits-range digits-range-1-{{qty}}" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][minimum_qty]" value="{{minimum_qty}}"></td>' +
                 '<td><input class="input-text required-entry validate-greater-than-zero" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][position]" value="{{position}}"></td>' +
                 '<td class="last"><span title="Delete Row"><?php echo $this->getSelectionDeleteButtonHtml() ?></span></td>';
 
@@ -193,7 +192,7 @@ Combodeals.Selection.prototype = {
                     'product_id' : pair.key,
                     'option_id' : $(cdOption.idLabel + '_id_' + parts[2]).value
                 };
-                cdSelection.addRow(parts[2], data);
+                comboDealSelection.addRow(parts[2], data);
             }
         );
     },
@@ -252,9 +251,30 @@ Combodeals.Selection.prototype = {
         }
         var id = element.up('table').id.split('_')[4];
         this.gridSelection.get(id).get(element.checkbox.value).set('qty', element.value);
+    },
+    
+    addPriceRangeClass : function(event) {
+        var element = Event.element(event);
+        var discountValueElement = element.up("td").next().down();
+
+        if (element.value == 'none' || element.value == 'free') {
+            discountValueElement.writeAttribute("value", "0");
+            discountValueElement.removeClassName('validate-digits-range');
+            discountValueElement.removeClassName('digits-range-1-100');
+            discountValueElement.disable();
+        }
+
+        if (element.value == 'percent') {
+            discountValueElement.enable();
+            discountValueElement.addClassName('validate-digits-range digits-range-1-100');
+        }
+
+        if (element.value == 'fixed' || element.value == 'percent') {
+            discountValueElement.enable();
+        }
     }
 }
 
-cdSelection = new Combodeals.Selection();
+comboDealSelection = new Combodeals.Selection();
 //]]>
 </script>

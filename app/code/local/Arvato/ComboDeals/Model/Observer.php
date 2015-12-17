@@ -6,7 +6,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Mayur Patel <mayurpate@cybage.com>
  */
 class Arvato_ComboDeals_Model_Observer {
 
@@ -21,15 +20,19 @@ class Arvato_ComboDeals_Model_Observer {
         $request = $observer->getEvent()->getRequest();
         $product = $observer->getEvent()->getProduct();
 
-        if($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
+        if ($product->getCompositeReadonly()) {
+            return $observer;
+        }
+
+        if ($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
             // set visibility to "Not Visible Individually"
             $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
             
-            if (($items = $request->getPost('combodeals_options')) && !$product->getCompositeReadonly()) {
+            if (($items = $request->getPost('combodeals_options'))) {
                 $product->setComboDealOptionsData($items);
             }
 
-            if (($selections = $request->getPost('combodeals_selections')) && !$product->getCompositeReadonly()) {
+            if (($selections = $request->getPost('combodeals_selections'))) {
                 $product->setComboDealSelectionsData($selections);
                 
                 // set SKU using mixed SKU string of selected child products
