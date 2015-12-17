@@ -27,7 +27,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Renderer_Sku extends Mage_Adm
                 ->columns(array('included_sku' => new Zend_Db_Expr
                             ("IFNULL(GROUP_CONCAT(DISTINCT CONCAT(`e`.`sku`)"
                             . " SEPARATOR ' , '), '')")));
-        return $productsCollection->getFirstItem()->getIncludedSku();
+        $includedSkus = $productsCollection->getFirstItem()->getIncludedSku();
+        return $includedSkus;
     }
 
 }

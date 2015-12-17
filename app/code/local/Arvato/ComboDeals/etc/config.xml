@@ -38,7 +38,6 @@
                         <label>Combo Deal Product</label>
                         <model>combodeals/product_type</model>
                         <is_qty>1</is_qty>
-                        <price_model>combodeals/product_price</price_model>
                         <composite>1</composite>
                     </combodeal>
                 </type>

@@ -183,7 +183,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             'filter' => false,
             'sortable' => false,
             'index' => 'stores',
-            'is_system' =>true,
+            'is_system' => true,
         ));
         $this->addExportType('*/*/exportCsv', Mage::helper('combodeals')->__('CSV'));
         $this->addExportType('*/*/exportXml', Mage::helper('combodeals')->__('XML'));
@@ -258,8 +258,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
 
     public function filterCallbackIncludedSku($collection, $column) {
         $value = $column->getFilter()->getValue();
-        $collection->addAttributeToFilter('sku', array(
-            array('like' => '%' . $value . '%')));
+        $collection->addAttributeToFilter('sku', array('like' => '%' . $value . '%'));
         return $collection;
     }
 

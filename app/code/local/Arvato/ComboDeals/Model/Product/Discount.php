@@ -6,7 +6,6 @@
  * @category    Arvato
  * @package     Arvato_ComboDeals
  * @copyright   Copyright (c) arvato 2015
- * @author      Shireen Nimachwala <shireenn@cybage.com>
  *
  */
 class Arvato_ComboDeals_Model_Product_Discount extends Mage_Core_Model_Abstract

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Override Catalog Edit Form
+ * Redirecting to combodeal products grid based on combodeal refferer
  *
  * @category    Arvato
  * @package     Arvato_ComboDeals
