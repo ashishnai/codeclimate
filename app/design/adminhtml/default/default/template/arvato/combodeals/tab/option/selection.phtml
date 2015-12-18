@@ -43,7 +43,7 @@ var bundleTemplateRow ='<td>' +
                 '<td><strong>{{price}}</strong></td>' +
                 '<td><strong>{{qty}}</strong></td>' +
                 '<td><?php echo $this->getDiscountTypeSelectHtml() ?></td>' +
-                '<td><input class="input-text required-entry validate-zero-or-greater" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][discount_amount]" value="{{discount_amount}}"></td>' +
+                '<td><input class="input-text required-entry validate-zero-or-greater" id="<?php echo $this->getFieldId() ?>_{{parentIndex}}_{{index}}_discount_amount" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][discount_amount]" value="{{discount_amount}}"></td>' +
                 '<td><input class="input-text required-entry validate-greater-than-zero validate-digits-range digits-range-1-{{qty}}" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][minimum_qty]" value="{{minimum_qty}}"></td>' +
                 '<td><input class="input-text required-entry validate-greater-than-zero" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][position]" value="{{position}}"></td>' +
                 '<td class="last"><span title="Delete Row"><?php echo $this->getSelectionDeleteButtonHtml() ?></span></td>';
@@ -117,8 +117,12 @@ Combodeals.Selection.prototype = {
         var tbody = $$('#' + this.idLabel + '_box_' + parentIndex + ' tbody');
 
         Element.insert(tbody[0], {'bottom':this.template.evaluate(data)});
-        
-        //set selected discount type
+
+        // set by default value '0' to discount_amount field and disable it
+        $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').disable();
+        $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').writeAttribute("value", "0");
+
+        //set selected discount type and cssclass
         if (data.discount_type) {
             $A($(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_type').options).each(function(selection){
                 if (selection.value==data.discount_type)
@@ -126,8 +130,23 @@ Combodeals.Selection.prototype = {
                     selection.selected = true;
                 }
             });
-        }
 
+            if(data.discount_type == 'percent') {
+                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').addClassName('validate-digits-range digits-range-1-100');
+                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').writeAttribute("value", data.discount_amount);
+                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').enable();
+            }
+
+            if(data.discount_type == 'fixed') {
+                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').addClassName('validate-number-range number-range-1-' + data.price.substring(1));
+                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').writeAttribute("value", data.discount_amount);
+                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').enable();
+            }
+
+            if(data.discount_type == 'none' || data.discount_type == 'free') {
+                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').disable();
+            }
+        }
     },
 
     addBox : function (parentIndex) {
@@ -256,20 +275,29 @@ Combodeals.Selection.prototype = {
     addPriceRangeClass : function(event) {
         var element = Event.element(event);
         var discountValueElement = element.up("td").next().down();
+        var originalPrice = element.up("td").previous(1).down().innerHTML;
 
         if (element.value == 'none' || element.value == 'free') {
             discountValueElement.writeAttribute("value", "0");
+            discountValueElement.value = 0;
             discountValueElement.removeClassName('validate-digits-range');
             discountValueElement.removeClassName('digits-range-1-100');
+            discountValueElement.removeClassName('validate-number-range');
+            discountValueElement.removeClassName('number-range-1-' + originalPrice.substring(1));
             discountValueElement.disable();
         }
 
         if (element.value == 'percent') {
-            discountValueElement.enable();
+            discountValueElement.removeClassName('validate-number-range');
+            discountValueElement.removeClassName('number-range-1-' + originalPrice.substring(1));
             discountValueElement.addClassName('validate-digits-range digits-range-1-100');
+            discountValueElement.enable();
         }
 
-        if (element.value == 'fixed' || element.value == 'percent') {
+        if (element.value == 'fixed') {
+            discountValueElement.removeClassName('validate-digits-range');
+            discountValueElement.removeClassName('digits-range-1-100');
+            discountValueElement.addClassName('validate-number-range number-range-1-' + originalPrice.substring(1));
             discountValueElement.enable();
         }
     }
