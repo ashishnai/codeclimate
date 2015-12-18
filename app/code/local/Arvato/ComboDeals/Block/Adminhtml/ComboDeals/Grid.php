@@ -287,7 +287,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
         }
 
         $condition = $collection->getConnection()
-                ->prepareSqlCondition('coption.from_date', $column->getFilter()->getCondition());
+                ->prepareSqlCondition('coption.to_date', $column->getFilter()->getCondition());
         $collection->getSelect()->where($condition);
         return $collection;
     }
@@ -305,7 +305,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
             return;
         }
         $condition = $collection->getConnection()
-                ->prepareSqlCondition('coption.to_date', $column->getFilter()->getCondition());
+                ->prepareSqlCondition('coption.from_date', $column->getFilter()->getCondition());
         $collection->getSelect()->where($condition);
         return $collection;
     }
