@@ -1,0 +1,100 @@
+<?php
+die('i m here');
+/** @var Mage_Catalog_Model_Product $product */
+$product = $this->getProduct();
+$product->setData('url', null);
+$product->setData('request_path', null);
+
+/** @var Mage_Core_Helper_Data $coreHelper */
+$coreHelper = $this->helper('core');
+?>
+<div class="product-view">
+    <div class="box-collateral box-tags">
+        <div class="box-title">
+            <h2><?php echo $this->__('Available Combo Deals') ?></h2>
+        </div>
+        <div class="box-content">
+
+            <?php $i = 0; ?>
+            <?php foreach ($this->getOptions() as $option): ?>
+                <div class="product_combodeal_option" id="product_combodeal_option<?php echo $i ?>">
+                    <h2><?php echo $this->escapeHtml($option->getTitle()); ?></h2>
+                    <ul class="products-grid">
+                        <!-- Main Product -->
+                        <li class="item">
+                            <a href="<?php echo $product->getUrlModel()->getUrl($product, array('_nosid' => true, '_ignore_category' => true)) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>"
+                               class="product-image">
+                                <img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(135) ?>" width="135" height="135"
+                                     alt="<?php echo $this->escapeHtml($product->getName()) ?>"/></a>
+
+                            <h3 class="product-name">
+                                <a href="<?php echo $product->getUrlModel()->getUrl($product, array('_nosid' => true, '_ignore_category' => true)) ?>"
+                                   title="<?php echo $this->escapeHtml($product->getName()) ?>"><?php echo $this->escapeHtml($product->getName()) ?></a>
+                            </h3>
+                            <?php echo $this->getDealPriceHtml($product, $option, false, '-new') ?>
+                        </li>
+                        <!-- Included Products -->
+                        <?php
+                            /** @var Mage_Catalog_Model_Product $selection */
+                            if ($option->getSelections()): ?>
+                            <?php foreach ($option->getSelections() as $selection):
+                                    $selection->setData('url', null);
+                                    $selection->setData('request_path', null);
+                                ?>
+                                <li class="item">
+                                    <a href="<?php echo $selection->getUrlModel()->getUrl($selection, array('_nosid' => true, '_ignore_category' => true)) ?>" title="<?php echo $this->escapeHtml($selection->getName()) ?>"
+                                       class="product-image">
+                                        <img src="<?php echo $this->helper('catalog/image')->init($selection, 'small_image')->resize(135) ?>" width="135"
+                                             height="135"
+                                             alt="<?php echo $this->escapeHtml($selection->getName()) ?>"/></a>
+
+                                    <h3 class="product-name">
+                                        <a href="<?php echo $selection->getUrlModel()->getUrl($selection, array('_nosid' => true, '_ignore_category' => true)) ?>"
+                                           title="<?php echo $this->escapeHtml($selection->getName()) ?>"><?php echo $this->escapeHtml($selection->getName()) ?></a>
+                                    </h3>
+                                    <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
+                                </li>
+
+                                <?php $i++; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
+                        <!-- Total and Add to Cart -->
+
+                        <li class="item">
+
+
+                            <div class="price-box">
+                                <p class="old-price">
+                                    <span class="price-label">
+                                         <?php echo $this->__('Regular Price:') ?></span>
+                                            <span class="price" id="old-price-total">
+                                                <?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?>
+                                            </span>
+                                </p>
+
+
+                                <p class="special-price">
+                                     <span class="price-label"><?php echo $this->__('Discounted Price:') ?></span>
+                                      <span class="price" id="product-price-total">
+                                            <?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?>
+                                      </span>
+                                 </p>
+                            </div>
+
+                            <button type="button" title="<?php echo $this->__('Order all') ?>" class="button btn-cart"
+                                    onclick="setLocation('<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>')">
+                                <span><span><?php echo $this->__('Order all') ?></span></span>
+                            </button>
+
+                        </li>
+                        <ul class="products-grid">
+                </div>
+            <?php endforeach; ?>
+
+        </div>
+    </div>
+</div>
+
+
+
