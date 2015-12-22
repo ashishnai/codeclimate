@@ -24,9 +24,9 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('combodeals
             'unsigned'  => true,
             'nullable'  => false,
             ), 'Parent Product Id')
-        ->addColumn('from_date', Varien_Db_Ddl_Table::TYPE_DATE, null, array(
+        ->addColumn('from_date', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
             ), 'From Date')
-        ->addColumn('to_date', Varien_Db_Ddl_Table::TYPE_DATE, null, array(
+        ->addColumn('to_date', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
             ), 'To Date')
         ->addColumn('store_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
             'nullable' => false,
@@ -117,5 +117,9 @@ if ($attributeSet->validate()) {
             ->initFromSkeleton($catalogProductEntityTypeId)
             ->save();
 }
+
+// change product sku column type to varchar(256)
+$installer->getConnection()->modifyColumn($installer->getTable('catalog/product'),
+    'sku', 'varchar(255)');
 
 $installer->endSetup();

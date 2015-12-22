@@ -14,18 +14,21 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
     const STORE_ID_ZERO = 0;
 
     /**
-     * Cache key for Options Collection
-     *
-     * @var string
+     * Flag True
      */
-    protected $_keyOptionsCollection = '_cache_instance_comboDeals_options_collection';
+    const TRUE = 1;
 
     /**
-     * Cache key for Selections Collection
-     *
-     * @var string
+     * Flag False
      */
-    protected $_keySelectionsCollection = '_cache_instance_comboDeals_selections_collection';
+    const FALSE = 0;
+
+    /**
+     * Is used default store options
+     *
+     * @var int
+     */
+    protected $_isUsedDefaultStoreOption = null;
 
     /**
      * Get Options with attached Selections collection
@@ -97,37 +100,62 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      */
     private function _getOptionsCollection($product, $optionId, $storeId)
     {
-        if (!$product->hasData($this->_keyOptionsCollection))
-        {
-            // load the combo deal options
-            /** @var Arvato_ComboDeals_Model_Resource_Option_Collection $optionsCollection */
-            $optionsCollection = Mage::getModel('combodeals/option')->getResourceCollection();
+        $this->_isUsedDefaultStoreOption = self::FALSE;
 
-            // filter by product id
-            $productId = $product->getId();
-            $optionsCollection->setProductIdFilter($productId);
+        // load the combo deal options
+        /** @var Arvato_ComboDeals_Model_Resource_Option_Collection $optionsCollection */
+        $optionsCollection = Mage::getModel('combodeals/option')->getResourceCollection();
 
-            // filter by store id if one is supplied
-            if ($storeId !== null) {
-                $optionsCollection->setStoreIdFilter($storeId);
-                if(!$optionsCollection->getData()) {
-                    $optionsCollection->getSelect()->reset(Zend_Db_Select::WHERE);
-                    $optionsCollection->setProductIdFilter($productId)
-                        ->setStoreIdFilter(self::STORE_ID_ZERO);
-                }
-            }
-            
-            // filter by option id if one is supplied
-            if ($optionId !== null)
-            {
-                $optionsCollection->setOptionIdFilter($optionId);
-            }
+        // filter by product id
+        $productId = $product->getId();
+        $optionsCollection->setProductIdFilter($productId);
 
-            // store the result at the product
-            $product->setData($this->_keyOptionsCollection, $optionsCollection);
+        // filter by store id if one is supplied
+        if ($storeId !== null) {
+            $optionsCollection->setStoreIdFilter($storeId);
         }
 
-        return $product->getData($this->_keyOptionsCollection);
+        // set default store data is store wise data not present
+        if(!$optionsCollection->getData()) {
+            $this->_isUsedDefaultStoreOption = self::TRUE;
+            $optionsCollection = $this->_getDefaultOptionsCollection($productId);
+        }
+
+        // filter by option id if one is supplied
+        if ($optionId !== null)
+        {
+            $optionsCollection->setOptionIdFilter($optionId);
+        }
+
+        return $optionsCollection;
+    }
+
+    /**
+     * Retrieve default store combodeal option collection
+     *
+     * @param int $productId
+     *
+     * @return array
+     */
+    private function _getDefaultOptionsCollection($productId)
+    {
+        $optionsCollection = Mage::getSingleton('combodeals/option')->getResourceCollection();
+        $optionsCollection->setProductIdFilter($productId)
+            ->setStoreIdFilter(self::STORE_ID_ZERO);
+        foreach ($optionsCollection as $option) {
+            $option->setData('option_id', null);
+        }
+        return $optionsCollection;
+    }
+
+    /**
+     * Is default store options used
+     *           
+     * @return int
+     */
+    public function isUsedDefaultStoreOptions()
+    {
+        return $this->_isUsedDefaultStoreOption;
     }
 
     /**
@@ -154,21 +182,15 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      */
     private function _getSelectionsCollection($optionIds, $product, $storeId = 0)
     {
-        $keyOptionIds = (is_array($optionIds) ? implode('_', $optionIds) : '');
-        $key = $this->_keySelectionsCollection . $keyOptionIds;
-        if (!$product->hasData($key))
-        {
-            $selectionsCollection = Mage::getResourceModel('combodeals/selection_collection')
-                ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
-                ->setFlag('require_stock_items', true)
-                ->setFlag('product_children', true)
-                ->setPositionOrder()
-                ->setStoreId($storeId)
-                ->setOptionIdsFilter($optionIds);
+        $selectionsCollection = Mage::getResourceModel('combodeals/selection_collection')
+            ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+            ->setFlag('require_stock_items', true)
+            ->setFlag('product_children', true)
+            ->setPositionOrder()
+            ->setStoreId($storeId)
+            ->setOptionIdsFilter($optionIds);
 
-            $product->setData($key, $selectionsCollection);
-        }
-        return $product->getData($key);
+        return $selectionsCollection;
     }
 
     /**
@@ -179,11 +201,12 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      */
     public function getFormatDate($option)
     {
-        //set formatted from date i.e. 12/9/2015
+        //set formatted from date i.e. 12/9/2015 1:00 AM
         $fromDate = $option->getFromDate();
         $fromDate = $this->prepareFormatDate($fromDate);
         $option->setFromDate($fromDate);
 
+        //set formatted to date i.e. 12/9/2015 1:00 AM
         $toDate = $option->getToDate();
         $toDate = $this->prepareFormatDate($toDate);
         $option->setToDate($toDate);
@@ -199,8 +222,8 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      */
     public function prepareFormatDate($date)
     {
-        //prepare formatted date i.e. 12/9/2015
-        $date = Mage::helper('core')->formatDate($date, Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+        //prepare formatted date i.e. 12/9/2015 1:00 AM
+        $date = Mage::helper('core')->formatDate($date, Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, true);
 
         return $date;
     }

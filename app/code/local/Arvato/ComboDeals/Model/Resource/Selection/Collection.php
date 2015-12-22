@@ -25,7 +25,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
     }
 
     /**
-     * Set store id for each collection item when collection was loaded
+     * Set price format, thumbnail html, store id for each collection item when collection was loaded
      *
      * @return Arvato_ComboDeals_Model_Resource_Selection_Collection
      */
@@ -34,7 +34,12 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         parent::_afterLoad();
         if ($this->_items) {
             foreach ($this->_items as $item) {
+                // set store wise price format
                 $item->setPrice($this->getFormatPrice($item->getPrice()));
+
+                // set thumbnail html
+                $item->setImage($this->getImageHtml($item));
+
                 if($this->getStoreId()) {
                     $item->setStoreId($this->getStoreId());
                 }
@@ -50,6 +55,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
     protected function _initSelect()
     {
         parent::_initSelect();
+        $this->addAttributeToSelect('thumbnail');
         $this->getSelect()->join(array('selection' => $this->_selectionTable),
             'selection.product_id = e.entity_id',
             array('*')
@@ -123,5 +129,18 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
     public function getFormatPrice($price)
     {
         return Mage::helper('core')->currencyByStore($price, $this->getStore($this->getStoreId()), true, false);
+    }
+
+    /**
+     * Get thumbnail html
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return string $imageOut
+     */
+    public function getImageHtml($product)
+    {
+        $imagePath = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(80);
+        $imageOut = sprintf('<img src="%s" width="80px"/>', $imagePath);
+        return $imageOut;
     }
 }

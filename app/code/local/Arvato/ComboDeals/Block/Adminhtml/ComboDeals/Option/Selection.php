@@ -43,7 +43,22 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Selection extends Mage
      */
     public function getSelectionDeleteButtonHtml()
     {
-        return $this->getChildHtml('selection_delete_button');
+        if($this->getProduct()->getId() == NULL) {
+            return $this->getChildHtml('selection_delete_button');
+        }
+    }
+
+    /**
+     * Retrieve Product object
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    public function getProduct()
+    {
+        if (!$this->getData('product')) {
+            $this->setData('product', Mage::registry('product'));
+        }
+        return $this->getData('product');
     }
 
     /**

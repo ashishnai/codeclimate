@@ -70,6 +70,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
+            ->addAttributeToSelect('thumbnail')
             ->addAttributeToSelect('attribute_set_id')
             ->addStoreFilter()
             ->joinField(
@@ -112,8 +113,20 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
             'header'    => Mage::helper('sales')->__('ID'),
             'sortable'  => true,
             'width'     => '60px',
-            'index'     => 'entity_id'
+            'index'     => 'entity_id',
         ));
+
+        $this->addColumn('image', array(
+            'header' => Mage::helper('catalog')->__('Image'),
+            'align' => 'left',
+            'index' => 'image',
+            'sortable'  => false,
+            'filter'  => false,
+            'width'     => '80',
+            'column_css_class'=> 'image',
+            'renderer' => 'Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Renderer_Image'
+        ));
+
         $this->addColumn('name', array(
             'header'    => Mage::helper('sales')->__('Product Name'),
             'index'     => 'name',
@@ -125,13 +138,12 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
             ->load()
             ->toOptionHash();
 
-        $this->addColumn('set_name',
-            array(
-                'header'=> Mage::helper('catalog')->__('Attrib. Set Name'),
-                'width' => '100px',
-                'index' => 'attribute_set_id',
-                'type'  => 'options',
-                'options' => $sets,
+        $this->addColumn('set_name', array(
+            'header'=> Mage::helper('catalog')->__('Attrib. Set Name'),
+            'width' => '100px',
+            'index' => 'attribute_set_id',
+            'type'  => 'options',
+            'options' => $sets,
         ));
 
         $this->addColumn('sku', array(
@@ -140,7 +152,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
             'index'     => 'sku',
             'column_css_class'=> 'sku'
         ));
-        
+
         $this->addColumn('price', array(
             'header'    => Mage::helper('catalog')->__('Price'),
             'align'     => 'center',
@@ -150,7 +162,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
             'index'     => 'price',
             'column_css_class'=> 'price'
         ));
-        
+
         $this->addColumn('qty', array(
             'header'    => Mage::helper('catalog')->__('Qty'),
             'width'     => '80px',
@@ -170,7 +182,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
 
         return parent::_prepareColumns();
     }
-    
+
     /**
      * Return selected products
      *

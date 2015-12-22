@@ -136,10 +136,9 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
      */
     public function getAddSelectionButtonHtml()
     {
-        if($this->getProduct()->getStoreId() == Arvato_ComboDeals_Helper_Option::STORE_ID_ZERO) {
+        if($this->getProduct()->getId() == NULL) {
             return $this->getChildHtml('add_selection_button');
         }
-        return $this->getChildHtml('add_selection_button');
     }
 
     /**
@@ -176,7 +175,9 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
      */
     public function getOptionDeleteButtonHtml()
     {
-        return $this->getChildHtml('option_delete_button');
+        if($this->getProduct()->getId() == NULL) {
+            return $this->getChildHtml('option_delete_button');
+        }
     }
 
     /**
