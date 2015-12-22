@@ -117,14 +117,14 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
         ));
 
         $this->addColumn('image', array(
-            'header' => Mage::helper('catalog')->__('Image'),
-            'align' => 'left',
-            'index' => 'image',
+            'header'    => Mage::helper('catalog')->__('Image'),
+            'align'     => 'left',
+            'index'     => 'image',
             'sortable'  => false,
-            'filter'  => false,
+            'filter'    => false,
             'width'     => '80',
+            'renderer'  => 'Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Renderer_Image',
             'column_css_class'=> 'image',
-            'renderer' => 'Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Renderer_Image'
         ));
 
         $this->addColumn('name', array(
@@ -157,9 +157,9 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
             'header'    => Mage::helper('catalog')->__('Price'),
             'align'     => 'center',
             'type'      => 'currency',
-            'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
             'rate'      => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
             'index'     => 'price',
+            'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
             'column_css_class'=> 'price'
         ));
 
@@ -167,8 +167,8 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option_Search_Grid extends Ma
             'header'    => Mage::helper('catalog')->__('Qty'),
             'width'     => '80px',
             'index'     => 'qty',
+            'type'      => 'number',
             'column_css_class'=> 'qty',
-            'type'      => 'number'
         ));
 
         $this->addColumn('is_selected', array(
