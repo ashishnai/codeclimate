@@ -34,11 +34,11 @@ class Arvato_ComboDeals_Model_ProductSaveObserver
 
             if (($selections = $request->getPost('combodeals_selections'))) {
                 $product->setComboDealSelectionsData($selections);
-            }
 
-            // set SKU using mixed SKU string of selected child products
-            if($product->getSku() == NULL) {
-                $product->setSku(Mage::helper("combodeals")->getJoinedSku($selections));
+                // set SKU using mixed SKU string of selected child products
+                if($product->getSku() == NULL) {
+                    $product->setSku(Mage::helper("combodeals")->getJoinedSku($selections));
+                }
             }
         }
         return $observer;
