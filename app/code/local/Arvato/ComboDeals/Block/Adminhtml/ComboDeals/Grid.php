@@ -94,7 +94,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
     }
 
     /*
-     * Prepare columns or Grid
+     * Prepare columns for Grid
      * 
      * @return Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid
      */
