@@ -10,6 +10,7 @@ class Arvato_ComboDeals_Model_Resource_Option extends Mage_Core_Model_Resource_D
      * Initialize connection and define resource
      *
      */
+    
     public function _construct()
     {
         $this->_init('combodeals/option', 'option_id');

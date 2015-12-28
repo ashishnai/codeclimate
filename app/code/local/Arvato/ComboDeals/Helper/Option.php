@@ -26,6 +26,14 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      * @var string
      */
     protected $_keySelectionsCollection = '_cache_instance_comboDeals_selections_collection';
+    
+    
+    /**
+     * Cache key for Parent Product Collection
+     *
+     * @var string
+     */
+    protected $_keyParentsCollection = '_cache_instance_comboDeals_parents_collection';
 
     /**
      * Get Options with attached Selections collection
@@ -204,4 +212,67 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
 
         return $date;
     }
+    
+    /*
+     * Retrive the combo deal products
+     * 
+     * @param Mage_Catalog_Model_Product $product 
+     * @return Arvato_ComboDeals_Model_Resource_Selection_Collection
+     */
+    public function getComboDealProducts($product)
+    {
+        $storeId = $product->getStoreId();
+        $product->setStoreFilter($storeId, $product);
+        $optionIds = $this->getAssociatedOptions($product, $storeId);
+        $selectionCollection = $this->_getSelectionsCollection($optionIds, $product, $storeId);
+        $return_options = array();
+        foreach ($optionIds as $optionId) {
+            $optionsCollection = Mage::getModel('combodeals/option')->getResourceCollection();           
+            // filter by option id if one is supplied
+            if ($optionId !== null) {
+                $optionsCollection->setOptionIdFilter($optionId);
+            }
+            $optionsCollection->setDealDateFilter();
+            $options = $optionsCollection->appendSelections($selectionCollection, false, true);
+            foreach ($options as $option) {
+                $return_options[] = $option;
+            }
+        }
+        return $return_options;
+    }
+    
+    /*
+     * Retrieve the option ids
+     * 
+     * @param Mage_Catalog_Model_Product $product
+     * @param int $storeId
+     * @return array $optionIds
+     */
+    public function getAssociatedOptions($product, $storeId = 0)
+    {        
+        // filter by product id
+        $productId = $product->getId();
+            $parentCollection = Mage::getResourceModel('combodeals/selection_collection')
+                    ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+                    ->addAttributeToSelect('selection' . 'option_id')
+                    ->setFlag('require_stock_items', true)
+                    ->setPositionOrder()
+                    ->setStoreId($storeId)
+                    ->setProductIdsFilter($productId);
+        foreach ($parentCollection->getItems() as $_selection) {
+            $optionIds[] = $_selection->getOptionId();
+        }
+        return $optionIds;
+    }
+    
+    /*
+     * 
+     * 
+     * 
+     */
+    public function getOptionStockStatus()
+    {
+        
+    }
+   
 }

@@ -30,6 +30,9 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      * New attribute set name
      */
     const COMBODEAL_ATTRIBUTE_SET_NAME = 'Combo Deals';
+    
+    const COMBODEAL_PRODUCT_HEADER_TITLE = 'combodeals_admin/combodeals_setting/header';
+
 
     /**
      * Retrieve mixed string SKU using selected child products
@@ -72,5 +75,15 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         return $sku;
+    }
+    
+    /*
+     * Get The header title or combo deal productss block
+     * 
+     * return string 
+     */
+    public function getHeaderTitle()
+    {
+        return Mage::getStoreConfig(self::COMBODEAL_PRODUCT_HEADER_TITLE);
     }
 }

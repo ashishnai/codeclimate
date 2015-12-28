@@ -34,7 +34,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         parent::_afterLoad();
         if ($this->_items) {
             foreach ($this->_items as $item) {
-                $item->setPrice($this->getFormatPrice($item->getPrice()));
+                $item->setPrice($item->getPrice());
                 if($this->getStoreId()) {
                     $item->setStoreId($this->getStoreId());
                 }
@@ -50,6 +50,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
     protected function _initSelect()
     {
         parent::_initSelect();
+        
         $this->getSelect()->join(array('selection' => $this->_selectionTable),
             'selection.product_id = e.entity_id',
             array('*')
@@ -88,8 +89,40 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         if (!empty($selectionIds)) {
             $this->getSelect()->where('selection.selection_id IN (?)', $selectionIds);
         }
+        
         return $this;
     }
+    
+     /**
+     * Apply product ids filter to collection
+     *
+     * @param array $productIds
+     * @return Arvato_ComboDeals_Model_Resource_Selection_Collection
+     */
+    public function setProductIdsFilter($productIds)
+    {
+        if (!empty($productIds)) {
+            $this->getSelect()->where('selection.product_id IN (?)', $productIds);
+        }
+        
+        return $this;
+    }
+    
+     /**
+     * Apply product ids filter to collection
+     *
+     * @param array $productIds
+     * @return Arvato_ComboDeals_Model_Resource_Selection_Collection
+     */
+    public function setExcludeProductIdsFilter($productIds)
+    {
+        if (!empty($productIds)) {
+            $this->getSelect()->where('selection.product_id NOT IN (?)', $productIds);
+        }
+        
+        return $this;
+    }
+
 
     /**
      * Set position order

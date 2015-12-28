@@ -6,6 +6,10 @@
  */
 class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
 {
+    const DISCOUNT_TYPE_PERCENT = 'percent';
+    const DISCOUNT_TYPE_FIXED   = 'fixed';
+    const DISCOUNT_TYPE_FREE   = 'free';
+    const DISCOUNT_TYPE_NONE   = 'none';
     /**
      * Initialize resource model
      */

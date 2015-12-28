@@ -28,12 +28,28 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
     {
         $this->_init('combodeals/option');
     }
+    
+    
+    
+    /**
+     * Initialize collection option with product name
+     *
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+        $attribute = Mage::getSingleton('eav/config')
+                ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'name');
+        $this->getSelect()->joinLeft(
+                array('name_table' => $attribute->getBackendTable()), "main_table.parent_id = name_table.entity_id AND "
+                . "name_table.attribute_id={$attribute->getId()}", array('name' => 'value')
+        );
+    }
 
     /**
      * Sets store id filter
      *
      * @param int $storeId The id of the store scope
-     *
      * @return Arvato_ComboDeals_Model_Resource_Option_Collection
      */
     public function setStoreIdFilter($storeId)
@@ -46,7 +62,6 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * Sets product id filter
      *
      * @param int $productId
-     *
      * @return Arvato_ComboDeals_Model_Resource_Option_Collection
      */
     public function setProductIdFilter($productId)
@@ -59,13 +74,29 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * Sets option id filter
      *
      * @param int $optionId
-     *
      * @return Arvato_ComboDeals_Model_Resource_Option_Collection
      */
     public function setOptionIdFilter($optionId)
     {
         $this->addFieldToFilter('main_table.option_id', $optionId);
         return $this;
+    }
+    
+    /*
+     * Sets the active deals filter
+     * 
+     * @param date|null $now
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setDealDateFilter($now=null)
+    {
+        if(is_null($now)){
+            $now = Mage::getModel('core/date')->date('Y-m-d');
+        }
+        $this->addFieldToFilter('main_table.from_date', array('lteq' =>$now));
+        $this->addFieldToFilter('main_table.to_date', array('gteq' => $now));
+        return $this;
+                
     }
 
     /**
@@ -80,32 +111,24 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * @return array
      */
     public function appendSelections($selectionsCollection, $stripBefore = false, $appendAll = true)
-    {
-        if ($stripBefore)
-        {
+    {        
+        if ($stripBefore) {
             $this->_stripSelections();
         }
 
-        if (!$this->_selectionsAppended)
-        {
-            foreach ($selectionsCollection->getItems() as $key => $_selection)
-            {
-                if ($_option = $this->getItemById($_selection->getOptionId()))
-                {
-                    if ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions()))
-                    {
+        if (!$this->_selectionsAppended) {
+            foreach ($selectionsCollection->getItems() as $key => $_selection) {
+                if ($_option = $this->getItemById($_selection->getOptionId())) {
+                    if ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions())) {
                         $_selection->setOption($_option);
                         $_option->addSelection($_selection);
-                    }
-                    else
-                    {
+                    } else {
                         $selectionsCollection->removeItemByKey($key);
                     }
                 }
             }
             $this->_selectionsAppended = true;
         }
-
         return $this->getItems();
     }
 
@@ -116,8 +139,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      */
     protected function _stripSelections()
     {
-        foreach ($this->getItems() as $option)
-        {
+        foreach ($this->getItems() as $option) {
             $option->setSelections(array());
         }
         $this->_selectionsAppended = false;
@@ -128,17 +150,13 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * Sets filter by option id
      *
      * @param array|int $ids
-     *
      * @return Arvato_ComboDeals_Model_Resource_Option_Collection
      */
     public function setIdFilter($ids)
     {
-        if (is_array($ids))
-        {
+        if (is_array($ids)) {
             $this->addFieldToFilter('main_table.option_id', array('in' => $ids));
-        }
-        else if ($ids != '')
-        {
+        } else if ($ids != '') {
             $this->addFieldToFilter('main_table.option_id', $ids);
         }
         return $this;
@@ -162,8 +180,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      */
     public function getAllIds()
     {
-        if (is_null($this->_itemIds))
-        {
+        if (is_null($this->_itemIds)) {
             $this->_itemIds = parent::getAllIds();
         }
         return $this->_itemIds;

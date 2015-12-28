@@ -1,0 +1,32 @@
+<?php
+/**
+ * Template for displaying combo-deal product prices within ComboDeal Template
+ * @see Arvato_ComboDeals_Block_Price
+ */
+/** @var Arvato_ComboDeals_Block_Price $this */
+?>
+<?php
+$productId = $this->getProduct()->getId();
+$secondPriceLabel = $this->__('Regular Price:');
+if ($this->isDiscountReceiver())
+{
+    $secondPriceLabel = $this->__('Discounted Price:');
+}
+?>
+<div class="price-box">
+    <p class="old-price">
+        <span class="price-label">
+             <?php if ($this->isDiscountReceiver()): ?>
+             <?php echo $this->__('Regular Price:') ?></span>
+                <span class="price" id="old-price-<?php echo $productId ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $this->getFormattedRegularPrice() ?>
+                </span>
+        <?php endif; ?>
+    </p>
+    <p class="special-price">
+        <span class="price-label"><?php echo $secondPriceLabel ?></span>
+        <span class="price" id="product-price-<?php echo $productId ?><?php echo $this->getIdSuffix() ?>">
+            <?php echo $this->getFormattedDiscountedPrice() ?>
+        </span>
+    </p>
+</div>
