@@ -233,6 +233,8 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 $optionsCollection->setOptionIdFilter($optionId);
             }
             $optionsCollection->setDealDateFilter();
+            $optionsCollection->setSortByTimeLeft();
+            $optionsCollection->setStatusFilter();
             $options = $optionsCollection->appendSelections($selectionCollection, false, true);
             foreach ($options as $option) {
                 $return_options[] = $option;
@@ -263,16 +265,5 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
             $optionIds[] = $_selection->getOptionId();
         }
         return $optionIds;
-    }
-    
-    /*
-     * 
-     * 
-     * 
-     */
-    public function getOptionStockStatus()
-    {
-        
-    }
-   
+    }  
 }

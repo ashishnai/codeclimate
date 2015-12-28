@@ -32,7 +32,7 @@ class Arvato_ComboDeals_Model_Selection extends Mage_Core_Model_Abstract
         $discountedPrice = $minimalProductPrice;
 
         /* @var $option Arvato_ComboDeals_Model_Option */
-        if($parentOption && $this->isActionProduct())
+        if($parentOption)
         {
             $option = $parentOption;
             $amount = $option->getAmount();

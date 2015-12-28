@@ -6,3 +6,5 @@ app/design/adminhtml/default/default/layout/combodeals.xml            app/design
 app/design/adminhtml/default/default/template/arvato/combodeals       app/design/adminhtml/default/default/template/arvato/combodeals
 app/design/frontend/base/default/layout/combodeals.xml                app/design/frontend/base/default/layout/combodeals.xml
 app/design/frontend/base/default/template/combodeals                  app/design/frontend/base/default/template/combodeals
+skin/frontend/base/default/combodeals                                 skin/frontend/base/default/combodeals
+js/arvato/combodeals                                                  js/arvato/combodeals 

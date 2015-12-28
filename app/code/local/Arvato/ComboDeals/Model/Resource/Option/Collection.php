@@ -32,7 +32,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
     
     
     /**
-     * Initialize collection option with product name
+     * Initialize collection option with product name, status
      *
      */
     protected function _initSelect()
@@ -40,10 +40,18 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         parent::_initSelect();
         $attribute = Mage::getSingleton('eav/config')
                 ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'name');
-        $this->getSelect()->joinLeft(
-                array('name_table' => $attribute->getBackendTable()), "main_table.parent_id = name_table.entity_id AND "
-                . "name_table.attribute_id={$attribute->getId()}", array('name' => 'value')
-        );
+        
+        $productAttributes = array('name', 'status');
+        foreach ($productAttributes as $attributeCode) {
+            $tableAlias = $attributeCode . '_table';
+            $attribute = Mage::getSingleton('eav/config')
+                    ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode);
+
+            $this->getSelect()->joinLeft(
+                    array($tableAlias => $attribute->getBackendTable()), "main_table.parent_id = $tableAlias.entity_id AND "
+                    . "$tableAlias.attribute_id={$attribute->getId()}", 'value'
+            );
+        }
     }
 
     /**
@@ -82,22 +90,52 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         return $this;
     }
     
-    /*
+    /**
      * Sets the active deals filter
      * 
-     * @param date|null $now
+     * @param date|null $currentDate
      * @return Arvato_ComboDeals_Model_Resource_Option_Collection
      */
-    public function setDealDateFilter($now=null)
+    public function setDealDateFilter($currentDate=null)
     {
-        if(is_null($now)){
-            $now = Mage::getModel('core/date')->date('Y-m-d');
+        if(is_null($currentDate)){
+            $currentDate = Mage::getModel('core/date')->date('Y-m-d');
         }
-        $this->addFieldToFilter('main_table.from_date', array('lteq' =>$now));
-        $this->addFieldToFilter('main_table.to_date', array('gteq' => $now));
+        $this->addFieldToFilter('main_table.from_date', array('lteq' => $currentDate));
+        $this->addFieldToFilter('main_table.to_date', array('gteq' => $currentDate));
         return $this;
                 
     }
+    
+    /**
+     * Sets filter on combo deal product status
+     * 
+     * 
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setStatusFilter()
+    {
+        $this->addFieldToFilter('status_table.value', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
+        return $this;
+    }
+            
+    /**
+     * Sets Combo deal Time left(Date Difference) sorting
+     * 
+     * 
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setSortByTimeLeft($currentDate=null)
+    {
+        if(is_null($currentDate)){
+            $currentDate = Mage::getModel('core/date')->date('Y-m-d');
+        }
+        $this->getSelect()
+                ->columns('DATEDIFF(main_table.to_date,'.$currentDate.') AS date_difference')
+                ->order('date_difference desc');
+        return $this;
+    } 
+    
 
     /**
      * Append selection to options
