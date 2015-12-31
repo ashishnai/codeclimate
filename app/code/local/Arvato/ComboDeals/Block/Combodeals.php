@@ -17,7 +17,7 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
    
     protected function _toHtml()
     {
-        if ($this->_hasProductComboDeals())
+        if ($this->_hasProductComboDeals() &&  Mage::helper("combodeals")->isEnableModuleOutput())
         {
             return parent::_toHtml();
         }
@@ -123,6 +123,24 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
 
         return $block->toHtml();
     }
+    
+    
+    /**
+     * Returns product price block html
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param Arvato_ComboDeals_Model_Option $option
+     * @param boolean $displayMinimalPrice
+     * @param string $idSuffix
+     * @return string
+     */
+    public function getDealTimerHtml($option, $count)
+    {        
+        $block = $this->getLayout()->createBlock('combodeals/timer')
+            ->setOption($option)
+            ->setCount($count);    
+        return $block->toHtml();
+    }
 
     /*
      * Calculates the total minimum product price without the combo deal
@@ -191,6 +209,7 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
     {
         $product = $this->getProduct();
         $selections = $option->getSelections();
+        $in_stock = array();
         if (!empty($selections)) {
             $in_stock = array();
             foreach ($selections as $selection) {

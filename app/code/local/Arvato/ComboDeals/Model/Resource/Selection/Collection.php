@@ -63,7 +63,23 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
                 '{{table}}.stock_id=1',
                 'left');
     }
-
+    
+    
+    
+    /**
+     * Set store filter
+     *
+     * @param int $storeId
+     * @return Mage_Core_Model_Store
+     */
+    public function setStoreIdFilter($storeId)
+    {
+        if (!empty($storeId)) {
+            $this->getSelect()->where('selection.store_id = (?)', $storeId);
+        }
+        return $this;
+    }
+    
     /**
      * Apply option ids filter to collection
      *

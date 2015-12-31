@@ -41,15 +41,15 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         $attribute = Mage::getSingleton('eav/config')
                 ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'name');
         
-        $productAttributes = array('name', 'status');
-        foreach ($productAttributes as $attributeCode) {
+        $productAttributes = array('name' => 'name', 'status' => 'status');
+        foreach ($productAttributes as $alias=>$attributeCode) {
             $tableAlias = $attributeCode . '_table';
             $attribute = Mage::getSingleton('eav/config')
                     ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode);
 
             $this->getSelect()->joinLeft(
                     array($tableAlias => $attribute->getBackendTable()), "main_table.parent_id = $tableAlias.entity_id AND "
-                    . "$tableAlias.attribute_id={$attribute->getId()}", 'value'
+                    . "$tableAlias.attribute_id={$attribute->getId()}",array($alias=>'value')
             );
         }
     }

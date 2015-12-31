@@ -27,6 +27,7 @@ class Arvato_ComboDeals_Helper_Price extends Mage_Core_Helper_Abstract {
     public function getRegularProductPrice($product, $inclTax)
     {
         $selectionModel = Mage::getModel('combodeals/selection')->setData($product->getData());
+    //    print_R($selectionModel);exit;
         $qty = $selectionModel->getMinimumQty();
         $_regularPrice = $this->taxHelper->getPrice($product, $product->getPrice(), $inclTax);
         $_finalPrice = $this->taxHelper->getPrice($product, $product->getFinalPrice(), $inclTax);

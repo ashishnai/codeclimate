@@ -152,7 +152,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Retrieve bundle selections collection based on used options
+     * Retrieve selections collection based on used options
      *
      * @param array $optionIds
      * @param Mage_Catalog_Model_Product $product
@@ -160,7 +160,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      *
      * @return Arvato_ComboDeals_Model_Resource_Selection_Collection
      */
-    private function _getSelectionsCollection($optionIds, $product, $storeId = 0)
+    private function _getSelectionsCollection($optionIds, $product, $storeId)
     {
         $keyOptionIds = (is_array($optionIds) ? implode('_', $optionIds) : '');
         $key = $this->_keySelectionsCollection . $keyOptionIds;
@@ -171,9 +171,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 ->setFlag('require_stock_items', true)
                 ->setFlag('product_children', true)
                 ->setPositionOrder()
-                ->setStoreId($storeId)
                 ->setOptionIdsFilter($optionIds);
-
             $product->setData($key, $selectionsCollection);
         }
         return $product->getData($key);
@@ -188,12 +186,10 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
     public function getFormatDate($option)
     {
         //set formatted from date i.e. 12/9/2015
-        $fromDate = $option->getFromDate();
-        $fromDate = $this->prepareFormatDate($fromDate);
+        $fromDate = $this->prepareFormatDate($option->getFromDate());
         $option->setFromDate($fromDate);
 
-        $toDate = $option->getToDate();
-        $toDate = $this->prepareFormatDate($toDate);
+        $toDate = $this->prepareFormatDate($option->getToDate());
         $option->setToDate($toDate);
         
         return $option;
@@ -222,25 +218,29 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
     public function getComboDealProducts($product)
     {
         $storeId = $product->getStoreId();
-        $product->setStoreFilter($storeId, $product);
+        $product->setStoreIdFilter($storeId, $product);
         $optionIds = $this->getAssociatedOptions($product, $storeId);
-        $selectionCollection = $this->_getSelectionsCollection($optionIds, $product, $storeId);
-        $return_options = array();
-        foreach ($optionIds as $optionId) {
-            $optionsCollection = Mage::getModel('combodeals/option')->getResourceCollection();           
-            // filter by option id if one is supplied
-            if ($optionId !== null) {
-                $optionsCollection->setOptionIdFilter($optionId);
+        if (empty($optionIds)) {
+            return;
+        } else {
+            $selectionCollection = $this->_getSelectionsCollection($optionIds, $product, $storeId);
+            $return_options = array();
+            foreach ($optionIds as $optionId) {
+                $optionsCollection = Mage::getModel('combodeals/option')->getResourceCollection();
+                // filter by option id if one is supplied
+                if ($optionId !== null) {
+                    $optionsCollection->setOptionIdFilter($optionId);
+                }
+                $optionsCollection->setDealDateFilter()
+                        ->setSortByTimeLeft()
+                        ->setStatusFilter();
+                $options = $optionsCollection->appendSelections($selectionCollection, false, true);
+                foreach ($options as $option) {
+                    $return_options[] = $option;
+                }
             }
-            $optionsCollection->setDealDateFilter();
-            $optionsCollection->setSortByTimeLeft();
-            $optionsCollection->setStatusFilter();
-            $options = $optionsCollection->appendSelections($selectionCollection, false, true);
-            foreach ($options as $option) {
-                $return_options[] = $option;
-            }
+            return $return_options;
         }
-        return $return_options;
     }
     
     /*
@@ -250,20 +250,36 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      * @param int $storeId
      * @return array $optionIds
      */
-    public function getAssociatedOptions($product, $storeId = 0)
+    public function getAssociatedOptions($product, $storeId)
     {        
         // filter by product id
         $productId = $product->getId();
-            $parentCollection = Mage::getResourceModel('combodeals/selection_collection')
-                    ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
-                    ->addAttributeToSelect('selection' . 'option_id')
-                    ->setFlag('require_stock_items', true)
-                    ->setPositionOrder()
-                    ->setStoreId($storeId)
-                    ->setProductIdsFilter($productId);
+        $optionIds = array();
+        $parentCollection = Mage::getResourceModel('combodeals/selection_collection')
+                ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+                ->addAttributeToSelect('selection' . 'option_id')
+                ->setFlag('require_stock_items', true)
+                ->setPositionOrder()
+                ->setStoreIdFilter($storeId)
+                ->setProductIdsFilter($productId);
         foreach ($parentCollection->getItems() as $_selection) {
             $optionIds[] = $_selection->getOptionId();
         }
         return $optionIds;
     }  
+    
+    
+    
+    public function getAllCombodeals()
+    {
+        // Gets the current store's id
+        $storeId = Mage::app()->getStore()->getStoreId();
+        $optionCollection = Mage::getResourceModel('combodeals/option')
+                ->setStoreIdFilter($storeId)
+                ->setDealDateFilter()
+                ->setSortByTimeLeft()
+                ->setStatusFilter();
+                
+     
+    }
 }

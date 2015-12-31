@@ -6,7 +6,7 @@
                 <script>arvato/combodeals/timer.js</script>
             </action>
             <action method="addCss">
-                <stylesheet>arvato/combodeals/timer.css</stylesheet>
+               <stylesheet>combodeals/combodeals.css</stylesheet>
             </action>
         </reference>
         <reference name="content">

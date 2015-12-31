@@ -7,62 +7,40 @@
  */
 ?>
 <?php
-/* Count for timer calculation declared here */
-$count = 1;
-$_product = $this->getProduct();
-$toDate = $_product->getSpecialTODate();
+$option = $this->getOption();
+$count = $this->getCount();
+$toDate = $option->getToDate();
 ?>
-<!--Condition for Timer Controllers goes here-->
-<?php if ($this->getPriceCountDown()): ?>
-	<?php if (Mage::helper('combodeals/timer')->isShowTitle('viewpage')): ?>
-		 <div id="heading<?php echo $count; ?>" style="color:#<?php echo $head_color; ?>; font-size: 18px; font-weight:bold;padding-top:15px;clear: both;">
-		 	<?php echo Mage::helper('combodeals/timer')->getTimerTitle(); ?>
-		 </div>
-	<?php endif; ?>
-		<div id="countbox_<?php echo $count; ?>" class="timer-view"></div>
-	<?php if (Mage::helper('combodeals/timer')->isShowCaption('viewpage')): ?>
-		<div class='clear'></div>
-		<div class='timerdate' id="caption<?php echo $count; ?>">
-			<span class='hour' style='margin:0px'>
-				<?php echo $this->__('Days') ?>
-			</span>
-			<span class='hour' style='margin:0 0 0 33px'>
-				<?php echo $this->__('Hours') ?>
-			</span>
-			<span class='min'  style='margin:0 0 0 24px'>
-				<?php echo $this->__('Minutes') ?>
-			</span>
-			<span class='sec' style='margin:0 0 0 14px'>
-				<?php echo $this->__('Seconds') ?>
-			</span>
-		</div>
-	<?php endif;?>
-	<script type="text/javascript">
-	   var dthen<?php echo $count; ?> = new Date("<?php echo Date("m/d/y", strtotime($toDate)).' 11:59:00 PM'; ?>");
-	   start = "<?php echo Date("m/d/y h:i:s A", strtotime(Mage_Core_Model_Locale::date(null, null, "en_US", true))); ?>";
-	   start_date = Date.parse(start);
-	   var dnow<?php echo $count; ?> = new Date(start_date);
-	   if(CountStepper>0)
-	   ddiff= new Date((dnow<?php echo $count; ?>)-(dthen<?php echo $count; ?>));
-	   else
-	   ddiff = new Date((dthen<?php echo $count; ?>)-(dnow<?php echo $count; ?>));
-	   gsecs<?php echo $count; ?> = Math.floor(ddiff.valueOf()/1000);
-	   var iid<?php echo $count; ?> = "countbox_<?php echo $count; ?>";
-	   CountBack(gsecs<?php echo $count; ?>,"countbox_"+timer, timer);
-	   timer++;
-	</script>
-<?php $count = $count + 1; ?>
-<?php endif; ?>
-
-<!--Dynamic style changes goes here-->
-<?php 
-	/* Admin Controllers for timer are declared here */
-	$desc_color = Mage::getStoreConfig('timer/apptha_timer_color/description');
-	$timer_color = Mage::getStoreConfig('timer/apptha_timer_color/text');
-	$head_color = Mage::getStoreConfig('timer/apptha_timer_color/heading_text_color');
-?>
-<style>
-    .timer-view{float: left;width: 100%;padding:0;color: #<?php echo $timer_color; ?>;font-size: 40px; font-family: arial;font-weight: bold;}
-    .timerdate{float: left;width: 100%;padding:0 0 15px 1px;color: #<?php echo $desc_color; ?>;font-size: 13px;}
-    #heading1{color:#<?php echo $head_color;?>;}
-</style>
+<div id="heading<?php echo $count; ?>" style="color:#<?php //echo $head_color;  ?>; font-size: 18px; font-weight:bold;padding-top:15px;clear: both;">
+    <?php echo $this->__('Deal End in'); ?>
+    <div id="countbox_<?php echo $count; ?>" class="timer-view"></div>
+    <div class='clear'></div>
+    <div class='timerdate' id="caption<?php echo $count; ?>">
+        <span class='hour' style='margin:0px'>
+            <?php echo $this->__('Days') ?>
+        </span>
+        <span class='hour' style='margin:0 0 0 33px'>
+            <?php echo $this->__('Hours') ?>
+        </span>
+        <span class='min'  style='margin:0 0 0 24px'>
+            <?php echo $this->__('Minutes') ?>
+        </span>
+        <span class='sec' style='margin:0 0 0 14px'>
+            <?php echo $this->__('Seconds') ?>
+        </span>
+    </div>
+</div>
+<script type="text/javascript">
+    var dthen<?php echo $count; ?> = new Date("<?php echo Mage::getModel('core/date')->date("m/d/y", strtotime($toDate)) . ' 11:59:00 PM'; ?>");
+    start = "<?php echo Mage::getModel('core/date')->date("m/d/y h:i:s A", strtotime(Mage::app()->getLocale()->date(null, null, null, true))); ?>";
+    start_date = Date.parse(start);
+    var dnow<?php echo $count; ?> = new Date(start_date);
+    if (CountStepper > 0)
+        ddiff = new Date((dnow<?php echo $count; ?>) - (dthen<?php echo $count; ?>));
+    else
+        ddiff = new Date((dthen<?php echo $count; ?>) - (dnow<?php echo $count; ?>));
+    gsecs<?php echo $count; ?> = Math.floor(ddiff.valueOf() / 1000);
+    var iid<?php echo $count; ?> = "countbox_<?php echo $count; ?>";
+    CountBack(gsecs<?php echo $count; ?>, "countbox_" + timer, timer);
+    timer++;
+</script>
