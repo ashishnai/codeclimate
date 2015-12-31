@@ -1,26 +1,28 @@
 <?php
-/**
- * Combo Deal Product view template
- *
- * @see Arvato_ComboDeals_Block_Combodeals
- */
-?>
-<?php
+/** @var Mage_Catalog_Model_Product $product */
+$product = $this->getProduct();
+$product->setData('url', null);
+$product->setData('request_path', null);
+
 /** @var Mage_Core_Helper_Data $coreHelper */
 $coreHelper = $this->helper('core');
-/* Count for timer calculation declared here */
 $countTimers = 0;
 ?>
-<div class="combo-deals">
-    <div>
-        <div class="info"> <strong><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></strong></div>
-    </div>
-    <?php foreach ($this->getOptions() as $option): ?>
 
-        <h3><?php echo $this->escapeHtml($option->getName()); ?></h3>
-        <div class="row-fluid">
-            <div class="span3">
-                <div class="image">
+<div class="combo-deals">
+    <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
+    <?php foreach ($this->getOptions() as $option): ?>
+        <div class="combodeal-pageHolder">
+            <div class="combodeal-page-title">
+                <h3><?php echo $this->escapeHtml($option->getName()); ?></h3>
+            </div>
+            <div class="combodeal-page-timer">
+                  <?php if (Mage::helper('combodeals/timer')->isEnableModuleOutput()): ?>
+                         <?php $countTimers +=1; ?>
+                         <?php echo $this->getDealTimerHtml($option, $countTimers) ?>
+                  <?php endif; ?>
+            </div>
+            <div class="combodeal-page-instock">
                     <div class="stock-box">
                         <?php if (in_array('fewleft', $this->getDealStockStatus($option))): ?>
                             <span></span>
@@ -37,57 +39,42 @@ $countTimers = 0;
                             <span></span>
                             <span class="out"></span>
                             <p class="out"><?php echo $this->__('out of stock') ?></p>
-                        <?php endif; ?> 
+                        <?php endif; ?>
                     </div>
-                </div>
-                <div class="info">
-                    <?php if (Mage::helper('combodeals/timer')->isEnableModuleOutput()): ?> 
-                        <?php $countTimers +=1; ?>
-                        <?php echo $this->getDealTimerHtml($option, $countTimers) ?>
-                    <?php endif; ?> 
-                </div>
-                <?php //echo $this->getDealPriceHtml($product, $option, false, '-new') ?>
-
             </div>
+        </div>
+        <div class="row-fluid">
             <!-- Included Products -->
-            <?php
-            /** @var Mage_Catalog_Model_Product $selection */
-            if ($option->getSelections()):
+            <?php if ($option->getSelections()):
+                /** @var Mage_Catalog_Model_Product $selection */
                 ?>
-                <?php
-                foreach ($option->getSelections() as $selection):
-                    $selection->setData('url', null);
-                    $selection->setData('request_path', null);
-                    ?>
-                    <div class="span3">
-                        <a href="<?php echo $selection->getUrlModel()->getUrl($selection, array('_nosid' => true, '_ignore_category' => true)) ?>" title="<?php echo $this->escapeHtml($selection->getName()) ?>"
-                           class="product-image">
-                            <div class="image">
-                                <img src="<?php echo $this->helper('catalog/image')->init($selection, 'small_image')->resize(135) ?>" width="135"
-                                     height="135"
-                                     alt="<?php echo $this->escapeHtml($selection->getName()) ?>"/></a>
-                    </div>        
-                    <div class="info">
-                        <strong>
-                            <a href="<?php echo $selection->getUrlModel()->getUrl($selection, array('_nosid' => true, '_ignore_category' => true)) ?>"
-                               title="<?php echo $this->escapeHtml($selection->getName()) ?>"><?php echo $this->escapeHtml($selection->getName()) ?></a>
-                        </strong>
-                        <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
-                    </div>
+                <?php foreach ($option->getSelections() as $selection):
+                $selection->setData('url', null);
+                $selection->setData('request_path', null);
+                ?>
+                <div class="span3">
+                    <a href="<?php echo $selection->getUrlModel()->getUrl($selection, array('_nosid' => true, '_ignore_category' => true)) ?>" class="product plus" title="<?php echo $this->escapeHtml($selection->getName()) ?>">
+                        <div class="image">
+                            <img src="<?php echo $this->helper('catalog/image')->init($selection, 'small_image')->resize(50); ?>" width="50" height="50" alt="<?php echo $this->escapeHtml($selection->getName()) ?>" />
+                        </div>
+                        <div class="info">
+                            <strong>
+                                <?php echo $this->escapeHtml($selection->getName()) ?>
+                            </strong>
+                            <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
+                        </div>
+                    </a>
                 </div>
             <?php endforeach; ?>
+                <div class="span3">
+                    <div class="result">
+                        <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
+                        <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
 
-            <!-- Total and Add to Cart -->
-
-            <div class="span3">
-                <div class="result">
-                    <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
-                    <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
-
-                    <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                        <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                    </div>
                 </div>
-            </div>
-        <?php endif; ?>  
-    </div>
-<?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
 </div>

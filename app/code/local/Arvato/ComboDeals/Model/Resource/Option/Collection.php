@@ -138,7 +138,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
     
 
     /**
-     * Append selection to options
+     * Append all selections to options
      * stripBefore - indicates to reload
      * appendAll - indicates do we need to filter by saleable and required custom options
      *
@@ -149,25 +149,44 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * @return array
      */
     public function appendSelections($selectionsCollection, $stripBefore = false, $appendAll = true)
-    {        
+    {
         if ($stripBefore) {
             $this->_stripSelections();
         }
 
         if (!$this->_selectionsAppended) {
-            foreach ($selectionsCollection->getItems() as $key => $_selection) {
-                if ($_option = $this->getItemById($_selection->getOptionId())) {
-                    if ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions())) {
-                        $_selection->setOption($_option);
-                        $_option->addSelection($_selection);
-                    } else {
-                        $selectionsCollection->removeItemByKey($key);
-                    }
+            foreach ($selectionsCollection->getItems() as $key => $_selection)
+            {
+                $_option = $this->getItemById($_selection->getOptionId());
+                if ($_option && ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions()))) {
+                    $_selection->setOption($_option);
+
+                    // check if default store option used
+                    $_selection = $this->checkUsedDefaultStoreOptions($_selection);
+                    $_option->addSelection($_selection);
+                }
+                else {
+                    $selectionsCollection->removeItemByKey($key);
                 }
             }
             $this->_selectionsAppended = true;
         }
         return $this->getItems();
+    }
+
+    /**
+     * Check and set null if default store options used
+     * 
+     * @param Arvato_ComboDeals_Model_Selection $_selection        
+     * @param Arvato_ComboDeals_Model_Selection $_selection
+     */
+    protected function checkUsedDefaultStoreOptions($_selection)
+    {
+        if (Mage::helper('combodeals/option')->isUsedDefaultStoreOptions()) {
+            $_selection->setData('selection_id', null);
+            $_selection->setData('option_id', null);
+        }
+        return $_selection;
     }
 
     /**
