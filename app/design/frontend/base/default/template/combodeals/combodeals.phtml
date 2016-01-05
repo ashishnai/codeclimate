@@ -13,7 +13,6 @@ $productPlus = "";
 $parentId = null;
 $selectionIds = array();
 ?>
-
 <div class="combo-deals">
     <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
     <?php foreach ($this->getOptions() as $option): ?>
@@ -70,7 +69,7 @@ $selectionIds = array();
                                 <strong>
                                 <?php echo $this->escapeHtml($selection->getName()) ?>
                                 </strong>
-            <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
+                                <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
                             </div>
                         </a>
                     </div>

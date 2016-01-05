@@ -90,7 +90,9 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
     /*
      * Get Combo deals add to cart Url
      * 
+     * @param int $productId
      * @param int $optionId
+     * @param array $selectionIds
      * @return string $url
      */
     public function getComboDealAddToCartUrl($productId, $optionId, $selectionIds)
@@ -230,4 +232,3 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
         return $in_stock;
     }
 }
-

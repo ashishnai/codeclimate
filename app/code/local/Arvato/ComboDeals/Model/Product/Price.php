@@ -8,8 +8,7 @@
 class Arvato_ComboDeals_Model_Product_Price extends Mage_Bundle_Model_Product_Price
 {
     /**
-     * Calculate final price of selection 
-     * with take into discount type
+     * Calculate final price of selection
      * with take into account tier price
      *
      * @param  Mage_Catalog_Model_Product $bundleProduct
