@@ -153,11 +153,11 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         if ($stripBefore) {
             $this->_stripSelections();
         }
-
         if (!$this->_selectionsAppended) {
             foreach ($selectionsCollection->getItems() as $key => $_selection) {
                 if ($_option = $this->getItemById($_selection->getOptionId())) {
                     if ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions())) {
+                     
                         $_selection->setOption($_option);
                         $_option->addSelection($_selection);
                     } else {

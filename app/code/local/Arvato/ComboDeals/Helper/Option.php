@@ -270,16 +270,23 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
     
     
     
-    public function getAllCombodeals()
+    public function getAllCombodeals($optionIds, $optionsCollection)
     {
-        // Gets the current store's id
-        $storeId = Mage::app()->getStore()->getStoreId();
-        $optionCollection = Mage::getResourceModel('combodeals/option')
+        $selectionsCollection = Mage::getResourceModel('combodeals/selection_collection')
+                ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+                ->setFlag('require_stock_items', true)
+                ->setFlag('product_children', true)
                 ->setStoreIdFilter($storeId)
-                ->setDealDateFilter()
-                ->setSortByTimeLeft()
-                ->setStatusFilter();
-                
-     
+                ->setOptionIdsFilter($optionIds)
+                ->setPositionOrder();
+        $options = $optionsCollection->appendSelections($selectionsCollection, false, true);
+        $return_options = array();
+
+        foreach ($options as $option) {
+            // set date format to "%m/%e/%Y"
+            $option = $this->getFormatDate($option);
+            $return_options[] = $option;
+        }
+        return $return_options;
     }
 }

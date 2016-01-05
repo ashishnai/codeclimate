@@ -207,14 +207,13 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
      */
     public function getDealStockStatus($option)
     {
-        $product = $this->getProduct();
         $selections = $option->getSelections();
         $in_stock = array();
         if (!empty($selections)) {
             $in_stock = array();
             foreach ($selections as $selection) {
                 if ($selection->getIsSalable() && Mage::helper('uandi_arvato')->isInStock($selection)) {
-                    if (Mage::helper('uandi_arvato')->isFewLeft($product)) {
+                    if (Mage::helper('uandi_arvato')->isFewLeft($selection)) {
                         $in_stock[] = 'fewleft';
                     } else {
                         $in_stock[] = 'instock';
