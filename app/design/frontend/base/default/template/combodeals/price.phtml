@@ -20,9 +20,10 @@ if ($this->isDiscountReceiver()) {
         </s>
     <?php endif; ?>
 
+
     <span class="<?php if ($this->isDiscountReceiver()) : ?>sale<?php else: ?>regular-price<?php endif; ?>">
         <span class="price"><?php echo $this->getFormattedDiscountedPrice() ?></span>
 
     </span>
-    <span class="combo-qty"><?php echo  $this->__('For %s', $this->getSelectionQty()) ?></span>
+    <span class="combo-qty"><?php echo $this->__('For %s', $this->getSelectionQty()) ?></span>
 </div>

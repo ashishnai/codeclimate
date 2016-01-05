@@ -15,7 +15,8 @@
 var bundleTemplateBox = '<table class="border" cellpadding="0" cellspacing="0">' +
     '    <thead>' +
     '        <tr class="headings">' +
-    '            <th><?php echo Mage::helper('catalog')->__('Name') ?></th>' +
+    '            <th><?php echo Mage::helper('catalog')->__('Image') ?></th>' +
+    '            <th><?php echo Mage::helper('catalog')->__('Name') ?></th>' +    
     '            <th><?php echo Mage::helper('catalog')->__('Original Price') ?></th>' +
     '            <th><?php echo Mage::helper('catalog')->__('Available Quantity') ?></th>' +
     '            <th class="type-order"><?php echo Mage::helper('combodeals')->__('Discount Type') ?></th>' +
@@ -29,14 +30,15 @@ var bundleTemplateBox = '<table class="border" cellpadding="0" cellspacing="0">'
     '    </tbody>' +
     '</table>';
 
-var bundleTemplateRow ='<td>' +
+var bundleTemplateRow = '<td>{{image}}</td>' +
+                '<td>' +
                 '    <input type="hidden" id="<?php echo $this->getFieldId() ?>_id_{{index}}" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_id]" value="{{selection_id}}">' +
                 '    <input type="hidden" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][option_id]" value="{{option_id}}">' +
                 '    <input type="hidden" class="product" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][product_id]" value="{{product_id}}">' +
                 '    <input type="hidden" class="product" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][sku]" value="{{sku}}">' +
                 '    <input type="hidden" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][delete]" value="" class="delete">' +
                 '    {{name}}<br />' +
-                '   <div  class="nobr">' +
+                '    <div  class="nobr">' +
                 '        <strong><?php echo $this->helper('sales')->__('SKU') ?>:</strong> {{sku}}' +
                 '    </div>' +
                 '</td>' +
@@ -122,7 +124,7 @@ Combodeals.Selection.prototype = {
         $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').disable();
         $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').writeAttribute("value", "0");
 
-        //set selected discount type and cssclass
+        //set selected discount type and relative css class
         if (data.discount_type) {
             $A($(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_type').options).each(function(selection){
                 if (selection.value==data.discount_type)
@@ -138,7 +140,7 @@ Combodeals.Selection.prototype = {
             }
 
             if(data.discount_type == 'fixed') {
-                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').addClassName('validate-number-range number-range-1-' + data.price.substring(1));
+                $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').addClassName('validate-number-range number-range-0.1-' + data.price.replace(/\D*/, ""));
                 $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').writeAttribute("value", data.discount_amount);
                 $(this.idLabel + '_' + parentIndex +'_'+ data.index +'_discount_amount').enable();
             }
@@ -207,6 +209,7 @@ Combodeals.Selection.prototype = {
                     'sku' : pair.value.get('sku'),
                     'price' : pair.value.get('price'),
                     'qty' : pair.value.get('qty'),
+                    'image' : pair.value.get('image'),
                     'position' : 1,
                     'product_id' : pair.key,
                     'option_id' : $(cdOption.idLabel + '_id_' + parts[2]).value
@@ -241,10 +244,12 @@ Combodeals.Selection.prototype = {
                 var sku = tr.select('td.sku')[0].innerHTML.stripTags().stripScripts().unescapeHTML().replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g, '');
                 var price = tr.select('td.price')[0].innerHTML.stripTags().stripScripts().unescapeHTML().replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g, '');
                 var qty = tr.select('td.qty')[0].innerHTML.stripTags().stripScripts().unescapeHTML().replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g, '');
+                var image = tr.select('td.image')[0].innerHTML;
                 this.gridSelection.get(id).get(element.value).set('name', name);
                 this.gridSelection.get(id).get(element.value).set('sku', sku);
                 this.gridSelection.get(id).get(element.value).set('price', price);
                 this.gridSelection.get(id).get(element.value).set('qty', qty);
+                this.gridSelection.get(id).get(element.value).set('image', image);
             } else {
                 this.gridSelection.get(id).unset(element.value);
             }
@@ -283,13 +288,13 @@ Combodeals.Selection.prototype = {
             discountValueElement.removeClassName('validate-digits-range');
             discountValueElement.removeClassName('digits-range-1-100');
             discountValueElement.removeClassName('validate-number-range');
-            discountValueElement.removeClassName('number-range-1-' + originalPrice.substring(1));
+            discountValueElement.removeClassName('number-range-0.1-' + originalPrice.replace(/\D*/, ""));
             discountValueElement.disable();
         }
 
         if (element.value == 'percent') {
             discountValueElement.removeClassName('validate-number-range');
-            discountValueElement.removeClassName('number-range-1-' + originalPrice.substring(1));
+            discountValueElement.removeClassName('number-range-0.1-' + originalPrice.replace(/\D*/, ""));
             discountValueElement.addClassName('validate-digits-range digits-range-1-100');
             discountValueElement.enable();
         }
@@ -297,7 +302,7 @@ Combodeals.Selection.prototype = {
         if (element.value == 'fixed') {
             discountValueElement.removeClassName('validate-digits-range');
             discountValueElement.removeClassName('digits-range-1-100');
-            discountValueElement.addClassName('validate-number-range number-range-1-' + originalPrice.substring(1));
+            discountValueElement.addClassName('validate-number-range number-range-0.1-' + originalPrice.replace(/\D*/, ""));
             discountValueElement.enable();
         }
     }
