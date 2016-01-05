@@ -1,116 +1,84 @@
 <?php
 /**
- * Combodeals Product block
+ * Combo Deal Product listing page
  *
- * @category   Combodeals
+ * @category   Arvato
  * @package    Arvato_Combodeals
  * @copyright   Copyright (c) arvato 2015
  */
-class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abstract
-    implements Mage_Widget_Block_Interface
+class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
 {
+    /**
+     * @var Arvato_ComboDeal_Helper_Price
+     */
+    protected $priceHelper;
+    /**
+     * @var Mage_Core_Helper_Data
+     */
+    protected $coreHelper;
+    
     private $_options;
     
     /**
-     * Initialize block's cache
+     * Set options collection
+     * 
      */
-   
-    protected function _toHtml()
+    public function __construct()
     {
-        if ($this->_hasProductComboDeals() &&  Mage::helper("combodeals")->isEnableModuleOutput())
-        {
-            return parent::_toHtml();
-        }
+        parent::__construct();
+        $storeId = Mage::app()->getStore()->getStoreId();
+        $collection = Mage::getResourceModel('combodeals/option_collection')
+                ->setStoreIdFilter($storeId)
+                ->setDealDateFilter()
+                ->setSortByTimeLeft()
+                ->setStatusFilter();
+        $this->setCollection($collection);
     }
     
+    /**
+     *  Prepare block for the pager and set our options collection
+     * 
+     * @return Arvato_ComboDeals_Block_List
+     */
+    protected function _prepareLayout()
+    {
+       if (Mage::helper('combodeals')->isEnableDedicatedPage()) {
+            parent::_prepareLayout();
+
+            $pager = $this->getLayout()->createBlock('page/html_pager', 'custom.pager');
+            $pager->setAvailableLimit(array(5 => 5, 10 => 10, 20 => 20, 'all' => 'All'));
+            $pager->setCollection($this->getCollection());
+            $this->setChild('pager', $pager);
+            $this->getCollection()->load();
+            return $this;
+        }
+    }
     
     /*
-     * Check if the product have combo deals at all
+     * Prepare pager html for use in template
      * 
-     * @return bool
      */
-    private function _hasProductComboDeals()
+    public function getPagerHtml()
     {
-        $options = $this->getOptions();
-
-        return !empty($options) && count($options) > 0;
-    }
-
-    /**
-     * Prepare collection with new products
-     *
-     * @return Mage_Core_Block_Abstract
-     */
-    protected function _beforeToHtml()
-    {
-        return parent::_beforeToHtml();
+        return $this->getChildHtml('pager');
     }
     
-    /*
-     * Get the product object
-     * 
-     * return Mage_Catalog_Model_Product
-     */
-    public function getProduct()
-    {
-        $widgetProductId = $this->getData('product_id');
-
-        // widget or block mode
-        if (!empty($widgetProductId))
-        {
-            $product = Mage::getModel('catalog/product')
-                ->load($widgetProductId);
-
-            if (!$this->hasData('product'))
-            {
-                $this->setData('product', $product);
-            }
-            return $product;
-        }
-        else
-        {
-            return parent::getProduct();
-        }
-    }
-
     /**
-     * Retrieve list of combodeal product options
-     *
-     * @return array
+     * Get all the available combodeals
+     * 
+     * @param array $optionIds
+     * @return Arvato_ComboDeals_Model_Option
      */
-    public function getOptions()
-    { 
-        if (empty($this->_options)) {   
+    public function getOptions($optionIds)
+    {
+         if (empty($this->_options)) {   
             $helper = Mage::helper("combodeals/option");
-            $this->_options = $helper->getComboDealProducts($this->getProduct());
+            $this->_options = $helper->getAllCombodeals($optionIds, $this->getCollection());
         }
         return $this->_options;
     }
-
-    /*
-     * Get Combo deals add to cart Url
-     * 
-     * @param int $productId
-     * @param int $optionId
-     * @param array $selectionIds
-     * @return string $url
-     */
-    public function getComboDealAddToCartUrl($productId, $optionId, $selectionIds)
-    {
-        $url = $this->getUrl('combodeals/cart/add',
-            array(
-                'product' => $productId,
-                'option_id'  => $optionId,
-                'selection_id'  => implode(',', $selectionIds),
-                'qty'  => 1,
-                Mage_Core_Controller_Front_Action::PARAM_NAME_URL_ENCODED => Mage::helper('core')->urlEncode($this->getCurrentUrl()),
-                Mage_Core_Model_Url::FORM_KEY => $this->_getSingletonModel('core/session')->getFormKey()
-            ));
-
-        return $url;
-    }
-
-    /**
+    
+     /**
      * Returns product price block html
      *
      * @param Mage_Catalog_Model_Product $product
@@ -130,7 +98,7 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
         return $block->toHtml();
     }
     
-    
+     
     /**
      * Returns product price block html
      *
@@ -147,8 +115,9 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
             ->setCount($count);    
         return $block->toHtml();
     }
-
-    /*
+    
+    
+     /*
      * Calculates the total minimum product price without the combo deal
      * 
      * @param Arvato_ComboDeals_Model_Option $option
@@ -158,10 +127,7 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
     {
         /* @var $priceHelper Arvato_ComboDeals_Helper_Price */
         $priceHelper = Mage::helper('combodeals/price');
-        $product = $this->getProduct();
         $inclTax = $priceHelper->displayIncludingTax();
-
-        $total = $priceHelper->getRegularProductPrice($product, $inclTax);
 
         $selections = $option->getSelections();
 
@@ -185,12 +151,7 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
     {
         /* @var $priceHelper Arvato_ComboDeals_Helper_Price */
         $priceHelper = Mage::helper('combodeals/price');
-        $product = $this->getProduct();
         $inclTax = $priceHelper->displayIncludingTax();
-
-        $productPrice = $priceHelper->getRegularProductPrice($product, $inclTax);
-        $total = $priceHelper->getDiscountedPrice($product, $option, $productPrice);
-
         $selections = $option->getSelections();
 
         if (!empty($selections))
@@ -231,5 +192,5 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
         }
         return $in_stock;
     }
-}
-
+   
+}    

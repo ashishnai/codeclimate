@@ -1,0 +1,46 @@
+<?php
+/**
+ * Combodeals Timer
+ * @category    Arvato
+ * @package     Arvato_ComboDeals
+ * @copyright   Copyright (c) arvato 2015
+ */
+?>
+<?php
+$option = $this->getOption();
+$count = $this->getCount();
+$toDate = $option->getToDate();
+?>
+<div id="heading<?php echo $count; ?>" class="combodeals-timer">
+    <?php echo $this->__('Deal Ends in : '); ?>
+    <span id="countbox_<?php echo $count; ?>" class="timer-view"></span>
+    <div class='clear'></div>
+    <div class='timerdate' id="caption<?php echo $count; ?>">
+        <span class='hour' style='margin:2px'>
+            <?php echo $this->__('Days') ?>
+        </span>
+        <span class='hour' style='margin:0 0 0 22px'>
+            <?php echo $this->__('Hrs') ?>
+        </span>
+        <span class='min'  style='margin:0 0 0 28px'>
+            <?php echo $this->__('Min') ?>
+        </span>
+        <span class='sec' style='margin:0 0 0 25px'>
+            <?php echo $this->__('Sec') ?>
+        </span>
+    </div>
+</div>
+<script type="text/javascript">
+    var dthen<?php echo $count; ?> = new Date("<?php echo Mage::getModel('core/date')->date("m/d/y", strtotime($toDate)) . ' 11:59:00 PM'; ?>");
+    start = "<?php echo Mage::getModel('core/date')->date("m/d/y h:i:s A", strtotime(Mage::app()->getLocale()->date(null, null, null, true))); ?>";
+    start_date = Date.parse(start);
+    var dnow<?php echo $count; ?> = new Date(start_date);
+    if (CountStepper > 0)
+        ddiff = new Date((dnow<?php echo $count; ?>) - (dthen<?php echo $count; ?>));
+    else
+        ddiff = new Date((dthen<?php echo $count; ?>) - (dnow<?php echo $count; ?>));
+    gsecs<?php echo $count; ?> = Math.floor(ddiff.valueOf() / 1000);
+    var iid<?php echo $count; ?> = "countbox_<?php echo $count; ?>";
+    CountBack(gsecs<?php echo $count; ?>, "countbox_" + timer, timer);
+    timer++;
+</script>

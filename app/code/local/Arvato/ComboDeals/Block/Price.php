@@ -18,6 +18,7 @@ class Arvato_ComboDeals_Block_Price extends Mage_Catalog_Block_Product_Abstract
     protected $coreHelper;
     private $regularPrice = null;
     private $discountedPrice = null;
+    private $selectionQty = null;
 
     public function __construct()
     {
@@ -86,5 +87,18 @@ class Arvato_ComboDeals_Block_Price extends Mage_Catalog_Block_Product_Abstract
             $this->discountedPrice = $this->priceHelper->getDiscountedPrice($this->getProduct(), $this->getOption());
         }
         return $this->discountedPrice;
+    }
+    
+    /**
+     * Gets minimum qty of the selected products
+     * 
+     * @return float
+     */
+    public function getSelectionQty()
+    {
+        if (is_null($this->selectionQty)){
+            $this->selectionQty = $this->priceHelper->getSelectionQty($this->getProduct());
+        }
+        return $this->selectionQty;
     }
 }

@@ -31,6 +31,21 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      */
     const COMBODEAL_ATTRIBUTE_SET_NAME = 'Combo Deals';
     
+    /**
+     * Enable Combodeal system configuration
+     */
+    const COMBODEAL_ENABLE_MODULE_OUTPUT = 'combodeals_admin/setting/enable_frontend';
+    
+       
+    /**
+     * Enable Combodeal Dedicated/Listing Page
+     */
+    
+    const COMBODEAL_ENABLE_DEDICATED_PAGE = 'combodeals_admin/combodeals_setting/enable_dedicated';
+    
+    /**
+     * Combdeal Block header title
+     */
     const COMBODEAL_PRODUCT_HEADER_TITLE = 'combodeals_admin/combodeals_setting/header';
 
 
@@ -77,8 +92,35 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
         return $sku;
     }
     
+     /*
+     * Check whether the module output is enabled in the global system configuration
+     * 
+     * return bool 
+     */
+    public function isEnableModuleOutput()
+    {
+        if(Mage::getStoreConfig(self::COMBODEAL_ENABLE_MODULE_OUTPUT))
+        {
+            return true;
+        }
+    }
+    
+    
+     /*
+     * Check whether the dedicated page display is enabled in the global system configuration
+     * 
+     * return bool 
+     */
+    public function isEnableDedicatedPage()
+    {
+        if(Mage::getStoreConfig(self::COMBODEAL_ENABLE_DEDICATED_PAGE))
+        {
+            return true;
+        }
+    }
+    
     /*
-     * Get The header title or combo deal productss block
+     * Get The header title for combo deal products block
      * 
      * return string 
      */

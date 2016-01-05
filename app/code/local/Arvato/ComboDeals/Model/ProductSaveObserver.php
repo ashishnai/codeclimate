@@ -27,16 +27,18 @@ class Arvato_ComboDeals_Model_ProductSaveObserver
         if ($product->getTypeId() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL){
             // set visibility to "Not Visible Individually"
             $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
-            
+
             if (($items = $request->getPost('combodeals_options'))) {
                 $product->setComboDealOptionsData($items);
             }
 
             if (($selections = $request->getPost('combodeals_selections'))) {
                 $product->setComboDealSelectionsData($selections);
-                
+
                 // set SKU using mixed SKU string of selected child products
-                $product->setSku(Mage::helper("combodeals")->getJoinedSku($selections));
+                if($product->getSku() == NULL) {
+                    $product->setSku(Mage::helper("combodeals")->getJoinedSku($selections));
+                }
             }
         }
         return $observer;

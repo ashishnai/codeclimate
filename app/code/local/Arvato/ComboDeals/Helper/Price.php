@@ -71,13 +71,28 @@ class Arvato_ComboDeals_Helper_Price extends Mage_Core_Helper_Abstract {
         }
         return $discountedPrice;
     }
+    
+    
+     /**
+     * Gets minimum qty of the selected products
+     *
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return float $regularProductPrice
+     */
+    public function getSelectionQty($product)
+    {
+        $selectionModel = Mage::getModel('combodeals/selection')->setData($product->getData());
+        return $selectionModel->getMinimumQty();
+    }    
 
     /**
      * Display price with tax if tax applicable
      * 
      * @return bool
      */
-    public function displayIncludingTax() {
+    public function displayIncludingTax() 
+    {
         return ($this->taxHelper->displayPriceIncludingTax() || $this->taxHelper->displayBothPrices());
     }
 
