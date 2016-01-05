@@ -90,15 +90,21 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
     /*
      * Get Combo deals add to cart Url
      * 
+     * @param int $productId
      * @param int $optionId
+     * @param array $selectionIds
      * @return string $url
      */
-    public function getComboDealAddToCartUrl($optionId)
+    public function getComboDealAddToCartUrl($productId, $optionId, $selectionIds)
     {
         $url = $this->getUrl('combodeals/cart/add',
             array(
-                'product_id' => $this->getProduct()->getId(),
-                'option_id'  => $optionId
+                'product' => $productId,
+                'option_id'  => $optionId,
+                'selection_id'  => implode(',', $selectionIds),
+                'qty'  => 1,
+                Mage_Core_Controller_Front_Action::PARAM_NAME_URL_ENCODED => Mage::helper('core')->urlEncode($this->getCurrentUrl()),
+                Mage_Core_Model_Url::FORM_KEY => $this->_getSingletonModel('core/session')->getFormKey()
             ));
 
         return $url;

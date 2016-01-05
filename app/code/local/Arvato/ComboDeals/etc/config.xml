@@ -36,6 +36,7 @@
                     <combodeal translate="label" module="catalog">
                         <label>Combo Deal Product</label>
                         <model>combodeals/product_type</model>
+                        <price_model>combodeals/product_price</price_model>
                         <is_qty>1</is_qty>
                         <composite>1</composite>
                     </combodeal>

@@ -10,6 +10,8 @@
 $product = $this->getProduct();
 $product->setData('url', null);
 $product->setData('request_path', null);
+$parentId = null;
+$selectionIds = array();
 
 /** @var Mage_Core_Helper_Data $coreHelper */
 $coreHelper = $this->helper('core');
@@ -22,6 +24,7 @@ $coreHelper = $this->helper('core');
         <div class="box-content">
             <?php $i = 0; ?>
             <?php foreach ($this->getOptions() as $option): ?>
+                <?php $parentId = $option->getParentId();?>
                 <div class="product_combodeal_option" id="product_combodeal_option<?php echo $i ?>">
                     <h2><?php echo $this->escapeHtml($option->getName()); ?></h2>
                     <ul class="products-grid">
@@ -52,6 +55,7 @@ $coreHelper = $this->helper('core');
                             ?>
                             <?php
                             foreach ($option->getSelections() as $selection):
+                                $selectionIds[] = $selection->getSelectionId();
                                 $selection->setData('url', null);
                                 $selection->setData('request_path', null);
                                 ?>
@@ -96,7 +100,7 @@ $coreHelper = $this->helper('core');
                             </div>
 
                             <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart"
-                                    onclick="setLocation('<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>')">
+                                    onclick="setLocation('<?php echo $this->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>')">
                                 <span><span><?php echo $this->__('Add to Cart') ?></span></span>
                             </button>
 
