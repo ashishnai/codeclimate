@@ -22,7 +22,7 @@ $countTimers = 0;
         ?>
         <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
         <?php foreach ($this->getOptions($optionIds) as $option): ?>
-        <?php $productPlus = ''; ?>
+            <?php $productPlus = ''; ?>
             <div class="combodeal-pageHolder">
                 <div class="combodeal-page-title">
                     <h3><?php echo $this->escapeHtml($option->getName()); ?></h3>
@@ -31,26 +31,26 @@ $countTimers = 0;
                     <?php if (Mage::helper('combodeals/timer')->isEnableModuleOutput()): ?>
                         <?php $countTimers +=1; ?>
                         <?php echo $this->getDealTimerHtml($option, $countTimers) ?>
-        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="combodeal-page-instock">
                     <div class="stock-box">
-        <?php if (in_array('fewleft', $this->getDealStockStatus($option))): ?>
+                        <?php if (in_array('fewleft', $this->getDealStockStatus($option))): ?>
                             <span></span>
                             <span class="few"></span>
                             <span></span>
                             <p class="few"><?php echo $this->__('few left') ?></p>
-        <?php elseif (in_array('instock', $this->getDealStockStatus($option))): ?>
+                        <?php elseif (in_array('instock', $this->getDealStockStatus($option))): ?>
                             <span class="in"></span>
                             <span></span>
                             <span></span>
                             <p class="in"><?php echo $this->__('in stock') ?></p>
-        <?php else: ?>
+                        <?php else: ?>
                             <span></span>
                             <span></span>
                             <span class="out"></span>
                             <p class="out"><?php echo $this->__('out of stock') ?></p>
-        <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -72,29 +72,29 @@ $countTimers = 0;
                                 </div>
                                 <div class="info">
                                     <strong>
-                <?php echo $this->escapeHtml($selection->getName()) ?>
+                                        <?php echo $this->escapeHtml($selection->getName()) ?>
                                     </strong>
-                        <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
+                                    <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
                                 </div>
                             </a>
                         </div>
-                <?php $productPlus = 'plus'; ?>
-            <?php endforeach; ?>
+                        <?php $productPlus = 'plus'; ?>
+                    <?php endforeach; ?>
                     <div class="span3">
                         <div class="result">
                             <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
                             <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
-            <?php if (in_array('fewleft', $this->getDealStockStatus($option)) || in_array('instock', $this->getDealStockStatus($option))): ?>
+                            <?php if (in_array('fewleft', $this->getDealStockStatus($option)) || in_array('instock', $this->getDealStockStatus($option))): ?>
                                 <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
-                    <?php endif; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
-        <?php endif; ?>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
 
         <script type="text/javascript">decorateTable('my-custom-table');</script>
-    <?php echo $this->getPagerHtml(); ?>    
+        <?php echo $this->getPagerHtml(); ?>    
 
     </div>
 <?php else: ?>

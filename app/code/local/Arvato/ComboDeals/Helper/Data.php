@@ -47,6 +47,11 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      * Combdeal Block header title
      */
     const COMBODEAL_PRODUCT_HEADER_TITLE = 'combodeals_admin/combodeals_setting/header';
+    
+     /**
+     * Limit of Combdeal Products
+     */
+    const COMBODEAL_PRODUCT_LIMIT = 'combodeals_admin/combodeals_setting/number_of_combodeals';
 
 
     /**
@@ -127,5 +132,16 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
     public function getHeaderTitle()
     {
         return Mage::getStoreConfig(self::COMBODEAL_PRODUCT_HEADER_TITLE);
+    }
+    
+    
+     /*
+     * Get The Limit for displaying combo deal on product detail
+     * 
+     * return int 
+     */
+    public function getProductLimit()
+    {
+        return Mage::getStoreConfig(self::COMBODEAL_PRODUCT_LIMIT);
     }
 }
