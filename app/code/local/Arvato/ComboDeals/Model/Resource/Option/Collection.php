@@ -160,7 +160,6 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
                 $_option = $this->getItemById($_selection->getOptionId());
                 if ($_option && ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions()))) {
                     $_selection->setOption($_option);
-                    $_selection->setPrice($this->getFormatPrice($_selection->getPrice(), $_selection->getStoreId()));
 
                     // check if default store option used
                     $_selection = $this->checkUsedDefaultStoreOptions($_selection);
