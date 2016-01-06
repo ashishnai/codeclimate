@@ -20,6 +20,12 @@ class Arvato_ComboDeals_Helper_SaveComboDeals extends Mage_Core_Helper_Abstract
         $options = $product->getComboDealOptionsData();
         if ($options) {
             // save option data
+            if ($product->getStoreId() != Arvato_ComboDeals_Helper_Option::STORE_ID_ZERO) {
+                $isSelectionValid = $this->checkSelectionValid($product);
+                if(!$isSelectionValid) {
+                    return $product;
+                }
+            }
             $options = $this->saveOptionData($options, $product);
 
             $usedProductIds = array();
@@ -33,6 +39,30 @@ class Arvato_ComboDeals_Helper_SaveComboDeals extends Mage_Core_Helper_Abstract
         }
 
         return $product;
+    }
+
+    /**
+     * Check selection data is valid for store or not
+     *
+     * @param Mage_Catalog_Model_Product $product
+     */
+    public function checkSelectionValid($product)
+    {
+        $selections = $product->getComboDealSelectionsData();
+        $valid = true;
+        foreach ($selections as $index => $group) {
+            foreach ($group as $key => $selection) {
+                $childProduct = Mage::getModel('catalog/product')->load($selection['product_id']);
+                $assignedStoreIds = $childProduct->getStoreIds();
+                if (in_array($product->getStoreId(), $assignedStoreIds)) {
+                    continue;
+                }
+                $errorMessage = sprintf('"%s" is not available in current store hence combo deal selection not saved', $childProduct->getName());
+                Mage::getSingleton('adminhtml/session')->addError($errorMessage);
+                $valid = false;
+            }
+        }
+        return $valid;
     }
 
     /**
