@@ -2,7 +2,7 @@
 /**
  * Combo Deal Product listing template
  *
- * @see Arvato_ComboDeals_Block_Combodeals
+ * @see Arvato_ComboDeals_Block_List
  */
 ?>
 <?php
@@ -14,13 +14,14 @@ $countTimers = 0;
 <?php $optionsCollection = $this->getCollection(); ?>
 <?php echo $this->getPagerHtml(); ?>
 <?php if($optionsCollection->getSize()): ?>
-<div class="combo-deals">
+<div class="combo-deals" id="my-custom-table">
     <?php foreach ($optionsCollection->getItems() as $_option) :
             $optionIds[] = $_option->getOptionId();
        endforeach;
     ?>
     <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
     <?php foreach ($this->getOptions($optionIds) as $option): ?>
+    <?php //if (!in_array('out_of_stock', $this->getDealStockStatus($option))): ?>
         <?php $productPlus = ''; ?>
         <div class="combodeal-pageHolder">
             <div class="combodeal-page-title">
@@ -34,12 +35,12 @@ $countTimers = 0;
             </div>
             <div class="combodeal-page-instock">
                     <div class="stock-box">
-                        <?php if (in_array('fewleft', $this->getDealStockStatus($option))): ?>
+                        <?php if (in_array('few_left', $this->getDealStockStatus($option))): ?>
                             <span></span>
                             <span class="few"></span>
                             <span></span>
                             <p class="few"><?php echo $this->__('few left') ?></p>
-                        <?php elseif (in_array('instock', $this->getDealStockStatus($option))): ?>
+                        <?php elseif (in_array('in_stock', $this->getDealStockStatus($option))): ?>
                             <span class="in"></span>
                             <span></span>
                             <span></span>
@@ -81,18 +82,19 @@ $countTimers = 0;
                     <div class="result">
                         <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
                         <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
-
-                        <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                        <?php if (in_array('in_stock', $this->getDealStockStatus($option)) || in_array('few_left', $this->getDealStockStatus($option))): ?>
+                            <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php endif; ?>
         </div>
+    <?php //endif; ?>
     <?php endforeach; ?>
     
-  <script type="text/javascript">decorateTable('my-custom-table');</script>
-<?php echo $this->getPagerHtml(); ?>    
-
+  <script type="text/javascript">decorateTable('my-custom-table');</script> 
   </div>
+<?php echo $this->getPagerHtml(); ?>   
 <?php else: ?>
     <p><?php echo $this->__('There are no combocdeal products found.'); ?></p>
 <?php endif ?>

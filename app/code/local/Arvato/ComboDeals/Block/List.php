@@ -46,7 +46,7 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
             parent::_prepareLayout();
 
             $pager = $this->getLayout()->createBlock('page/html_pager', 'custom.pager');
-            $pager->setAvailableLimit(array(5 => 5, 10 => 10, 20 => 20, 'all' => 'All'));
+            $pager->setAvailableLimit(array(1 => 1, 2=> 2, 20 => 20, 'all' => 'All'));
             $pager->setCollection($this->getCollection());
             $this->setChild('pager', $pager);
             $this->getCollection()->load();
@@ -181,12 +181,12 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
             foreach ($selections as $selection) {
                 if ($selection->getIsSalable() && Mage::helper('uandi_arvato')->isInStock($selection)) {
                     if (Mage::helper('uandi_arvato')->isFewLeft($selection)) {
-                        $in_stock[] = 'fewleft';
+                        $in_stock[] = 'few_left';
                     } else {
-                        $in_stock[] = 'instock';
+                        $in_stock[] = 'in_stock';
                     }
                 } else {
-                    $in_stock[] = 'outstock';
+                    $in_stock[] = 'out_of_stock';
                 }
             }
         }

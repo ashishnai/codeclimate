@@ -214,12 +214,12 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
             foreach ($selections as $selection) {
                 if ($selection->getIsSalable() && Mage::helper('uandi_arvato')->isInStock($selection)) {
                     if (Mage::helper('uandi_arvato')->isFewLeft($selection)) {
-                        $in_stock[] = 'fewleft';
+                        $in_stock[] = 'few_left';
                     } else {
-                        $in_stock[] = 'instock';
+                        $in_stock[] = 'in_stock';
                     }
                 } else {
-                    $in_stock[] = 'outstock';
+                    $in_stock[] = 'out_stock';
                 }
             }
         }

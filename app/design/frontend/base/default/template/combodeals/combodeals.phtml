@@ -1,4 +1,11 @@
 <?php
+/**
+ * Combo Deal Product View template
+ *
+ * @see Arvato_ComboDeals_Block_Combodeals
+ */
+?>
+<?php
 /** @var Mage_Catalog_Model_Product $product */
 $product = $this->getProduct();
 $product->setData('url', null);
@@ -25,12 +32,12 @@ $productPlus = "";
             </div>
             <div class="combodeal-page-instock">
                 <div class="stock-box">
-                    <?php if (in_array('fewleft', $this->getDealStockStatus($option))): ?>
+                    <?php if (in_array('few_left', $this->getDealStockStatus($option))): ?>
                         <span></span>
                         <span class="few"></span>
                         <span></span>
                         <p class="few"><?php echo $this->__('few left') ?></p>
-                    <?php elseif (in_array('instock', $this->getDealStockStatus($option))): ?>
+                    <?php elseif (in_array('in_stock', $this->getDealStockStatus($option))): ?>
                         <span class="in"></span>
                         <span></span>
                         <span></span>
@@ -64,7 +71,7 @@ $productPlus = "";
                                 <strong>
                                 <?php echo $this->escapeHtml($selection->getName()) ?>
                                 </strong>
-            <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
+                            <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
                             </div>
                         </a>
                     </div>
@@ -74,8 +81,9 @@ $productPlus = "";
                     <div class="result">
                         <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
                         <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
-
-                        <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                        <?php //if (in_array('in_stock', $this->getDealStockStatus($option))): ?>
+                            <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                        <?php //endif; ?>
                     </div>
                 </div>
         <?php endif; ?>
