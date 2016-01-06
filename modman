@@ -7,4 +7,4 @@ app/design/adminhtml/default/default/template/arvato/combodeals       app/design
 app/design/frontend/arvato_basis/default/layout/combodeals.xml        app/design/frontend/arvato_basis/default/layout/combodeals.xml
 app/design/frontend/arvato_basis/default/template/combodeals          app/design/frontend/arvato_basis/default/template/combodeals
 skin/frontend/arvato_basis/default/combodeals                         skin/frontend/arvato_basis/default/combodeals
-js/arvato/combodeals                                                  js/arvato/combodeals 
+js/arvato/combodeals                                                  js/arvato/combodeals
