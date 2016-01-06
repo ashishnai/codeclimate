@@ -19,6 +19,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * @var bool
      */
     protected $_selectionsAppended = false;
+    const MINUTE= 'MINUTE';
 
     /**
      * Init model and resource model
@@ -99,7 +100,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
     public function setDealDateFilter($currentDate=null)
     {
         if(is_null($currentDate)){
-            $currentDate = Mage::getModel('core/date')->date('Y-m-d');
+            $currentDate = Mage::getModel('core/date')->date('Y-m-d H:i:s');
         }
         $this->addFieldToFilter('main_table.from_date', array('lteq' => $currentDate));
         $this->addFieldToFilter('main_table.to_date', array('gteq' => $currentDate));
@@ -128,14 +129,14 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
     public function setSortByTimeLeft($currentDate=null)
     {
         if(is_null($currentDate)){
-            $currentDate = Mage::getModel('core/date')->date('Y-m-d');
+            $currentDate = Mage::getModel('core/date')->date('Y-m-d H:i:s');           
         }
         $this->getSelect()
-                ->columns('DATEDIFF(main_table.to_date,'.$currentDate.') AS date_difference')
+                ->columns('TIMESTAMPDIFF('.self::MINUTE.', "'.$currentDate.'", `main_table`.`to_date`) AS date_difference')
                 ->order('date_difference desc');
         return $this;
     } 
-    
+         
 
     /**
      * Append all selections to options

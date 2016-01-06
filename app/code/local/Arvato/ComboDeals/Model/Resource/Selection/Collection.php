@@ -154,6 +154,19 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
             ->order('selection.selection_id asc');
         return $this;
     }
+    
+    
+    /**
+     * Sets limit to the number o combodeal products to display
+     * 
+     * @param int
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setDealLimit($limit)
+    {
+        $this->getSelect()->limit($limit);
+        return $this;
+    }
 
     /**
      * Get thumbnail html
@@ -163,8 +176,12 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
      */
     public function getImageHtml($product)
     {
-        $imagePath = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(80);
-        $imageOut = sprintf('<img src="%s" width="80px"/>', $imagePath);
-        return $imageOut;
+        try {
+            $imagePath = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(80);
+            $imageOut = sprintf('<img src="%s" width="80px"/>', $imagePath);
+            return $imageOut;
+        } catch (Exception $e) {            
+            return;
+        }
     }
 }

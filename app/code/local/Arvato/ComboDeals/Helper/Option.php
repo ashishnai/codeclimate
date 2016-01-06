@@ -232,7 +232,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      * Retrive the combo deal products
      * 
      * @param Mage_Catalog_Model_Product $product 
-     * @return Arvato_ComboDeals_Model_Resource_Selection_Collection
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection $return_options
      */
     public function getComboDealProducts($product)
     {
@@ -279,8 +279,11 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 ->addAttributeToSelect('selection' . 'option_id')
                 ->setFlag('require_stock_items', true)
                 ->setPositionOrder()
-                ->setStoreIdFilter($storeId)
+                ->setStoreIdFilter($storeId)               
                 ->setProductIdsFilter($productId);
+        if($limit = Mage::helper('combodeals')->getProductLimit()){
+            $parentCollection->setDealLimit($limit);
+        }
         foreach ($parentCollection->getItems() as $_selection) {
             $optionIds[] = $_selection->getOptionId();
         }
@@ -288,7 +291,13 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
     }  
     
     
-    
+    /*
+     * Retrieve all the active combodeals
+     * 
+     * @param array $optionIds
+     * @param Arvato_ComboDeals_Model_Resource_Option_Collection $optionsCollection
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection $return_options
+     */
     public function getAllCombodeals($optionIds, $optionsCollection)
     {
         $selectionsCollection = Mage::getResourceModel('combodeals/selection_collection')
