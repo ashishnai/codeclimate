@@ -6,6 +6,5 @@ app/design/adminhtml/default/default/layout/combodeals.xml            app/design
 app/design/adminhtml/default/default/template/arvato/combodeals       app/design/adminhtml/default/default/template/arvato/combodeals
 app/design/frontend/arvato_basis/default/layout/combodeals.xml        app/design/frontend/arvato_basis/default/layout/combodeals.xml
 app/design/frontend/arvato_basis/default/template/combodeals          app/design/frontend/arvato_basis/default/template/combodeals
-app/design/frontend/arvato_basis/default/template/catalog/product     app/design/frontend/arvato_basis/default/template/catalog/product
 skin/frontend/arvato_basis/default/combodeals                         skin/frontend/arvato_basis/default/combodeals
 js/arvato/combodeals                                                  js/arvato/combodeals 
