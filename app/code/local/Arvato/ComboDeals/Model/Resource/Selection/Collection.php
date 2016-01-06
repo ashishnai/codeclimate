@@ -35,6 +35,9 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         if ($this->_items) {
             foreach ($this->_items as $item) {
                 $item->setPrice($item->getPrice());
+
+                // set thumbnail html
+                $item->setImage($this->getImageHtml($item));
                 if($this->getStoreId()) {
                     $item->setStoreId($this->getStoreId());
                 }
@@ -150,28 +153,6 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         $this->getSelect()->order('selection.position asc')
             ->order('selection.selection_id asc');
         return $this;
-    }
-
-    /**
-     * Get store object of curently edited product
-     *
-     * @param int $storeId
-     * @return Mage_Core_Model_Store
-     */
-    protected function getStore($storeId)
-    {
-        return Mage::app()->getStore($storeId);
-    }
-
-    /**
-     * Get store wise price format
-     * 
-     * @param decimal $price
-     * @return string
-     */
-    public function getFormatPrice($price)
-    {
-        return Mage::helper('core')->currencyByStore($price, $this->getStore($this->getStoreId()), true, false);
     }
 
     /**
