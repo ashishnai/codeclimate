@@ -1,0 +1,260 @@
+<?php
+/**
+ * u+i bootstrap
+ * @frompackage     enterprise_default
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<?php
+	$_helper = $this->helper('catalog/output');
+	$_product = $this->getProduct();
+	$_showReviews = Mage::helper('core/data')->isModuleEnabled('Mage_Review') ? Mage::helper('core/data')->isModuleOutputEnabled('Mage_Review') : false;
+	$_addThisEnabled = Mage::helper('core/data')->isModuleEnabled('AddThis_SharingTool') ? Mage::helper('core/data')->isModuleOutputEnabled('AddThis_SharingTool') : false;
+?>
+
+<script type="text/javascript">
+	var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+
+
+<?php echo $this->getMessagesBlock()->setEscapeMessageFlag(true)->toHtml(); ?>
+<div id="product-view">
+
+	<form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+		<?php echo $this->getBlockHtml('formkey') ?>
+		<input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+		<input type="hidden" name="related_product" id="related-products-field" value="" />
+
+		<div class="two-columns">
+			<section class="col product-info">
+				<?php if ($_teaserText = $_product->getArvatoTeaserText()): ?>
+					<h2 class="headline-normal"><?php echo $_teaserText; ?></h2>
+				<?php endif ?>
+				<div class="row-fluid">
+					<div class="span6">
+						<?php echo $this->getChildHtml('media') ?>
+						<div class="fullscreen hidden-phone overlay-enlarge">
+							<p>
+								<a href="#product-image-modal" data-toggle="modal">
+									<i class="icon-arvato-fullscreen"></i>
+									<span><?php echo $this->__('Click for fullscreen gallery') ?></span>
+								</a>
+							</p>
+						</div>
+					</div>
+					<div class="span6">
+						<div class="product-text">
+							<h1 class="headline-small"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+							<?php echo $this->getChildHtml('product_type_data') ?>
+							<div class="product-teaser visible-desktop">
+								<?php if ($_product->getShortDescription()):?>
+									<?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description'); ?>
+								<?php endif;?>
+							</div>
+							<p class="product-part-number"><small><?php echo $this->__('Part number:') ?> <?php echo $_product->getSku() ?></small></p>
+							<?php if ($_product->isSaleable() && $this->hasOptions()) : ?>
+								<?php echo $this->getChildHtml('product_options_wrapper') ?>
+							<?php endif;?>
+						</div>
+					</div>
+				</div>
+				<div class="product-append">
+					<div class="product-teaser hidden-desktop">
+						<?php if ($_product->getShortDescription()):?>
+							<p><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></p>
+						<?php endif;?>
+					</div>
+				</div>
+			</section>
+			<aside class="col span4 product-options-bar">
+				<?php if ($_showReviews): ?>
+					<div class="customer-rating hidden-phone">
+						<p><strong><?php echo $this->__('Customer rating') ?></strong></p>
+						<?php $_rating = $this->helper('uandi_arvato/rating')->getRating($_product); ?>
+						<?php if ($_rating['votes'] > 0) : ?>
+						<ul>
+							<?php while($_rating['full'] > 0) : ?>
+								<li><span class="customer-rating-star full"></span></li>
+								<?php $_rating['full']--; ?>
+							<?php endwhile; ?>
+							<?php if($_rating['half'] > 0) : ?>
+								<li><span class="customer-rating-star half"></span></li>
+							<?php endif; ?>
+							<?php while($_rating['empty'] > 0) : ?>
+								<li><span class="customer-rating-star"></span></li>
+								<?php $_rating['empty']--; ?>
+							<?php endwhile; ?>
+							<li class="votes">(<?php echo $_rating['votes'] ?>)</li>
+						</ul>
+						<?php endif; ?>
+						<!-- TODO u+i: JavaScript for scrolling to bottom/tabs and activating the review tab -->
+						<p><a href="#product-collateral-reviews" data-toggle="tab"><?php echo $this->__('Rate this product') ?></a></p>
+					</div>
+				<?php endif ?>
+				<div class="add-to-cart-box">
+					<div class="row-fluid">
+						<div class="span8 mobile-75 first-in-row-mobile">
+							<?php echo $this->getPriceHtml($_product) ?>
+							<p><?php echo $this->__('All prices include tax') ?></p>
+						</div>
+						<div class="span4 quantity mobile-25">
+							<?php if($_product->isAvailable() && !$_product->isGrouped()): ?>
+								<p><?php echo $this->__('Amount') ?></p>
+                                <?php
+                                    if (!$_product->isConfigurable() && !$_product->isVirtual()) {
+                                        $_stock_item = $_product->getStockItem();
+                                        $_option_count = min(
+                                            intval($_stock_item->getMaxSaleQty()),
+                                            intval($_stock_item->getQty()),
+                                            9
+                                        );
+                                    } else {
+                                        $_option_count = 9;
+                                    }
+                                ?>
+                                <select name="qty" id="qty" class="selectpicker">
+                                    <?php for ($i = 1; $i <= $_option_count; $i++) : ?>
+                                        <option value="<?php echo $i ?>"<?php if (($this->getProductDefaultQty() * 1) == $i) : ?> selected="selected"<?php endif; ?>><?php echo $i ?></option>
+                                    <?php endfor ?>
+                                </select>
+							<?php endif; ?>
+						</div>
+					</div>
+					<?php if ($_product->isSaleable()):?>
+						<?php echo $this->getChildHtml('addtocart') ?>
+					<?php endif; ?>
+					<?php echo $this->getChildHtml('alert_urls') ?>
+				</div>
+				<div class="links">
+					<ul>
+						<?php if ($this->helper('wishlist')->isAllow()): ?>
+							<li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-primary link-action"><i class="icon-arvato-list_address"></i> <?php echo $this->__('Add to wishlist') ?></a></li>
+						<?php endif ?>
+						<?php if ($this->canEmailToFriend()): ?>
+							<li><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>" class="link-primary link-action"><i class="icon-arvato-friend"></i> <?php echo $this->__('Send to a friend') ?></a></li>
+						<?php endif ?>
+						<li><a href="<?php echo $this->helper('catalog/product_compare')->getAddUrl($_product) ?>" class="link-primary link-action compare-action"><i class="icon-arvato-waage"></i> <?php echo $this->__('Compare this product') ?></a></li>
+					</ul>
+				</div>
+				<?php $_payments = $this->getLayout()->createBlock('cms/block')->setBlockId('footer_payments')->toHtml(); ?>
+				<?php if ($_payments): ?>
+					<div class="payment-icons">
+						<p><strong><?php echo $this->__('Easy and secure payment') ?></strong></p>
+						<?php echo $_payments ?>
+					</div>
+				<?php endif ?>
+				<?php if ($_addThisEnabled): ?>
+					<div class="share">
+						<?php echo $this->getLayout()->createBlock('sharingtool/share')->setBlockId('addthis_sharetool')->toHtml(); ?>
+					</div>
+				<?php endif ?>
+			</aside>
+		</div>
+	</form>
+<?php echo $this->getChildHtml('combodeals'); ?>
+	<?php $_detailedInfoGroup = $this->getChildGroup('detailed_info', 'getChildHtml') ?>
+	<?php $_count = count($_detailedInfoGroup) + ($_showReviews ? 1 : 0) ?>
+	<?php $_first = true ?>
+	<div class="additional-info">
+		<ul class="nav nav-tabs nav-tabs-count-<?php echo $_count ?>" id="product-collateral">
+			<?php if ($_detailedInfoGroup): ?>
+				<?php foreach ($_detailedInfoGroup as $_alias => $_html): ?>
+					<?php if ($_html): ?>
+						<li<?php if ($_first): ?> class="active"<?php endif ?>>
+							<a href="#product-collateral-<?php echo $_alias ?>" data-toggle="tab">
+								<?php echo $this->escapeHtml($this->getChildData($_alias, 'title')) ?>
+							</a>
+							<span></span>
+						</li>
+						<?php $_first = false ?>
+					<?php endif ?>
+				<?php endforeach ?>
+			<?php endif ?>
+			<?php if ($_showReviews): ?>
+				<li<?php if ($_first): ?> class="active"<?php endif ?>>
+					<a href="#product-collateral-reviews" data-toggle="tab"><?php echo $this->__('Customer Reviews') ?></a>
+					<span></span>
+				</li>
+			<?php endif ?>
+		</ul>
+		<?php $_first = true ?>
+		<div class="tab-content">
+			<?php if ($_detailedInfoGroup): ?>
+				<?php foreach ($_detailedInfoGroup as $_alias => $_html): ?>
+					<?php if ($_html): ?>
+						<div class="tab-pane<?php if ($_first): ?> active<?php endif ?>" id="product-collateral-<?php echo $_alias ?>">
+							<div class="tab-text">
+								<?php echo $_html ?>
+							</div>
+						</div>
+						<?php $_first = false ?>
+					<?php endif ?>
+				<?php endforeach ?>
+			<?php endif ?>
+			<?php if ($_showReviews): ?>
+				<div class="tab-pane<?php if ($_first): ?> active<?php endif ?>" id="product-collateral-reviews">
+					<div class="tab-text">
+						<?php echo $this->getChildHtml('product_review') ?>
+					</div>
+				</div>
+			<?php endif ?>
+		</div>
+        </div>
+        	
+</div>
+
+<script>
+	var productAddToCartForm = new VarienForm('product_addtocart_form');
+	productAddToCartForm.submit = function(button, url) {
+		if (this.validator.validate()) {
+			var form = this.form;
+			var oldUrl = form.action;
+
+			if (url) {
+			   form.action = url;
+			}
+			var e = null;
+			try {
+				this.form.submit();
+			} catch (e) {
+			}
+			this.form.action = oldUrl;
+			if (e) {
+				throw e;
+			}
+
+			if (button && button != 'undefined') {
+				button.disabled = true;
+			}
+		}
+	}.bind(productAddToCartForm);
+
+	productAddToCartForm.submitLight = function(button, url){
+		if(this.validator) {
+			var nv = Validation.methods;
+			delete Validation.methods['required-entry'];
+			delete Validation.methods['validate-one-required'];
+			delete Validation.methods['validate-one-required-by-name'];
+			// Remove custom datetime validators
+			for (var methodName in Validation.methods) {
+				if (methodName.match(/^validate-datetime-.*/i)) {
+					delete Validation.methods[methodName];
+				}
+			}
+
+			if (this.validator.validate()) {
+				if (url) {
+					this.form.action = url;
+				}
+				this.form.submit();
+			}
+			Object.extend(Validation.methods, nv);
+		}
+	}.bind(productAddToCartForm);
+</script>

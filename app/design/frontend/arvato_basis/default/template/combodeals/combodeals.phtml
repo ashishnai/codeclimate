@@ -9,14 +9,14 @@
 /** @var Mage_Core_Helper_Data $coreHelper */
 $coreHelper = $this->helper('core');
 $countTimers = 0;
-$productPlus = "";
 $parentId = null;
 $selectionIds = array();
 ?>
 <div class="combo-deals">
     <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
     <?php foreach ($this->getOptions() as $option): ?>
-        <?php $parentId = $option->getParentId();?>
+        <?php $productPlus = ""; ?>
+        <?php $parentId = $option->getParentId(); ?>
         <div class="combodeal-pageHolder">
             <div class="combodeal-page-title">
                 <h3><?php echo $this->escapeHtml($option->getName()); ?></h3>
@@ -67,23 +67,24 @@ $selectionIds = array();
                             </div>
                             <div class="info">
                                 <strong>
-                                <?php echo $this->escapeHtml($selection->getName()) ?>
+                                    <?php echo $this->escapeHtml($selection->getName()) ?>
                                 </strong>
                                 <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
                             </div>
                         </a>
                     </div>
-            <?php $productPlus = "plus" ?>
-        <?php endforeach; ?>
+                    <?php $productPlus = "plus" ?>
+                <?php endforeach; ?>
                 <div class="span3">
                     <div class="result">
                         <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
                         <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
-
-                        <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                        <?php if (in_array('fewleft', $this->getDealStockStatus($option)) || in_array('instock', $this->getDealStockStatus($option))): ?>
+                            <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                        <?php endif; ?>
                     </div>
                 </div>
-        <?php endif; ?>
+            <?php endif; ?>
         </div>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 </div>
