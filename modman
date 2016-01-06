@@ -4,7 +4,7 @@ app/code/local/Arvato/ComboDeals                                      app/code/l
 app/etc/modules/Arvato_ComboDeals.xml                                 app/etc/modules/Arvato_ComboDeals.xml
 app/design/adminhtml/default/default/layout/combodeals.xml            app/design/adminhtml/default/default/layout/combodeals.xml
 app/design/adminhtml/default/default/template/arvato/combodeals       app/design/adminhtml/default/default/template/arvato/combodeals
-app/design/frontend/arvato_basis/default/layout/combodeals.xml        app/design/frontend/arvato_basis/default/layout/combodeals.xml
-app/design/frontend/arvato_basis/default/template/combodeals          app/design/frontend/arvato_basis/default/template/combodeals
-skin/frontend/arvato_basis/default/combodeals                         skin/frontend/arvato_basis/default/combodeals
+app/design/frontend/base/default/layout/combodeals.xml                app/design/frontend/base/default/layout/combodeals.xml
+app/design/frontend/base/default/template/combodeals                  app/design/frontend/base/default/template/combodeals
+skin/frontend/base/default/combodeals                                 skin/frontend/base/default/combodeals
 js/arvato/combodeals                                                  js/arvato/combodeals 
