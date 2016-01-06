@@ -1,25 +1,34 @@
 <?php
 /**
+<<<<<<< HEAD
  * Combo Deal Product View template
+=======
+ * Combo Deal Product view template
+>>>>>>> 97318f99465d8c32e33bfa00a6c73d023644ecdf
  *
  * @see Arvato_ComboDeals_Block_Combodeals
  */
 ?>
 <?php
+<<<<<<< HEAD
 /** @var Mage_Catalog_Model_Product $product */
 $product = $this->getProduct();
 $product->setData('url', null);
 $product->setData('request_path', null);
 
+=======
+>>>>>>> 97318f99465d8c32e33bfa00a6c73d023644ecdf
 /** @var Mage_Core_Helper_Data $coreHelper */
 $coreHelper = $this->helper('core');
 $countTimers = 0;
 $productPlus = "";
+$parentId = null;
+$selectionIds = array();
 ?>
-
 <div class="combo-deals">
     <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
     <?php foreach ($this->getOptions() as $option): ?>
+        <?php $parentId = $option->getParentId();?>
         <div class="combodeal-pageHolder">
             <div class="combodeal-page-title">
                 <h3><?php echo $this->escapeHtml($option->getName()); ?></h3>
@@ -59,6 +68,7 @@ $productPlus = "";
                 ?>
                 <?php
                 foreach ($option->getSelections() as $selection):
+                    $selectionIds[] = $selection->getSelectionId();
                     $selection->setData('url', null);
                     $selection->setData('request_path', null);
                     ?>
@@ -71,7 +81,11 @@ $productPlus = "";
                                 <strong>
                                 <?php echo $this->escapeHtml($selection->getName()) ?>
                                 </strong>
+<<<<<<< HEAD
                             <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
+=======
+                                <?php echo $this->getDealPriceHtml($selection, $option, false, '-new') ?>
+>>>>>>> 97318f99465d8c32e33bfa00a6c73d023644ecdf
                             </div>
                         </a>
                     </div>
@@ -81,9 +95,14 @@ $productPlus = "";
                     <div class="result">
                         <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
                         <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
+<<<<<<< HEAD
                         <?php //if (in_array('in_stock', $this->getDealStockStatus($option))): ?>
                             <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
                         <?php //endif; ?>
+=======
+
+                        <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+>>>>>>> 97318f99465d8c32e33bfa00a6c73d023644ecdf
                     </div>
                 </div>
         <?php endif; ?>
