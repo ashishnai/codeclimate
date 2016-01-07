@@ -265,4 +265,28 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
     {
         return Mage::helper('core')->currencyByStore($price, $this->getStore($storeId), true, false);
     }
+
+    /**
+     * Is default store options used
+     *           
+     * @return int
+     */
+    public function isUsedDefaultStoreOptions()
+    {
+        $this->getOptions();
+        return Mage::helper('combodeals/option')->isUsedDefaultStoreOptions();
+    }
+
+    /**
+     * Is default store options used then set opacity class
+     *           
+     * @return string
+     */
+    public function getOpacityClass()
+    {
+        if ($this->isUsedDefaultStoreOptions() && !$this->isDefaultStore()) {
+            return "opacity: 0.5";
+        }
+        return;
+    }
 }
