@@ -28,7 +28,7 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
         parent::__construct();
         $storeId = Mage::app()->getStore()->getStoreId();
 
-        $collection = Mage::getResourceModel('combodeals/option_collection');
+        $collection = Mage::getResourceModel('combodeals/option_collection')
                 ->setStoreIdFilter($storeId)
                 ->setDealDateFilter()
                 ->setSortByTimeLeft()
