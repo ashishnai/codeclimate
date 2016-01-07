@@ -1,0 +1,49 @@
+<?php
+/**
+ * u+i bootstrap
+ * @frompackage     enterprise_default
+ */
+
+/**
+ * Product list toolbar
+ *
+ * @see Mage_Catalog_Block_Product_List_Toolbar
+ */
+?>
+<?php if($this->getCollection()->getSize()): ?>
+
+    <div class="navbar toolbar">
+        <div class="navbar-inner toolbar-inner">
+            <ul class="nav row-fluid">
+                <li class="span3 limit items">
+                    <strong class="toolbar-description"><?php echo $this->__('Show') ?></strong>
+                    <?php $_limits = $this->getAvailableLimit(); ?>
+                    <div class="dropdown<?php if ($this->getDropup()) : ?> dropup<?php endif ?>">
+                        <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                            <?php foreach ($_limits as $_key => $_limit): ?>
+                                <?php if($this->isLimitCurrent($_key)): ?>
+                                    <?php echo $_limit ?>
+                                <?php endif; ?>
+                            <?php endforeach ?>
+                            <i class="icon-chevron-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <?php foreach ($_limits as $_key => $_limit): ?>
+                                <?php if(!$this->isLimitCurrent($_key)): ?>
+                                    <li>
+                                        <a href="<?php echo $this->getLimitUrl($_key) ?>"><?php echo $_limit ?></a>
+                                    </li>
+                                <?php endif; ?>
+                            <?php endforeach ?>
+                        </ul>
+                    </div>
+                </li>
+                <li class="span3 toolbar-pager">
+                    <div class="pagination">
+                        <?php echo $this->getPagerHtml() ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+<?php endif ?>

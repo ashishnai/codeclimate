@@ -5,14 +5,7 @@
  * @see Arvato_ComboDeals_Block_Combodeals
  */
 ?>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
-        echo $this->getLayout()->createBlock('combodeals/list')->setTemplate('combodeals/list.phtml')->toHtml();
-        ?>
-    </body>
-</html>
+
+<div class="combodeals-dedicated-page">
+<?php echo $this->getLayout()->createBlock('combodeals/list')->setTemplate('combodeals/list.phtml')->toHtml(); ?>
+</div>
