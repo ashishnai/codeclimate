@@ -36,7 +36,7 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
     }
     
     /**
-     *  Prepare block for the pager and set our options collection
+     *  Prepare block for the pager and set the options collection
      * 
      * @return Arvato_ComboDeals_Block_List
      */

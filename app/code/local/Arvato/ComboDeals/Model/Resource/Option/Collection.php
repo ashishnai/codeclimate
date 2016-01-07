@@ -19,7 +19,13 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * @var bool
      */
     protected $_selectionsAppended = false;
-    const MINUTE= 'MINUTE';
+    
+    /**
+     * Duration Counter
+     * 
+     * @var string
+     */
+    const MINUTE = 'MINUTE';
 
     /**
      * Init model and resource model
@@ -27,10 +33,8 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      */
     protected function _construct()
     {
-        $this->_init('combodeals/option');
+        $this->_init('combodeals/option');        
     }
-    
-    
     
     /**
      * Initialize collection option with product name, status
@@ -133,7 +137,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         }
         $this->getSelect()
                 ->columns('TIMESTAMPDIFF('.self::MINUTE.', "'.$currentDate.'", `main_table`.`to_date`) AS date_difference')
-                ->order('date_difference desc');
+                ->order('date_difference asc');
         return $this;
     } 
          

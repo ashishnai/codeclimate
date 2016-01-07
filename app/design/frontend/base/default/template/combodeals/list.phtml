@@ -94,9 +94,8 @@ $countTimers = 0;
         <?php endforeach; ?>
 
         <script type="text/javascript">decorateTable('my-custom-table');</script>
-        <?php echo $this->getPagerHtml(); ?>    
-
     </div>
+<?php echo $this->getPagerHtml(); ?>    
 <?php else: ?>
     <p><?php echo $this->__('There are no combocdeal products found.'); ?></p>
 <?php endif ?>

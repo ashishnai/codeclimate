@@ -11,7 +11,7 @@ class Arvato_ComboDeals_Block_Timer extends Mage_Catalog_Block_Product_Abstract
     /**
      * @var Arvato_ComboDeal_Helper_Timer
      */
-    protected $timerHelper;
+    protected $_timerHelper;
     /**
      * @var Mage_Core_Helper_Data
      */
@@ -20,7 +20,7 @@ class Arvato_ComboDeals_Block_Timer extends Mage_Catalog_Block_Product_Abstract
     {
         parent::__construct();
 
-        $this->timerHelper = Mage::helper('combodeals/timer');
+        $this->_timerHelper = Mage::helper('combodeals/timer');
         $this->setSkipGenerateContent(true);
         $this->setTemplate('combodeals/timer.phtml');
     }

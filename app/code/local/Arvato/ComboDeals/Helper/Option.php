@@ -251,7 +251,6 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                     $optionsCollection->setOptionIdFilter($optionId);
                 }
                 $optionsCollection->setDealDateFilter()
-                        ->setSortByTimeLeft()
                         ->setStatusFilter();
                 $options = $optionsCollection->appendSelections($selectionCollection, false, true);
                 foreach ($options as $option) {

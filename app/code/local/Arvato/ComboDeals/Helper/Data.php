@@ -35,12 +35,10 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      * Enable Combodeal system configuration
      */
     const COMBODEAL_ENABLE_MODULE_OUTPUT = 'combodeals_admin/setting/enable_frontend';
-    
-       
+           
     /**
      * Enable Combodeal Dedicated/Listing Page
-     */
-    
+     */    
     const COMBODEAL_ENABLE_DEDICATED_PAGE = 'combodeals_admin/combodeals_setting/enable_dedicated';
     
     /**
@@ -100,7 +98,7 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      /*
      * Check whether the module output is enabled in the global system configuration
      * 
-     * return bool 
+     * @return bool 
      */
     public function isEnableModuleOutput()
     {
@@ -114,7 +112,7 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      /*
      * Check whether the dedicated page display is enabled in the global system configuration
      * 
-     * return bool 
+     * @return bool 
      */
     public function isEnableDedicatedPage()
     {
@@ -127,7 +125,7 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
     /*
      * Get The header title for combo deal products block
      * 
-     * return string 
+     * @return string 
      */
     public function getHeaderTitle()
     {
@@ -138,10 +136,30 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      /*
      * Get The Limit for displaying combo deal on product detail
      * 
-     * return int 
+     * @return int 
      */
     public function getProductLimit()
     {
         return Mage::getStoreConfig(self::COMBODEAL_PRODUCT_LIMIT);
     }
+    
+    /*
+     * Check if combodeals cms page is active
+     * 
+     * @return bool
+     */
+    public function isActiveDealCms()
+    {
+        if ($this->isEnableDedicatedPage()) {
+            $cmsCollections = Mage::getModel('cms/page')->getCollection();
+            $attribute = "identifier";
+            $value = "combo_deals";
+            $cmsCollections->addFieldToFilter($attribute, $value);
+            $item = $cmsCollections->getFirstItem();
+            if($item->getData('is_active') == 1){
+                return true;
+            }
+        }
+    }
+    
 }
