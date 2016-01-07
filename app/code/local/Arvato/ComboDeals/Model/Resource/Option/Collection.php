@@ -240,27 +240,4 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         }
         return $this->_itemIds;
     }
-
-    /**
-     * Get store object of curently edited product
-     *
-     * @param int $storeId
-     * @return Mage_Core_Model_Store
-     */
-    protected function getStore($storeId)
-    {
-        return Mage::app()->getStore($storeId);
-    }
-
-    /**
-     * Get store wise price format
-     * 
-     * @param decimal $price
-     * @param int $storeId
-     * @return string
-     */
-    public function getFormatPrice($price, $storeId)
-    {
-        return Mage::helper('core')->currencyByStore($price, $this->getStore($storeId), true, false);
-    }
 }

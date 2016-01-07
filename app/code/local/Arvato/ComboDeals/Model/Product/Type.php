@@ -243,4 +243,15 @@ class Arvato_ComboDeals_Model_Product_Type extends Mage_Bundle_Model_Product_Typ
         }
         return $usedSelections;
     }
+
+    /**
+     * Return product sku based on sku_type attribute
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return string
+     */
+    public function getSku($product = null)
+    {
+        return $this->getProduct($product)->getData('sku');
+    }
 }
