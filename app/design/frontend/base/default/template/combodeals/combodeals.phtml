@@ -81,6 +81,7 @@ $selectionIds = array();
                         <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
                         <?php if (in_array('fewleft', $this->getDealStockStatus($option)) || in_array('instock', $this->getDealStockStatus($option))): ?>
                             <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                            <?php unset($selectionIds);?>
                         <?php endif; ?>
                     </div>
                 </div>

@@ -227,7 +227,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
 
         return $date;
     }
-    
+
     /*
      * Retrive the combo deal products
      * 
@@ -251,8 +251,8 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                     $optionsCollection->setOptionIdFilter($optionId);
                 }
                 $optionsCollection->setDealDateFilter()
-                        ->setSortByTimeLeft()
-                        ->setStatusFilter();
+                        ->setStatusFilter()
+                        ->setInventoryFilter();
                 $options = $optionsCollection->appendSelections($selectionCollection, false, true);
                 foreach ($options as $option) {
                     $return_options[] = $option;
@@ -261,7 +261,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
             return $return_options;
         }
     }
-    
+
     /*
      * Retrieve the option ids
      * 
@@ -270,7 +270,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      * @return array $optionIds
      */
     public function getAssociatedOptions($product, $storeId)
-    {        
+    {
         // filter by product id
         $productId = $product->getId();
         $optionIds = array();
@@ -279,7 +279,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 ->addAttributeToSelect('selection' . 'option_id')
                 ->setFlag('require_stock_items', true)
                 ->setPositionOrder()
-                ->setStoreIdFilter($storeId)               
+                ->setStoreIdFilter($storeId)
                 ->setProductIdsFilter($productId);
         if($limit = Mage::helper('combodeals')->getProductLimit()){
             $parentCollection->setDealLimit($limit);
@@ -288,9 +288,8 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
             $optionIds[] = $_selection->getOptionId();
         }
         return $optionIds;
-    }  
-    
-    
+    }
+
     /*
      * Retrieve all the active combodeals
      * 

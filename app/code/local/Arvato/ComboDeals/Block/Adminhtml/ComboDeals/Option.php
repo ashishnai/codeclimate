@@ -244,6 +244,29 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
     }
 
     /**
+     * Get store object of curently edited product
+     *
+     * @param int $storeId
+     * @return Mage_Core_Model_Store
+     */
+    protected function getStore($storeId)
+    {
+        return Mage::app()->getStore($storeId);
+    }
+
+    /**
+     * Get store wise price format
+     * 
+     * @param decimal $price
+     * @param int $storeId
+     * @return string
+     */
+    public function getFormatPrice($price, $storeId)
+    {
+        return Mage::helper('core')->currencyByStore($price, $this->getStore($storeId), true, false);
+    }
+
+    /**
      * Is default store options used
      *           
      * @return int

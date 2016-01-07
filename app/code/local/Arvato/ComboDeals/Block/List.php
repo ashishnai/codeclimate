@@ -38,7 +38,7 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
     
     /**
      *  Prepare toolbar and set to collection
-     * 
+     *
      * @return Arvato_ComboDeals_Block_List
     */
 

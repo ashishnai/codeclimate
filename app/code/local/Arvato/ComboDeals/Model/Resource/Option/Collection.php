@@ -19,7 +19,13 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * @var bool
      */
     protected $_selectionsAppended = false;
-    const MINUTE= 'MINUTE';
+    
+    /**
+     * Duration Counter
+     * 
+     * @var string
+     */
+    const MINUTE = 'MINUTE';
 
     /**
      * Init model and resource model
@@ -29,9 +35,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
     {
         $this->_init('combodeals/option');
     }
-    
-    
-    
+
     /**
      * Initialize collection option with product name, status
      *
@@ -41,20 +45,34 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         parent::_initSelect();
         $attribute = Mage::getSingleton('eav/config')
                 ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'name');
-        
+
         $productAttributes = array('name' => 'name', 'status' => 'status');
-        foreach ($productAttributes as $alias=>$attributeCode) {
+        foreach ($productAttributes as $alias => $attributeCode) {
             $tableAlias = $attributeCode . '_table';
             $attribute = Mage::getSingleton('eav/config')
                     ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode);
 
             $this->getSelect()->joinLeft(
                     array($tableAlias => $attribute->getBackendTable()), "main_table.parent_id = $tableAlias.entity_id AND "
-                    . "$tableAlias.attribute_id={$attribute->getId()}",array($alias=>'value')
+                    . "$tableAlias.attribute_id={$attribute->getId()}", array($alias => 'value')
             );
-        }
+        }       
     }
 
+    /*
+     * Check combodeal product inventory
+     * 
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setInventoryFilter()
+    {
+        $this->getSelect()->joinLeft(
+                array('stock_table' => 'cataloginventory_stock_item'), "main_table.parent_id = stock_table.product_id 
+                ", array('stock_table.is_in_stock')
+        );
+        $this->getSelect()->where('stock_table.is_in_stock = (?)', 1);
+        return $this;
+    }
     /**
      * Sets store id filter
      *
@@ -90,7 +108,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         $this->addFieldToFilter('main_table.option_id', $optionId);
         return $this;
     }
-    
+
     /**
      * Sets the active deals filter
      * 
@@ -105,9 +123,8 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         $this->addFieldToFilter('main_table.from_date', array('lteq' => $currentDate));
         $this->addFieldToFilter('main_table.to_date', array('gteq' => $currentDate));
         return $this;
-                
     }
-    
+
     /**
      * Sets filter on combo deal product status
      * 
@@ -119,7 +136,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         $this->addFieldToFilter('status_table.value', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         return $this;
     }
-            
+
     /**
      * Sets Combo deal Time left(Date Difference) sorting
      * 
@@ -133,10 +150,9 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         }
         $this->getSelect()
                 ->columns('TIMESTAMPDIFF('.self::MINUTE.', "'.$currentDate.'", `main_table`.`to_date`) AS date_difference')
-                ->order('date_difference desc');
+                ->order('date_difference asc');
         return $this;
-    } 
-         
+    }
 
     /**
      * Append all selections to options
@@ -150,7 +166,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * @return array
      */
     public function appendSelections($selectionsCollection, $stripBefore = false, $appendAll = true)
-    {        
+    {
         if ($stripBefore) {
             $this->_stripSelections();
         }
@@ -239,28 +255,5 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
             $this->_itemIds = parent::getAllIds();
         }
         return $this->_itemIds;
-    }
-
-    /**
-     * Get store object of curently edited product
-     *
-     * @param int $storeId
-     * @return Mage_Core_Model_Store
-     */
-    protected function getStore($storeId)
-    {
-        return Mage::app()->getStore($storeId);
-    }
-
-    /**
-     * Get store wise price format
-     * 
-     * @param decimal $price
-     * @param int $storeId
-     * @return string
-     */
-    public function getFormatPrice($price, $storeId)
-    {
-        return Mage::helper('core')->currencyByStore($price, $this->getStore($storeId), true, false);
     }
 }

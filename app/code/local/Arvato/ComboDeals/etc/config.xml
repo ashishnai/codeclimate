@@ -28,6 +28,16 @@
                 </combodeals>
             </updates>
         </layout>
+        <events>
+            <sales_quote_collect_totals_after>
+                <observers>
+                    <combodeal_set_custom_discount>
+                        <class>combodeals/saveDiscountObserver</class>
+                        <method>setDiscount</method>
+                    </combodeal_set_custom_discount>
+                </observers>
+            </sales_quote_collect_totals_after>            
+        </events>
     </frontend>
     <global>
         <catalog>

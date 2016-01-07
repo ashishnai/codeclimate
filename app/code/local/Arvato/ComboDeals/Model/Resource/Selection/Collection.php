@@ -59,16 +59,14 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
             array('*')
         );
         $this->joinField(
-                'qty', 
+                'qty',
                 'cataloginventory/stock_item',
                 'ROUND(qty)',
                 'product_id=entity_id',
                 '{{table}}.stock_id=1',
                 'left');
     }
-    
-    
-    
+
     /**
      * Set store filter
      *
@@ -82,7 +80,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         }
         return $this;
     }
-    
+
     /**
      * Apply option ids filter to collection
      *
@@ -111,7 +109,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         
         return $this;
     }
-    
+
      /**
      * Apply product ids filter to collection
      *
@@ -126,7 +124,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
         
         return $this;
     }
-    
+
      /**
      * Apply product ids filter to collection
      *
@@ -154,8 +152,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
             ->order('selection.selection_id asc');
         return $this;
     }
-    
-    
+
     /**
      * Sets limit to the number o combodeal products to display
      * 

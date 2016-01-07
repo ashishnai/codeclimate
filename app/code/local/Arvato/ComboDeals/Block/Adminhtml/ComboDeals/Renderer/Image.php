@@ -16,8 +16,12 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Renderer_Image extends Mage_A
      */
     public function render(Varien_Object $row)
     {
-        $imagePath = Mage::helper('catalog/image')->init($row, 'thumbnail')->resize(80);
-        $imageOut = sprintf('<img src="%s" width="80px"/>', $imagePath);
-        return $imageOut;
+        try {
+            $imagePath = Mage::helper('catalog/image')->init($row, 'thumbnail')->resize(80);
+            $imageOut = sprintf('<img src="%s" width="80px"/>', $imagePath);
+            return $imageOut;
+        } catch (Exception $e) {
+            return;
+        }
     }
 }
