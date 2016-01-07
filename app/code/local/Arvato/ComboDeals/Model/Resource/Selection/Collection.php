@@ -180,7 +180,7 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
             $imagePath = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(80);
             $imageOut = sprintf('<img src="%s" width="80px"/>', $imagePath);
             return $imageOut;
-        } catch (Exception $e) {            
+        } catch (Exception $e) {
             return;
         }
     }
