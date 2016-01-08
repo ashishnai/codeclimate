@@ -3,14 +3,13 @@
  * u+i bootstrap
  * @frompackage     enterprise_default
  */
-
 /**
  * Product list toolbar
  *
  * @see Mage_Catalog_Block_Product_List_Toolbar
  */
 ?>
-<?php if($this->getCollection()->getSize()): ?>
+<?php if ($this->getCollection()->getSize()): ?>
 
     <div class="navbar toolbar">
         <div class="navbar-inner toolbar-inner">
@@ -21,7 +20,7 @@
                     <div class="dropdown<?php if ($this->getDropup()) : ?> dropup<?php endif ?>">
                         <button type="button" class="dropdown-toggle" data-toggle="dropdown">
                             <?php foreach ($_limits as $_key => $_limit): ?>
-                                <?php if($this->isLimitCurrent($_key)): ?>
+                                <?php if ($this->isLimitCurrent($_key)): ?>
                                     <?php echo $_limit ?>
                                 <?php endif; ?>
                             <?php endforeach ?>
@@ -29,7 +28,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <?php foreach ($_limits as $_key => $_limit): ?>
-                                <?php if(!$this->isLimitCurrent($_key)): ?>
+                                <?php if (!$this->isLimitCurrent($_key)): ?>
                                     <li>
                                         <a href="<?php echo $this->getLimitUrl($_key) ?>"><?php echo $_limit ?></a>
                                     </li>
@@ -43,7 +42,22 @@
                         <?php echo $this->getPagerHtml() ?>
                     </div>
                 </li>
+                <li class="span3 sorting">
+                    <div class="pagination">
+                        <strong class="toolbar-description"><?php echo $this->__('Results') ?></strong>
+                        <ul>
+                            <li class="active last">
+                                <span><?php if ($this->getLastPageNum() > 1): ?>
+                                        <?php echo $this->__('Items %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+                                    <?php else: ?>
+                                        <strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
+                                    <?php endif; ?></span>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
-<?php endif ?>
+    <?php
+ endif ?>

@@ -15,6 +15,18 @@ $selectionIds = array();
 
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $optionsCollection = $this->getCollection(); ?>
+
+<div class="page-header">
+    <div class="row-fluid">
+        <div class="span8 mobile-50 first-in-row-mobile">
+            <h1 class="headline-normal"><?php echo $this->__("Combo Deals") ?></h1>
+        </div>
+        <div class="span4 mobile-50">
+            <p class="results">
+            </p>
+        </div>
+    </div>
+</div>
 <?php echo $this->getToolbarHtml(); ?>
 <?php if ($optionsCollection->getSize()): ?>
     <div class="combo-deals">
@@ -23,7 +35,6 @@ $selectionIds = array();
             $optionIds[] = $_option->getOptionId();
         endforeach;
         ?>
-        <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
         <?php foreach ($this->getOptions($optionIds) as $option): ?>
             <?php $productPlus = ''; ?>
             <?php $parentId = $option->getParentId(); ?>
@@ -98,9 +109,6 @@ $selectionIds = array();
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
-        <script type="text/javascript">decorateTable('my-custom-table');</script>
-
-
     </div>
     <?php echo $this->getToolbarHtml(); ?>
 <?php else: ?>
