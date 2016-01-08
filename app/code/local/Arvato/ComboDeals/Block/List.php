@@ -100,12 +100,10 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
     
      
     /**
-     * Returns product price block html
+     * Returns deal timer block html
      *
-     * @param Mage_Catalog_Model_Product $product
      * @param Arvato_ComboDeals_Model_Option $option
-     * @param boolean $displayMinimalPrice
-     * @param string $idSuffix
+     * @param int $count
      * @return string
      */
     public function getDealTimerHtml($option, $count)

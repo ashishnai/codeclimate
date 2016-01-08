@@ -87,29 +87,6 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
         return $this->_options;
     }
 
-    /*
-     * Get Combo deals add to cart Url
-     * 
-     * @param int $productId
-     * @param int $optionId
-     * @param array $selectionIds
-     * @return string $url
-     */
-    public function getComboDealAddToCartUrl($productId, $optionId, $selectionIds)
-    {
-        $url = $this->getUrl('combodeals/cart/add',
-            array(
-                'product' => $productId,
-                'option_id'  => $optionId,
-                'selection_id'  => implode(',', $selectionIds),
-                'qty'  => 1,
-                Mage_Core_Controller_Front_Action::PARAM_NAME_URL_ENCODED => Mage::helper('core')->urlEncode($this->getCurrentUrl()),
-                Mage_Core_Model_Url::FORM_KEY => $this->_getSingletonModel('core/session')->getFormKey()
-            ));
-
-        return $url;
-    }
-
     /**
      * Returns product price block html
      *
@@ -131,13 +108,11 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
     }
     
     
-    /**
-     * Returns product price block html
+   /**
+     * Returns deal timer block html
      *
-     * @param Mage_Catalog_Model_Product $product
      * @param Arvato_ComboDeals_Model_Option $option
-     * @param boolean $displayMinimalPrice
-     * @param string $idSuffix
+     * @param int $count
      * @return string
      */
     public function getDealTimerHtml($option, $count)
@@ -171,7 +146,6 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
                 $total += $priceHelper->getRegularProductPrice($selection, $inclTax);
             }
         }
-
         return $total;
     }
 

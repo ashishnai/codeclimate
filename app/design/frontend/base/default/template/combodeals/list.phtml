@@ -88,10 +88,8 @@ $selectionIds = array();
                         <div class="result">
                             <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
                             <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
-                            <?php if (in_array('fewleft', $this->getDealStockStatus($option)) || in_array('instock', $this->getDealStockStatus($option))): ?>
-                                <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
-                            <?php endif; ?> <?php if (in_array('fewleft', $this->getDealStockStatus($option)) || in_array('instock', $this->getDealStockStatus($option))): ?>
-                                <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                            <?php if (in_array('few_left', $this->getDealStockStatus($option)) || in_array('in_stock', $this->getDealStockStatus($option))): ?>
+                                <a class="btn btn-primary btn-small" href="<?php echo Mage::helper('combodeals')->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
                                 <?php unset($selectionIds); ?>
                             <?php endif; ?>
                         </div>
@@ -99,7 +97,6 @@ $selectionIds = array();
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
-
         <script type="text/javascript">decorateTable('my-custom-table');</script>
     </div>
     <?php echo $this->getPagerHtml(); ?>    
