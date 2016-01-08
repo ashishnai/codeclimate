@@ -16,7 +16,8 @@ $hasDeals = 0;
 <div class="combo-deals" id='combo-deals'>
     <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
     <?php foreach ($this->getOptions() as $option): ?>
-        <?php if (in_array('out_of_stock', Mage::helper('combodeals')->getDealStockStatus($option)) == false): ?>
+        <?php $dealStockStatus = Mage::helper('combodeals')->getDealStockStatus($option); ?>
+        <?php if (in_array('out_of_stock', $dealStockStatus) == false): ?>
             <?php $hasDeals = 1; ?>
             <?php $productPlus = ""; ?>
             <?php $parentId = $option->getParentId(); ?>
@@ -32,17 +33,17 @@ $hasDeals = 0;
                 </div>
                 <div class="combodeal-page-instock">
                     <div class="stock-box">
-                        <?php if (in_array('out_of_stock', Mage::helper('combodeals')->getDealStockStatus($option))): ?>
+                        <?php if (in_array('out_of_stock', $dealStockStatus)): ?>
                             <span></span>
                             <span class="out"></span>
                             <span></span>
                             <p class="out"><?php echo $this->__('out of stock') ?></p>
-                        <?php elseif (in_array('few_left', Mage::helper('combodeals')->getDealStockStatus($option))): ?>
+                        <?php elseif (in_array('few_left', $dealStockStatus)): ?>
                             <span></span>
                             <span></span>
                             <span class="few"></span>
                             <p class="few"><?php echo $this->__('few left') ?></p>
-                        <?php elseif (in_array('in_stock', Mage::helper('combodeals')->getDealStockStatus($option))): ?>
+                        <?php elseif (in_array('in_stock', $dealStockStatus)): ?>
                             <span class="in"></span>
                             <span></span>
                             <span></span>
@@ -82,7 +83,7 @@ $hasDeals = 0;
                         <div class="result">
                             <div class="total"><?php echo $this->__('Total') ?> <small><?php echo $coreHelper->currency($this->getTotalPrice($option), true, false) ?></small></div>
                             <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
-                            <?php if (in_array('few_left', $this->getDealStockStatus($option)) || in_array('in_stock', $this->getDealStockStatus($option))): ?>
+                            <?php if (in_array('few_left', $dealStockStatus) || in_array('in_stock', $dealStockStatus)): ?>
                                 <a class="btn btn-primary btn-small" href="<?php echo Mage::helper('combodeals')->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
                                 <?php unset($selectionIds); ?>
                             <?php endif; ?>
