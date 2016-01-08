@@ -185,7 +185,7 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
         return $url;
     }
     
-        /*
+    /*
      * Get the combo deal product stock status
      * 
      * @param Arvato_ComboDeals_Model_Option $option

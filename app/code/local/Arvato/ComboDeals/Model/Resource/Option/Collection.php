@@ -60,22 +60,6 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
     }
     
     /*
-     * 
-     * 
-     * 
-     */
-    public function checkProductInStore()
-    {
-        $this->getSelect()->joinLeft(
-                array('product_table' => Mage::getSingleton('core/resource')->getTableName('catalog/product')), "main_table.parent_id = product_table.entity_id 
-                ", array('product_table.store_id')
-        );
-        $this->getSelect()->where('product_table.store_id = (?)', 64);
-        echo $this->getSelect()->__toString();exit;
-        return $this;
-    }        
-
-    /*
      * Check combodeal product inventory
      * 
      * @return Arvato_ComboDeals_Model_Resource_Option_Collection
@@ -89,6 +73,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         $this->getSelect()->where('stock_table.is_in_stock = (?)', 1);
         return $this;
     }
+    
     /**
      * Sets store id filter
      *

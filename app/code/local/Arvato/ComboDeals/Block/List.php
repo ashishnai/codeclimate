@@ -96,8 +96,7 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
             ->setIdSuffix($idSuffix);
 
         return $block->toHtml();
-    }
-    
+    }    
      
     /**
      * Returns deal timer block html
@@ -113,9 +112,8 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
             ->setCount($count);    
         return $block->toHtml();
     }
-    
-    
-     /*
+        
+    /*
      * Calculates the total minimum product price without the combo deal
      * 
      * @param Arvato_ComboDeals_Model_Option $option
@@ -152,10 +150,8 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
         $inclTax = $priceHelper->displayIncludingTax();
         $selections = $option->getSelections();
 
-        if (!empty($selections))
-        {
-            foreach ($selections as $selection)
-            {
+        if (!empty($selections)) {
+            foreach ($selections as $selection) {
                 $productPrice = $priceHelper->getRegularProductPrice($selection, $inclTax);
                 $total += $priceHelper->getDiscountedPrice($selection, $option, $productPrice);
             }

@@ -46,7 +46,6 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
 
         $selectionCollection = $this->_getSelectionsCollection(
             $this->_getOptionsIds($product),
-            $product,
             $storeId
         );
 
@@ -80,7 +79,6 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
 
         $selectionCollection = $this->_getSelectionsCollection(
             $this->_getOptionsIds($product),
-            $product,
             $storeId
         );
 
@@ -180,7 +178,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      *
      * @return Arvato_ComboDeals_Model_Resource_Selection_Collection
      */
-    private function _getSelectionsCollection($optionIds, $product, $storeId)
+    private function _getSelectionsCollection($optionIds, $storeId)
     {
         $selectionsCollection = Mage::getResourceModel('combodeals/selection_collection')
             ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
@@ -242,7 +240,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
         if (empty($optionIds)) {
             return;
         } else {
-            $selectionCollection = $this->_getSelectionsCollection($optionIds, $product, $storeId);
+            $selectionCollection = $this->_getSelectionsCollection($optionIds, $storeId);
             $return_options = array();
             foreach ($optionIds as $optionId) {
                 $optionsCollection = Mage::getModel('combodeals/option')->getResourceCollection();
@@ -253,7 +251,6 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 $optionsCollection->setDealDateFilter()
                         ->setStatusFilter()
                         ->setInventoryFilter();
-                   //     ->checkProductInStore();
                 $options = $optionsCollection->appendSelections($selectionCollection, false, true);
                 foreach ($options as $option) {
                     $return_options[] = $option;
@@ -282,7 +279,6 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 ->setPositionOrder()
                 ->setStoreIdFilter($storeId)
                 ->setProductIdsFilter($productId);
-              //  ->setInventoryFilter();
         if($limit = Mage::helper('combodeals')->getProductLimit()){
             $parentCollection->setDealLimit($limit);
         }
@@ -300,15 +296,10 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
      * @return Arvato_ComboDeals_Model_Resource_Option_Collection $return_options
      */
     public function getAllCombodeals($optionIds, $optionsCollection)
-    {
-        $selectionsCollection = Mage::getResourceModel('combodeals/selection_collection')
-                ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
-                ->setFlag('require_stock_items', true)
-                ->setFlag('product_children', true)
-                ->setStoreIdFilter($storeId)
-                ->setOptionIdsFilter($optionIds)
-                ->setPositionOrder();
-        $options = $optionsCollection->appendSelections($selectionsCollection, false, true);
+    {     
+        // Gets the current store's id
+        $storeId = Mage::app()->getStore()->getStoreId();
+        $options = $optionsCollection->appendSelections($this->_getSelectionsCollection($optionIds, $storeId), false, true);
         $return_options = array();
 
         foreach ($options as $option) {

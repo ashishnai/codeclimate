@@ -21,8 +21,7 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
         {
             return parent::_toHtml();
         }
-    }
-    
+    }    
     
     /*
      * Check if the product have combo deals at all
@@ -175,7 +174,6 @@ class Arvato_ComboDeals_Block_Combodeals extends Mage_Catalog_Block_Product_Abst
                 $total += $priceHelper->getDiscountedPrice($selection, $option, $productPrice);
             }
         }
-
         return $total;
     }
 }
