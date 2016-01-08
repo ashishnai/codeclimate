@@ -289,4 +289,17 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Option extends Mage_Adminhtml
         }
         return;
     }
+
+    /**
+     * Return positive qty format
+     *           
+     * @return int
+     */
+    public function getFormatQty($qty)
+    {
+        if ($qty < 0) {
+            return -($qty);
+        }
+        return $qty;
+    }
 }

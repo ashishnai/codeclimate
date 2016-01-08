@@ -22,6 +22,13 @@ class Arvato_ComboDeals_Model_Product_Price extends Mage_Bundle_Model_Product_Pr
     protected $_totalPriceWithDisc = null;
 
     /**
+     * combodeal parent product discount array
+     *
+     * @var float
+     */
+    protected $_productDiscountArray = null;
+
+    /**
      * Get Total price for Bundle items
      *
      * @param Mage_Catalog_Model_Product $product
@@ -56,16 +63,23 @@ class Arvato_ComboDeals_Model_Product_Price extends Mage_Bundle_Model_Product_Pr
             }
         }
 
-        $this->_totalPriceWithoutDisc += $priceWithoutDisc * $qty;
-        $this->_totalPriceWithDisc += $priceWithDisc * $qty;
+        $totalPriceWithoutDisc = $priceWithoutDisc * $qty;
+        $totalPriceWithDisc = $priceWithDisc * $qty;
+
+        $this->_totalPriceWithoutDisc += $totalPriceWithoutDisc;
+        $this->_totalPriceWithDisc += $totalPriceWithDisc;
+
         $this->setPriceWithoutDiscount($this->_totalPriceWithoutDisc);
         $this->setPriceWithDiscount($this->_totalPriceWithDisc);
+
+        $this->_productDiscountArray[$product->getId()] = $totalPriceWithoutDisc - $totalPriceWithDisc;
+        $this->setProductDiscount($this->_productDiscountArray);
 
         return $priceWithoutDisc;
     }
 
     /**
-     * set total price for combodeal items with discount
+     * Set total price for combodeal items with discount
      *
      * @param float $price
      */
@@ -76,7 +90,7 @@ class Arvato_ComboDeals_Model_Product_Price extends Mage_Bundle_Model_Product_Pr
     }
 
     /**
-     * set total price for combodeal items without discount
+     * Set total price for combodeal items without discount
      *
      * @param float $price
      */
@@ -87,13 +101,34 @@ class Arvato_ComboDeals_Model_Product_Price extends Mage_Bundle_Model_Product_Pr
     }
 
     /**
+     * Set each product discount
+     *
+     * @param array $discount
+     */
+    public function setProductDiscount($discount)
+    {
+        Mage::unregister('product_discount');
+        Mage::register('product_discount', $discount);
+    }
+
+    /**
      * Return discount ammonunt
      *
      * @return float
      */
-    public function getDiscount()
+    public function getTotalDiscount()
     {
         return (Mage::registry('price_without_disc') - Mage::registry('price_with_disc'));
+    }
+
+    /**
+     * Return discount ammonunt
+     *
+     * @return float
+     */
+    public function getProductDiscount()
+    {
+        return Mage::registry('product_discount');
     }
 
     /**
