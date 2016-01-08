@@ -80,6 +80,9 @@ class Arvato_ComboDeals_Helper_SaveComboDeals extends Mage_Core_Helper_Abstract
                 unset($option['option_id']);
             }
 
+            $option['from_date'] = $this->prepareGmtFormatDate($option['from_date']);
+            $option['to_date'] = $this->prepareGmtFormatDate($option['to_date']);
+
             $optionModel = Mage::getModel('combodeals/option')
                 ->setData($option)
                 ->setParentId($product->getId())
@@ -131,5 +134,18 @@ class Arvato_ComboDeals_Helper_SaveComboDeals extends Mage_Core_Helper_Abstract
         }
 
         $resource->dropAllUnneededSelections($product->getId(), $excludeSelectionIds);
+    }
+
+    /**
+     * prepare GMT formatted from and to date
+     *
+     * @param string $date
+     * @return string $date
+     */
+    public function prepareGmtFormatDate($date)
+    {
+        $date = Mage::getModel('core/date')->gmtDate(null, $date);
+
+        return $date;
     }
 }
