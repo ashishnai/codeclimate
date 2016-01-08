@@ -27,6 +27,7 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
     {
         parent::__construct();
         $storeId = Mage::app()->getStore()->getStoreId();
+
         $collection = Mage::getResourceModel('combodeals/option_collection')
                 ->setStoreIdFilter($storeId)
                 ->setDealDateFilter()
@@ -36,33 +37,52 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
     }
     
     /**
-     *  Prepare block for the pager and set the options collection
-     * 
+     *  Prepare toolbar and set to collection
+     *
      * @return Arvato_ComboDeals_Block_List
-     */
+    */
+
     protected function _prepareLayout()
     {
-       if (Mage::helper('combodeals')->isEnableDedicatedPage()) {
+
+        if (Mage::helper('combodeals')->isEnableDedicatedPage())
+        {
             parent::_prepareLayout();
 
-            $pager = $this->getLayout()->createBlock('page/html_pager', 'custom.pager');
-            $pager->setAvailableLimit(array(5 => 5, 10 => 10, 20 => 20, 'all' => 'All'));
-            $pager->setCollection($this->getCollection());
-            $this->setChild('pager', $pager);
+            $toolbar = $this->getToolbarBlock();
+            // called prepare sortable parameters
+            $collection = $this->getCollection();
+
+            // set collection to toolbar and apply sort
+            $toolbar->setCollection($collection);
+            $this->setChild('toolbar', $toolbar);
             $this->getCollection()->load();
             return $this;
         }
     }
-    
-    /*
-     * Prepare pager html for use in template
-     * 
+
+    /**
+     *  Prepare block for the toolbar
+     *
+     * @return Arvato_ComboDeals_Block_List
      */
-    public function getPagerHtml()
+    public function getToolbarBlock()
     {
-        return $this->getChildHtml('pager');
+        $block = $this->getLayout()->createBlock('combodeals/toolbar', microtime());
+        return $block;
     }
-    
+
+    /**
+     *  return tollbar
+     *
+     * @return Arvato_ComboDeals_Block_List
+     */
+    public function getToolbarHtml()
+    {
+        return $this->getChildHtml('toolbar');
+    }
+
+
     /**
      * Get all the available combodeals
      * 

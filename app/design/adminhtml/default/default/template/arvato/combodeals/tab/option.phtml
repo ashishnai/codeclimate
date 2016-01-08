@@ -113,6 +113,7 @@ cdOption = new Combodeals.Option(optionTemplate);
         <?php foreach ($_option->getSelections() as $_selection): ?>
             <?php $_selection->setName($this->escapeHtml($_selection->getName())); ?>
             <?php $_selection->setPrice($this->getFormatPrice($_selection->getPrice(), $_selection->getStoreId())); ?>
+            <?php $_selection->setQty($this->getFormatQty($_selection->getQty())); ?>
             comboDealSelection.addRow(optionIndex, <?php echo $_selection->toJson() ?>);
         <?php endforeach; ?>
     <?php endif; ?>

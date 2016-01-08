@@ -91,7 +91,7 @@ class Arvato_ComboDeals_Model_Product_Type extends Mage_Bundle_Model_Product_Typ
                  * Create extra attributes that will be converted to product options in order item
                  * for selection (not for all bundle)
                  */
-                $price = Mage::helper('combodeals/price')->getDiscountedPrice($selection, $option);
+                $price = Mage::helper('combodeals/price')->getRegularProductPrice($selection, Mage::helper('combodeals/price')->displayIncludingTax());
                 
                 $attributes = array(
                     'price'         => Mage::app()->getStore()->convertPrice($price),

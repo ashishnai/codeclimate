@@ -12,9 +12,10 @@ $countTimers = 0;
 $parentId = null;
 $selectionIds = array();
 ?>
+
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $optionsCollection = $this->getCollection(); ?>
-<?php echo $this->getPagerHtml(); ?>
+<?php echo $this->getToolbarHtml(); ?>
 <?php if ($optionsCollection->getSize()): ?>
     <div class="combo-deals">
         <?php
@@ -98,8 +99,10 @@ $selectionIds = array();
             </div>
         <?php endforeach; ?>
         <script type="text/javascript">decorateTable('my-custom-table');</script>
+
+
     </div>
-    <?php echo $this->getPagerHtml(); ?>    
+    <?php echo $this->getToolbarHtml(); ?>
 <?php else: ?>
     <p><?php echo $this->__('There are no combodeal products found.'); ?></p>
 <?php endif ?>

@@ -19,7 +19,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
      * @var bool
      */
     protected $_selectionsAppended = false;
-    
+
     /**
      * Duration Counter
      * 
@@ -56,7 +56,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
                     array($tableAlias => $attribute->getBackendTable()), "main_table.parent_id = $tableAlias.entity_id AND "
                     . "$tableAlias.attribute_id={$attribute->getId()}", array($alias => 'value')
             );
-        }       
+        }
     }
     
     /*
@@ -73,7 +73,7 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         $this->getSelect()->where('stock_table.is_in_stock = (?)', 1);
         return $this;
     }
-    
+
     /**
      * Sets store id filter
      *

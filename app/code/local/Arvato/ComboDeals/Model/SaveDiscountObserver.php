@@ -17,7 +17,9 @@ class Arvato_ComboDeals_Model_SaveDiscountObserver
     {
         $quote = $observer->getEvent()->getQuote();
         $quoteId = $quote->getId();
-        $discountAmount = Mage::getModel('combodeals/product_price')->getDiscount();
+        $discountAmount = Mage::getModel('combodeals/product_price')->getTotalDiscount();
+        $productDiscountAmount = Mage::getModel('combodeals/product_price')->getProductDiscount();
+
         if ($quoteId) {
             if ($discountAmount > 0) {
                 $total = $quote->getBaseSubtotal();
@@ -33,11 +35,10 @@ class Arvato_ComboDeals_Model_SaveDiscountObserver
                 $this->setQuoteTotal($quote, $discountAmount);
 
                 foreach ($quote->getAllItems() as $item) {
-                    //We apply discount amount based on the ratio between the GrandTotal and the RowTotal
-                    $rat = $item->getPriceInclTax() / $total;
-                    $ratDisc = $discountAmount * $rat;
-                    $item->setDiscountAmount(($item->getDiscountAmount() + $ratDisc) * $item->getQty());
-                    $item->setBaseDiscountAmount(($item->getBaseDiscountAmount() + $ratDisc) * $item->getQty())->save();
+                    if($item->getProductType() == Arvato_ComboDeals_Model_Product_Type::TYPE_COMBODEAL) {
+                        $item->setDiscountAmount($item->getDiscountAmount() + $productDiscountAmount[$item->getProductId()]);
+                        $item->setBaseDiscountAmount($item->getBaseDiscountAmount() + $productDiscountAmount[$item->getProductId()])->save();
+                    }
                 }
             }
         }
@@ -104,11 +105,11 @@ class Arvato_ComboDeals_Model_SaveDiscountObserver
         $address->setBaseGrandTotal((float) $address->getBaseGrandTotal() - $discountAmount);
         if ($address->getDiscountDescription()) {
             $address->setDiscountAmount(-($address->getDiscountAmount() - $discountAmount));
-            $address->setDiscountDescription($address->getDiscountDescription() . ', Combo Deal');
+            $address->setDiscountDescription($address->getDiscountDescription() . ', ' . Mage::helper('combodeals')->getDiscountLabel());
             $address->setBaseDiscountAmount(-($address->getBaseDiscountAmount() - $discountAmount));
         } else {
             $address->setDiscountAmount(-($discountAmount));
-            $address->setDiscountDescription('Combo Deal');
+            $address->setDiscountDescription(Mage::helper('combodeals')->getDiscountLabel());
             $address->setBaseDiscountAmount(-($discountAmount));
         }
         $address->save();

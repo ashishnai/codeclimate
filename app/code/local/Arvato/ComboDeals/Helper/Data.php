@@ -51,6 +51,16 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
      */
     const COMBODEAL_PRODUCT_LIMIT = 'combodeals_admin/combodeals_setting/number_of_combodeals';
 
+    /**
+     * Store config path of Combdeal discount label
+     */
+    const COMBODEAL_DISCOUNT_LABEL_PATH = 'combodeals_admin/combodeals_setting/label_cart';
+
+    /**
+     * Combdeal discount label
+     */
+    const COMBODEAL_DISCOUNT_LABEL = 'Combo Deal';
+
 
     /**
      * Retrieve mixed string SKU using selected child products
@@ -139,6 +149,19 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
     public function getProductLimit()
     {
         return Mage::getStoreConfig(self::COMBODEAL_PRODUCT_LIMIT);
+    }
+
+    /*
+     * Get combodeal discount label
+     *
+     * @return string
+     */
+    public function getDiscountLabel()
+    {
+        $label = Mage::getStoreConfig(self::COMBODEAL_DISCOUNT_LABEL_PATH) ?
+                    Mage::getStoreConfig(self::COMBODEAL_DISCOUNT_LABEL_PATH) :
+                        self::COMBODEAL_DISCOUNT_LABEL;
+        return $label;
     }
 
     /*
