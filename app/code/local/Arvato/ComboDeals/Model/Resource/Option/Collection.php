@@ -45,20 +45,34 @@ class Arvato_ComboDeals_Model_Resource_Option_Collection extends Mage_Core_Model
         parent::_initSelect();
         $attribute = Mage::getSingleton('eav/config')
                 ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'name');
-        
+
         $productAttributes = array('name' => 'name', 'status' => 'status');
-        foreach ($productAttributes as $alias=>$attributeCode) {
+        foreach ($productAttributes as $alias => $attributeCode) {
             $tableAlias = $attributeCode . '_table';
             $attribute = Mage::getSingleton('eav/config')
                     ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode);
 
             $this->getSelect()->joinLeft(
                     array($tableAlias => $attribute->getBackendTable()), "main_table.parent_id = $tableAlias.entity_id AND "
-                    . "$tableAlias.attribute_id={$attribute->getId()}",array($alias=>'value')
+                    . "$tableAlias.attribute_id={$attribute->getId()}", array($alias => 'value')
             );
-        }
+        }       
     }
 
+    /*
+     * Check combodeal product inventory
+     * 
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setInventoryFilter()
+    {
+        $this->getSelect()->joinLeft(
+                array('stock_table' => 'cataloginventory_stock_item'), "main_table.parent_id = stock_table.product_id 
+                ", array('stock_table.is_in_stock')
+        );
+        $this->getSelect()->where('stock_table.is_in_stock = (?)', 1);
+        return $this;
+    }
     /**
      * Sets store id filter
      *
