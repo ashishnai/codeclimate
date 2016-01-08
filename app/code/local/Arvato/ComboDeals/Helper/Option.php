@@ -303,8 +303,6 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
         $return_options = array();
 
         foreach ($options as $option) {
-            // set date format to "%m/%e/%Y"
-            $option = $this->getFormatDate($option);
             $return_options[] = $option;
         }
         return $return_options;
