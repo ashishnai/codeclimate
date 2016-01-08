@@ -32,7 +32,8 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
                 ->setStoreIdFilter($storeId)
                 ->setDealDateFilter()
                 ->setSortByTimeLeft()
-                ->setStatusFilter();
+                ->setStatusFilter()
+                ->setInventoryFilter();
         $this->setCollection($collection);
     }
     
