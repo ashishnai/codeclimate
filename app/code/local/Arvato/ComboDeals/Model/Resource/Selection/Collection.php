@@ -66,6 +66,18 @@ class Arvato_ComboDeals_Model_Resource_Selection_Collection extends Mage_Catalog
                 '{{table}}.stock_id=1',
                 'left');
     }
+    
+     /*
+     * Check combodeal product inventory
+     * 
+     * @return Arvato_ComboDeals_Model_Resource_Option_Collection
+     */
+    public function setInventoryFilter()
+    {
+        $this->getSelect()->where('at_qty.is_in_stock = (?)', 1);
+        echo $this->getSelect()->__toString();exit;
+        return $this;
+    }
 
     /**
      * Set store filter

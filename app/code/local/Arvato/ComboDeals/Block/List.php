@@ -165,32 +165,4 @@ class Arvato_ComboDeals_Block_List extends Mage_Core_Block_Template
 
         return $total;
     }
-    
-    /*
-     * Get the combo deal product stock status
-     * 
-     * @param Arvato_ComboDeals_Model_Option $option
-     * @return  
-     */
-    public function getDealStockStatus($option)
-    {
-        $selections = $option->getSelections();
-        $in_stock = array();
-        if (!empty($selections)) {
-            $in_stock = array();
-            foreach ($selections as $selection) {
-                if ($selection->getIsSalable() && Mage::helper('uandi_arvato')->isInStock($selection)) {
-                    if (Mage::helper('uandi_arvato')->isFewLeft($selection)) {
-                        $in_stock[] = 'fewleft';
-                    } else {
-                        $in_stock[] = 'instock';
-                    }
-                } else {
-                    $in_stock[] = 'outstock';
-                }
-            }
-        }
-        return $in_stock;
-    }
-   
 }    

@@ -159,4 +159,57 @@ class Arvato_ComboDeals_Helper_Data extends Mage_Core_Helper_Abstract
             }
         }
     }
+    
+    
+    /*
+     * Get Combo deals add to cart Url
+     * 
+     * @param int $productId
+     * @param int $optionId
+     * @param array $selectionIds
+     * @return string $url
+     */
+    public function getComboDealAddToCartUrl($productId, $optionId, $selectionIds)
+    {
+        $url = Mage::getUrl('combodeals/cart/add',
+            array(
+                'product' => $productId,
+                'option_id'  => $optionId,
+                'selection_id'  => implode(',', $selectionIds),
+                'qty'  => 1,
+                Mage_Core_Controller_Front_Action::PARAM_NAME_URL_ENCODED => Mage::helper('core')->urlEncode(Mage::helper('core/url')->getCurrentUrl()),
+                Mage_Core_Model_Url::FORM_KEY => Mage::getSingleton('core/session')->getFormKey()
+
+            ));
+
+        return $url;
+    }
+    
+        /*
+     * Get the combo deal product stock status
+     * 
+     * @param Arvato_ComboDeals_Model_Option $option
+     * @return  
+     */
+    public function getDealStockStatus($option)
+    {
+        $selections = $option->getSelections();
+        $in_stock = array();
+        if (!empty($selections)) {
+            $in_stock = array();
+            foreach ($selections as $selection) {
+                if ($selection->getIsSalable() && Mage::helper('uandi_arvato')->isInStock($selection)) {
+                    if (Mage::helper('uandi_arvato')->isFewLeft($selection)) {
+                        $in_stock[] = 'few_left';
+                    } else {
+                        $in_stock[] = 'in_stock';
+                    }
+                } else {
+                    $in_stock[] = 'out_of_stock';
+                }
+            }
+        }
+        return $in_stock;
+    }
+
 }

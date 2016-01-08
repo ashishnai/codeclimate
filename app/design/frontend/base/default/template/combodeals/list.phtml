@@ -9,6 +9,8 @@
 /** @var Mage_Core_Helper_Data $coreHelper */
 $coreHelper = $this->helper('core');
 $countTimers = 0;
+$parentId = null;
+$selectionIds = array();
 ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $optionsCollection = $this->getCollection(); ?>
@@ -23,6 +25,7 @@ $countTimers = 0;
         <h3><?php echo $this->__(Mage::helper('combodeals')->getHeaderTitle()) ?></h3>
         <?php foreach ($this->getOptions($optionIds) as $option): ?>
             <?php $productPlus = ''; ?>
+            <?php $parentId = $option->getParentId(); ?>
             <div class="combodeal-pageHolder">
                 <div class="combodeal-page-title">
                     <h3><?php echo $this->escapeHtml($option->getName()); ?></h3>
@@ -35,22 +38,22 @@ $countTimers = 0;
                 </div>
                 <div class="combodeal-page-instock">
                     <div class="stock-box">
-                        <?php if (in_array('fewleft', $this->getDealStockStatus($option))): ?>
+                        <?php if (in_array('out_of_stock', Mage::helper('combodeals')->getDealStockStatus($option))): ?>
+                            <span></span>
+                            <span class="out"></span>
+                            <span></span>
+                            <p class="out"><?php echo $this->__('out of stock') ?></p>
+                        <?php elseif (in_array('few_left', Mage::helper('combodeals')->getDealStockStatus($option))): ?>
+                            <span></span>
                             <span></span>
                             <span class="few"></span>
-                            <span></span>
                             <p class="few"><?php echo $this->__('few left') ?></p>
-                        <?php elseif (in_array('instock', $this->getDealStockStatus($option))): ?>
+                        <?php elseif (in_array('in_stock', Mage::helper('combodeals')->getDealStockStatus($option))): ?>
                             <span class="in"></span>
                             <span></span>
                             <span></span>
-                            <p class="in"><?php echo $this->__('in stock') ?></p>
-                        <?php else: ?>
-                            <span></span>
-                            <span></span>
-                            <span class="out"></span>
-                            <p class="out"><?php echo $this->__('out of stock') ?></p>
-                        <?php endif; ?>
+                            <p class="in"><?php echo Mage::helper('combodeals')->__('in stock') ?></p>
+                        <?php endif; ?>        
                     </div>
                 </div>
             </div>
@@ -62,6 +65,7 @@ $countTimers = 0;
                     ?>
                     <?php
                     foreach ($option->getSelections() as $selection):
+                        $selectionIds[] = $selection->getSelectionId();
                         $selection->setData('url', null);
                         $selection->setData('request_path', null);
                         ?>
@@ -86,6 +90,9 @@ $countTimers = 0;
                             <div class="price"><?php echo $coreHelper->currency($this->getTotalDiscountedPrice($option), true, false) ?></div>
                             <?php if (in_array('fewleft', $this->getDealStockStatus($option)) || in_array('instock', $this->getDealStockStatus($option))): ?>
                                 <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($option->getId()) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                            <?php endif; ?> <?php if (in_array('fewleft', $this->getDealStockStatus($option)) || in_array('instock', $this->getDealStockStatus($option))): ?>
+                                <a class="btn btn-primary btn-small" href="<?php echo $this->getComboDealAddToCartUrl($parentId, $option->getId(), $selectionIds) ?>" title="<?php echo $this->__('Order all') ?>"><?php echo $this->__('Order all') ?></a>
+                                <?php unset($selectionIds); ?>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -95,7 +102,7 @@ $countTimers = 0;
 
         <script type="text/javascript">decorateTable('my-custom-table');</script>
     </div>
-<?php echo $this->getPagerHtml(); ?>    
+    <?php echo $this->getPagerHtml(); ?>    
 <?php else: ?>
-    <p><?php echo $this->__('There are no combocdeal products found.'); ?></p>
+    <p><?php echo $this->__('There are no combodeal products found.'); ?></p>
 <?php endif ?>

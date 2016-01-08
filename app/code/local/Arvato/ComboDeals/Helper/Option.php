@@ -253,6 +253,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 $optionsCollection->setDealDateFilter()
                         ->setStatusFilter()
                         ->setInventoryFilter();
+                   //     ->checkProductInStore();
                 $options = $optionsCollection->appendSelections($selectionCollection, false, true);
                 foreach ($options as $option) {
                     $return_options[] = $option;
@@ -281,6 +282,7 @@ class Arvato_ComboDeals_Helper_Option extends Mage_Core_Helper_Abstract
                 ->setPositionOrder()
                 ->setStoreIdFilter($storeId)
                 ->setProductIdsFilter($productId);
+              //  ->setInventoryFilter();
         if($limit = Mage::helper('combodeals')->getProductLimit()){
             $parentCollection->setDealLimit($limit);
         }
