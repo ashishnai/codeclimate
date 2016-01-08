@@ -128,7 +128,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
         $this->addColumn('from_date', array(
             'header' => Mage::helper('combodeals')->__('Start Date'),
             'width' => '60px',            
-            'type' => 'date',
+            'type' => 'datetime',
             'index' => 'from_date',
             'filter_condition_callback' => array($this, 'filterCallbackFromDate'),
         ));
@@ -136,7 +136,7 @@ class Arvato_ComboDeals_Block_Adminhtml_ComboDeals_Grid extends Mage_Adminhtml_B
         $this->addColumn('to_date', array(
             'header' => Mage::helper('combodeals')->__('End Date'),
             'width' => '60px',
-            'type' => 'date',
+            'type' => 'datetime',
             'index' => 'to_date',
             'filter_condition_callback' => array($this, 'filterCallbackToDate'),
         ));

@@ -11,11 +11,9 @@ $coreHelper = $this->helper('core');
 $countTimers = 0;
 $parentId = null;
 $selectionIds = array();
+$hasDeals = 0;
 ?>
-
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $optionsCollection = $this->getCollection(); ?>
-
 <div class="page-header">
     <div class="row-fluid">
         <div class="span8 mobile-50 first-in-row-mobile">
@@ -27,8 +25,8 @@ $selectionIds = array();
         </div>
     </div>
 </div>
-<?php echo $this->getToolbarHtml(); ?>
 <?php if ($optionsCollection->getSize()): ?>
+<?php echo $this->getToolbarHtml(); ?>
     <div class="combo-deals">
         <?php
         foreach ($optionsCollection->getItems() as $_option) :
@@ -39,6 +37,7 @@ $selectionIds = array();
             <?php $productPlus = ''; ?>
             <?php $parentId = $option->getParentId(); ?>
             <?php $dealStockStatus = Mage::helper('combodeals')->getDealStockStatus($option); ?>
+            <?php $hasDeals = 1; ?>
             <div class="combodeal-pageHolder">
                 <div class="combodeal-page-title">
                     <h3><?php echo $this->escapeHtml($option->getName()); ?></h3>
